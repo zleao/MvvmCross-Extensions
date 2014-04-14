@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 
 namespace MvvmCrossUtilities.Plugins.Rest.Request
 {
@@ -32,6 +33,8 @@ namespace MvvmCrossUtilities.Plugins.Rest.Request
 
         public IDictionary<object, string[]> Objects { get; private set; }
 
+        public IList<Parameter> Parameters { get; private set; }
+
         #endregion
 
         #region Constructor
@@ -47,6 +50,7 @@ namespace MvvmCrossUtilities.Plugins.Rest.Request
             Headers = new Dictionary<string, string>();
             UrlSegments = new Dictionary<string, string>();
             Objects = new Dictionary<object, string[]>();
+            Parameters = new List<Parameter>();
         }
 
         #endregion
@@ -98,6 +102,12 @@ namespace MvvmCrossUtilities.Plugins.Rest.Request
                     AddHeader("Accept-Encoding", "gzip");
                     break;
             }
+        }
+
+        public void AddParameter(Parameter parameter)
+        {
+            if (parameter != null)
+                Parameters.Add(parameter);
         }
 
         #endregion

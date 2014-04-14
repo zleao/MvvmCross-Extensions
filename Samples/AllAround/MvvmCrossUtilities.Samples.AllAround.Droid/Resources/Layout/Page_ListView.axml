@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+  <include
+      android:id="@+id/pageTitle"
+      layout="@layout/PageCommon_Titlebar" />
+  <LinearLayout
+    android:id="@+id/pageButtonList1"
+    android:layout_below="@id/pageTitle"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        local:MvxLang="Text Label_Button_SelectionMode"
+        local:MvxBind="Click SelectionModeCommand" />
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/pageButtonList2"
+    android:layout_below="@id/pageButtonList1"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+    <Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          local:MvxLang="Text Label_Button_AddItem"
+          local:MvxBind="Click AddItemCommand" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        local:MvxLang="Text Label_Button_RemoveItem"
+        local:MvxBind="Click RemoveItemCommand" />
+  </LinearLayout>
+  <LinearLayout
+    android:id="@+id/pageButtonList3"
+    android:layout_below="@id/pageButtonList2"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        local:MvxLang="Text Label_Button_AddSelectedItem"
+        local:MvxBind="Click AddSelectedItemCommand" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        local:MvxLang="Text Label_Button_RemoveSelectedItem"
+        local:MvxBind="Click RemoveSelectedItemCommand" />
+  </LinearLayout>
+  <SelectableListView
+        android:id="@+id/itemsList"
+        android:layout_below="@id/pageButtonList3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingLeft="12dp"
+        local:MvxItemTemplate="@layout/listitem_selectableitem"
+        local:MvxBind="ItemsSource Items, Mode=OneWay; 
+                       SelectedItems SelectedItems;
+                       SingleSelection SingleSelection" />
+  <TextView
+      android:id="@+id/selectedItemsLabel"
+      android:layout_below="@id/itemsList"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:gravity="center_vertical|start"
+      android:singleLine="true"
+      android:ellipsize="marquee"
+      android:text="Selected Items:"
+      android:paddingTop="15dp" />
+  <Mvx.MvxListView
+      android:layout_below="@id/selectedItemsLabel"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center_horizontal"
+      android:paddingLeft="12dp"
+      local:MvxItemTemplate="@layout/listitem_readonlyitem"
+      local:MvxBind="ItemsSource SelectedItems, Mode=OneWay" />
+</RelativeLayout>

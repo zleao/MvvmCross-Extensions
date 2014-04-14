@@ -1,9 +1,7 @@
-﻿using MvvmCrossUtilities.Plugins.Rest.Request;
+﻿using System;
+using MvvmCrossUtilities.Plugins.Rest.Request;
 using MvvmCrossUtilities.Plugins.Rest.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using RestSharp.Deserializers;
 
 #if MONODROID
 namespace MvvmCrossUtilities.Plugins.Rest.Droid
@@ -140,6 +138,11 @@ namespace MvvmCrossUtilities.Plugins.Rest.SharedFiles
             foreach (var item in restRequest.Objects)
                 restSharpRequest.AddObject(item.Key, item.Value);
 
+            foreach (var item in restRequest.Parameters)
+	        {
+                restSharpRequest.AddParameter(item.Name, item.Value, GetRestSharpParameterType(item.Type));
+	        }
+
             return restSharpRequest;
         }
 
@@ -147,6 +150,7 @@ namespace MvvmCrossUtilities.Plugins.Rest.SharedFiles
         {
             //TODO: maybe we could use allways the same instance...
             var restClient = new RestSharp.RestClient(url);
+            restClient.AddHandler("application/x-json", new JsonDeserializer());
 
             return restClient;
         }
@@ -203,6 +207,30 @@ namespace MvvmCrossUtilities.Plugins.Rest.SharedFiles
             restResponse.Data = restSharpResponse.Data;
 
             return restResponse;
+        }
+
+        private RestSharp.ParameterType GetRestSharpParameterType(ParameterType pluginParamType)
+        {
+            switch (pluginParamType)
+            {
+                case ParameterType.Cookie:
+                    return RestSharp.ParameterType.Cookie;
+
+                case ParameterType.GetOrPost:
+                    return RestSharp.ParameterType.GetOrPost;
+
+                case ParameterType.UrlSegment:
+                    return RestSharp.ParameterType.UrlSegment;
+
+                case ParameterType.HttpHeader:
+                    return RestSharp.ParameterType.HttpHeader;
+                
+                case ParameterType.RequestBody:
+                    return RestSharp.ParameterType.RequestBody;
+                
+                default:
+                    throw new System.NotSupportedException("ParameterType not supported: " + pluginParamType.ToString());
+            }
         }
 
         #endregion

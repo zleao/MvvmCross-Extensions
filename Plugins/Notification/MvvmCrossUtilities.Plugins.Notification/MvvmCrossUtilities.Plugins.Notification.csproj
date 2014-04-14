@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5986D2AE-6250-4B51-B3D4-5649A85F5631}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MvvmCrossUtilities.Plugins.Notification</RootNamespace>
+    <AssemblyName>MvvmCrossUtilities.Plugins.Notification</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Exceptions\NotificationErrorException.cs" />
+    <Compile Include="INotificationService.cs" />
+    <Compile Include="Messages\Base\NotificationOneWayMessage.cs" />
+    <Compile Include="Messages\Base\NotificationTextMessage.cs" />
+    <Compile Include="Messages\Base\NotificationTwoWayMessage.cs" />
+    <Compile Include="Messages\NotificationMessage.cs" />
+    <Compile Include="Messages\NotificationModeEnum.cs" />
+    <Compile Include="Messages\NotificationResult.cs" />
+    <Compile Include="Messages\NotificationSeverityEnum.cs" />
+    <Compile Include="Messages\OneWay\NotificationGenericMessage.cs" />
+    <Compile Include="Messages\OneWay\NotificationLongRunningGenericMessage.cs" />
+    <Compile Include="Messages\OneWay\NotificationSubscriberChangeMessage.cs" />
+    <Compile Include="Messages\TwoWay\NotificationGenericBlockingMessage.cs" />
+    <Compile Include="Messages\TwoWay\NotificationGenericQuestionMessage.cs" />
+    <Compile Include="Messages\TwoWay\NotificationGenericQuestionResult.cs" />
+    <Compile Include="NotificationManager.cs" />
+    <Compile Include="PluginLoader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subscriptions\OneWay\OneWayStrongSubscription.cs" />
+    <Compile Include="Subscriptions\OneWay\OneWaySubscription.cs" />
+    <Compile Include="Subscriptions\OneWay\OneWayWeakSubscription.cs" />
+    <Compile Include="Subscriptions\Subscription.cs" />
+    <Compile Include="Subscriptions\TwoWay\TwoWayStrongSubscription.cs" />
+    <Compile Include="Subscriptions\TwoWay\TwoWaySubscription.cs" />
+    <Compile Include="Subscriptions\TwoWay\TwoWayWeakSubscription.cs" />
+    <Compile Include="SubscriptionToken.cs" />
+    <Compile Include="ThreadRunners\IMvxActionRunner.cs" />
+    <Compile Include="ThreadRunners\MainThreadActionRunner.cs" />
+    <Compile Include="ThreadRunners\SimpleActionRunner.cs" />
+    <Compile Include="ThreadRunners\ThreadpoolActionRunner.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Cirrious.CrossCore">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.CrossCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Localization">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.Localization.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

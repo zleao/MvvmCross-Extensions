@@ -151,3 +151,4 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/Libraries/Xamarin/Xamarin.Android.Support/V4/4.18.1/18

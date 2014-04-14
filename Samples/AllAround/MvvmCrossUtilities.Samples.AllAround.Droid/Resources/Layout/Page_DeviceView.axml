@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+  <include
+      layout="@layout/PageCommon_Titlebar"
+      android:id="@+id/DevicePageHeader" />
+  <ScrollView
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:id="@+id/scrollView1"
+      android:layout_below="@+id/DevicePageHeader"
+      android:layout_above="@+id/DeviceButtonsLayout">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+      <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh"
+            local:MvxBind="Click RefreshCommand" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="BackCameraSupported" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text BackCameraSupported" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="FrontCameraSupported" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text FrontCameraSupported" />
+      <TextView
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textSize="14dp"
+           android:layout_marginTop="5dp"
+           android:text="GetAvailableVirtualMemory" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text GetAvailableVirtualMemory" />
+      <TextView
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textSize="14dp"
+           android:layout_marginTop="5dp"
+           android:text="ID" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text ID" />
+      <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginTop="5dp"
+            android:text="Battery Level" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text BatteryLevel" />
+      <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:layout_marginTop="5dp"
+            android:text="Network type" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text NetworkType" />
+      <TextView
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textSize="14dp"
+           android:layout_marginTop="5dp"
+           android:text="Wifi connected" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text WifiConnected" />
+      <TextView
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:textSize="14dp"
+           android:layout_marginTop="5dp"
+           android:text="Phone calls missed" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text PhoneCallsMissed" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="Timezone bias" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text TimeZoneBias" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="Available free space" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text AvailableFreeSpace" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="Manufacturer" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text Manufacturer" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="Model" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text Model" />
+      <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="14dp"
+          android:layout_marginTop="5dp"
+          android:text="Brand" />
+      <EditText
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:textSize="18dp"
+          android:editable="false"
+          android:clickable="false"
+          android:enabled="false"
+          local:MvxBind="Text Brand" />
+    </LinearLayout>
+  </ScrollView>
+</RelativeLayout>
