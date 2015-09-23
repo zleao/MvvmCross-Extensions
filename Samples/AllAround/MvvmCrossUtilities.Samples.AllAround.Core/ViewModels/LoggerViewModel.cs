@@ -1,11 +1,12 @@
-﻿using System;
-using System.Windows.Input;
-using Cirrious.CrossCore;
+﻿using Cirrious.CrossCore;
 using Cirrious.MvvmCross.Plugins.ThreadUtils;
 using Cirrious.MvvmCross.ViewModels;
 using MvvmCrossUtilities.Plugins.Logger;
 using MvvmCrossUtilities.Plugins.Storage;
 using MvvmCrossUtilities.Samples.AllAround.Core.ViewModels.Base;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 {
@@ -83,33 +84,44 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 
         #region Methods
 
-        private void OnLogMessage()
+        private async void OnLogMessage()
         {
-            Logger.Log(LogLevel.Info, "MvvmCrossUtilities", "Just a log message to test...");
-            ShowLogMessage();
+            await DoWorkAsync(async () =>
+            {
+                await Logger.LogAsync(LogTypeEnum.Info, "MvvmCrossUtilities", "Just a log message to test...");
+                await ShowLogMessageAsync();
+            }, "Logging...");
         }
 
-        private void OnLogException()
+        private async void OnLogException()
         {
-            Logger.Log(LogLevel.Error, "MvvmCrossUtilities", new Exception("Error exception!!!"), "ErrorLog");
-            ShowLogMessage();
+            await DoWorkAsync(async () =>
+            {
+                await Logger.LogAsync(LogTypeEnum.Error, "MvvmCrossUtilities", new Exception("Error exception!!!"), "ErrorLog");
+                await ShowLogMessageAsync();
+            }, "Logging...");
         }
 
-        private void OnLogFatal()
+        private async void OnLogFatal()
         {
-            Logger.Log(LogLevel.Fatal, "MvvmCrossUtilities", new Exception("Fatal exception!!!"), "FatalLog");
-            ShowLogMessage();
+            await DoWorkAsync(async () =>
+            {
+                await Logger.LogAsync(LogTypeEnum.Fatal, "MvvmCrossUtilities", new Exception("Fatal exception!!!"), "FatalLog");
+                await ShowLogMessageAsync();
+            }, "Logging...");
         }
 
-        private void ShowLogMessage()
+        private async void OnLogExecutionTime()
         {
-            PublishInfoNotification("Log written" + Environment.NewLine + "Check folder: " + Storage.NativePath(StorageLocation.ExternalPublic, Logger.LogBasePath));
+            await DoWorkAsync(async () =>
+            {
+                await Logger.LogMethodExecutionTimeAsync(() => ThreadSleep.Sleep(new TimeSpan(0, 0, 1)), "OnLogExecutionTime");
+                await ShowLogMessageAsync();
+            }, "Logging...");
         }
-
-        private void OnLogExecutionTime()
+        private Task ShowLogMessageAsync()
         {
-            Logger.LogExecutionTime(() => ThreadSleep.Sleep(new TimeSpan(0, 0, 1)), "OnLogExecutionTime");
-            ShowLogMessage();
+            return PublishInfoNotificationAsync("Log written" + Environment.NewLine + "Check folder: " + Storage.NativePath(StorageLocation.ExternalPublic, Logger.LogBasePath));
         }
 
         #endregion

@@ -6,7 +6,7 @@ using MvvmCrossUtilities.Libraries.Portable.ViewModels;
 
 namespace MvvmCrossUtilities.Samples.AllAround.Droid.Views.Base
 {
-    public abstract class BaseView<TViewModel> : FragmentActivity
+    public abstract class BaseView<TViewModel> : ActivityBase
        where TViewModel : ViewModel
     {
         #region Properties
@@ -60,7 +60,7 @@ namespace MvvmCrossUtilities.Samples.AllAround.Droid.Views.Base
                 if (field == null)
                     throw new Android.Content.Res.Resources.NotFoundException(resName);
 
-                var resId = field.GetRawConstantValue() as int?;
+				var resId = typeof(Resource.Layout).GetField(resName).GetValue(null) as int?;
                 if (resId == null)
                     throw new NullReferenceException(string.Format("Id for resource '{0}' not found", resName));
 
@@ -70,6 +70,11 @@ namespace MvvmCrossUtilities.Samples.AllAround.Droid.Views.Base
             {
                 throw;
             }
+        }
+
+        protected override int GetContextOptionResourceId(string imageId)
+        {
+			return Resources.GetIdentifier("ic_action_" + imageId, "drawable", ApplicationContext.PackageName);
         }
 
         #endregion

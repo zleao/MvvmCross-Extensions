@@ -1,6 +1,10 @@
-﻿namespace MvvmCrossUtilities.Plugins.Notification.Messages.Base
+﻿
+namespace MvvmCrossUtilities.Plugins.Notification.Messages.Base
 {
-    public abstract class NotificationOneWayMessage : NotificationMessage
+    /// <summary>
+    /// One-way notification
+    /// </summary>
+    public abstract class NotificationOneWayMessage : NotificationMessage, INotificationOneWayMessage
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationOneWayMessage"/> class.

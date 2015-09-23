@@ -1,17 +1,21 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Android.Content;
 using Android.Content.Res;
 using Android.Graphics.Drawables;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Platform;
+using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Attributes;
+using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView;
 using MvvmCrossUtilities.Libraries.Portable.Models;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
 {
@@ -28,9 +32,9 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
 
         #region Properties
 
-        public new BindableTreeViewAdapter Adapter
+        public new AbstractTreeViewAdapter<IExpandable> Adapter
         {
-            get { return base.Adapter as BindableTreeViewAdapter; }
+            get { return base.Adapter as AbstractTreeViewAdapter<IExpandable>; }
             set
             {
                 var existing = Adapter;
@@ -39,7 +43,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
 
                 if (!(value is AbstractTreeViewAdapter<IExpandable>))
                 {
-                    throw new TreeConfigurationException("The adapter is not of TreeViewAdapter type");
+                    throw new TreeConfigurationException("The adapter is not of AbstractTreeViewAdapter<IExpandable> type");
                 }
 
                 base.Adapter = value;
@@ -186,6 +190,20 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
         }
         private bool _collapsible;
 
+        public bool SelectionEnabled
+        {
+            get { return _selectionEnabled; }
+            set
+            {
+                if (_selectionEnabled != value)
+                {
+                    _selectionEnabled = value;
+                    OnAttributeChange();
+                }
+            }
+        }
+        private bool _selectionEnabled;
+
         #endregion
 
         #region Constructors
@@ -204,31 +222,58 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
             : base(context, attrs, defStyle)
         {
             ParseAttributes(context, attrs);
+
+            Adapter = new PerformanceBindableTreeViewAdapter(Context, MvxAndroidBindingContextHelpers.Current(), new InMemoryTreeStateManager<IExpandable>(), null, 1, ItemTemplateId);
+
+            SyncAdapter();
         }
 
         #endregion
 
         #region Methods
 
+        private object SafeGetFieldValue(Type styleable, string fieldName)
+        {
+            return SafeGetFieldValue(styleable, fieldName, 0);
+        }
+
+        private object SafeGetFieldValue(Type styleable, string fieldName, object defaultValue)
+        {
+            var field = styleable.GetField(fieldName);
+            if (field == null)
+            {
+                MvxBindingTrace.Trace(MvxTraceLevel.Error, "Missing stylable field {0}", fieldName);
+                return defaultValue;
+            }
+
+            return field.GetValue(null);
+        }
+
         private void ParseAttributes(Context context, IAttributeSet attrs)
         {
             ItemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
 
-            TypedArray a = context.ObtainStyledAttributes(attrs, Resource.Styleable.TreeViewList);
+            var finder = Mvx.Resolve<IMvxAppResourceTypeFinder>();
+            var resourceType = finder.Find();
+            var styleable = resourceType.GetNestedType("Styleable");
 
-            _expandedDrawable = a.GetDrawable(Resource.Styleable.TreeViewList_src_expanded);
+            var treeListViewAttrsId = (int[])SafeGetFieldValue(styleable, "BindableTreeViewList", new int[0]);
+            TypedArray a = context.ObtainStyledAttributes(attrs, treeListViewAttrsId, 0, 0);
+
+            _expandedDrawable = a.GetDrawable((int)SafeGetFieldValue(styleable, "BindableTreeViewList_src_expanded", 0));
             if (_expandedDrawable == null)
                 _expandedDrawable = context.Resources.GetDrawable(DEFAULT_EXPANDED_RESOURCE);
 
-            _collapsedDrawable = a.GetDrawable(Resource.Styleable.TreeViewList_src_collapsed);
+            _collapsedDrawable = a.GetDrawable((int)SafeGetFieldValue(styleable, "BindableTreeViewList_src_collapsed", 0));
             if (_collapsedDrawable == null)
                 _collapsedDrawable = context.Resources.GetDrawable(DEFAULT_COLLAPSED_RESOURCE);
 
-            _indentWidth = a.GetDimensionPixelSize(Resource.Styleable.TreeViewList_indent_width, DEFAULT_INDENT);
-            _indicatorGravity = (GravityFlags)a.GetInteger(Resource.Styleable.TreeViewList_indicator_gravity, (int)DEFAULT_GRAVITY);
-            _indicatorBackgroundDrawable = a.GetDrawable(Resource.Styleable.TreeViewList_indicator_background);
-            _rowBackgroundDrawable = a.GetDrawable(Resource.Styleable.TreeViewList_row_background);
-            _collapsible = a.GetBoolean(Resource.Styleable.TreeViewList_collapsible, true);
+            _indentWidth = a.GetDimensionPixelSize((int)SafeGetFieldValue(styleable, "BindableTreeViewList_indent_width", 0), DEFAULT_INDENT);
+            _indicatorGravity = (GravityFlags)a.GetInteger((int)SafeGetFieldValue(styleable, "BindableTreeViewList_indicator_gravity", 0), (int)DEFAULT_GRAVITY);
+            _indicatorBackgroundDrawable = a.GetDrawable((int)SafeGetFieldValue(styleable, "BindableTreeViewList_indicator_background", 0));
+            _rowBackgroundDrawable = a.GetDrawable((int)SafeGetFieldValue(styleable, "BindableTreeViewList_row_background", 0));
+            _collapsible = a.GetBoolean((int)SafeGetFieldValue(styleable, "BindableTreeViewList_collapsible", 0), true);
+            _selectionEnabled = a.GetBoolean((int)SafeGetFieldValue(styleable, "BindableTreeViewList_selection_enabled", 1), true);
         }
 
         private void SyncAdapter()
@@ -240,6 +285,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
             Adapter.SetIndicatorBackgroundDrawable(IndicatorBackgroundDrawable);
             Adapter.SetRowBackgroundDrawable(RowBackgroundDrawable);
             Adapter.SetCollapsible(Collapsible);
+            Adapter.SetSelectionEnabled(SelectionEnabled);
         }
 
         private void OnAttributeChange()
@@ -250,26 +296,26 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
 
         private void SetItemsSource(IEnumerable value)
         {
-            _itemsSource = value;
-            var expandableItems = value as IEnumerable<IExpandable>;
-            if (expandableItems == null)
+            if(Adapter == null)
             {
-                MvxTrace.Warning("TreeviewList.ItemsSource are null or not of type IList<IExpandable>");
+                MvxTrace.Warning("Adapter is null");
                 return;
             }
 
-            //var maximumNumberOfLevels = GetMaximumNumberOfLevels(expandableItems);
-            var maximumNumberOfLevels = 1;
-            var manager = new InMemoryTreeStateManager<IExpandable>();
-            var treeBuilder = new TreeBuilder<IExpandable>(manager);
-
-            foreach (var item in expandableItems)
+            _itemsSource = value;
+            if(value == null)
             {
-                treeBuilder.SequentiallyAddNextNode(item, 0);
-                AddChildNodes(treeBuilder, item, 1);
+                MvxTrace.Warning("TreeviewList.ItemsSource is null");
+                return;
+            }
+            var expandableItems = value as IEnumerable<IExpandable>;
+            if (expandableItems == null)
+            {
+                MvxTrace.Warning("TreeviewList.ItemsSource is not of type IList<IExpandable>");
+                return;
             }
 
-            Adapter = new BindableTreeViewAdapter(Context, manager, maximumNumberOfLevels, ItemTemplateId);
+            (Adapter as PerformanceBindableTreeViewAdapter).UpdateItemsSource(expandableItems);
         }
 
         private void AddChildNodes(TreeBuilder<IExpandable> treeBuilder, IExpandable parent, int level)

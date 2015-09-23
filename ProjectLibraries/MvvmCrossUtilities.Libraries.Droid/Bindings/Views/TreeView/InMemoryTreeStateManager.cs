@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Android.Database;
 using Android.Util;
 using Java.Util;
 using MvvmCrossUtilities.Libraries.Portable.Extensions;
 using MvvmCrossUtilities.Libraries.Portable.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
 {
@@ -13,7 +13,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
         where T : class, IExpandable
     {
         private static readonly string TAG = "InMemoryTreeStateManager";
-        private static readonly long serialVersionUID = 1L;
+        //private static readonly long serialVersionUID = 1L;
 
         private IDictionary<T, InMemoryTreeNode<T>> _allNodes = new Dictionary<T, InMemoryTreeNode<T>>();
         private InMemoryTreeNode<T> _topSentinel = new InMemoryTreeNode<T>(null, null, -1, true);
@@ -21,6 +21,12 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
         private List<T> _unmodifiableVisibleList = null;
         private bool _visibleByDefault = false;
         private HashSet<DataSetObserver> _observers = new HashSet<DataSetObserver>();
+
+        public void ResetVisibleList()
+        {
+            _visibleListCache = null;
+            _unmodifiableVisibleList = null;
+        }
 
         private void InternalDataSetChanged()
         {

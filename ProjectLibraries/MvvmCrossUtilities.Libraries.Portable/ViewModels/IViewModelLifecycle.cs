@@ -1,5 +1,8 @@
 ﻿namespace MvvmCrossUtilities.Libraries.Portable.ViewModels
 {
+    /// <summary>
+    /// Interface for viewmodel lifecycle
+    /// </summary>
     public interface IViewModelLifecycle
     {
         /// <summary>

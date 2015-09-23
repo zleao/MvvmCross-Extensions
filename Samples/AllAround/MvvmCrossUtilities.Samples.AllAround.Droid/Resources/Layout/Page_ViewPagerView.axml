@@ -8,6 +8,8 @@
   <include
       android:id="@+id/pageTitle"
       layout="@layout/PageCommon_Titlebar" />
+  
+  <!-- Block Swipe -->
   <LinearLayout
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"
@@ -24,6 +26,8 @@
       local:MvxLang="TextOn Label_Common_Yes; TextOff Label_Common_No"
       local:MvxBind="Checked BlockSwipe, Mode=TwoWay" />
   </LinearLayout>
+  
+  <!-- Page Index -->
   <LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -40,11 +44,14 @@
       android:gravity="center_vertical|right" 
       local:MvxBind="Text CurrentPageIndex" />
   </LinearLayout>
+ 
+  <!-- Page Selected Text -->
   <TextView
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:gravity="center_vertical|center_horizontal"
       local:MvxBind="Text PageSelectedText" />
+  
   <BindableViewPager
      android:layout_width="fill_parent"
      android:layout_height="match_parent"

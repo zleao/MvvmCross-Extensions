@@ -73,19 +73,33 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 
         public MainViewModel()
         {
-            _navigateCommand = new MvxCommand<MenuOption>((o) => ShowViewModel(o.ViewModelType));
+            _navigateCommand = new MvxCommand<MenuOption>(OnNavigation); //new MvxCommand<MenuOption>((o) => ShowViewModel(o.ViewModelType));
 
-            MenuOptions.Add(new MenuOption("Contrast converter", typeof(ColorViewModel)));
-            MenuOptions.Add(new MenuOption("Device info", typeof(DeviceViewModel)));
-            MenuOptions.Add(new MenuOption("Dialog demos", typeof(DialogViewModel)));
-            MenuOptions.Add(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_List), typeof(ListViewModel)));
-            MenuOptions.Add(new MenuOption("Logger", typeof(LoggerViewModel)));
-            MenuOptions.Add(new MenuOption("Rest", typeof(RestServicesViewModel)));
-            MenuOptions.Add(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_TreeViewList), typeof(TreeViewListViewModel)));
-            MenuOptions.Add(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_ViewPager), typeof(ViewPagerViewModel)));
-            
-            //MenuOptions.Add(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_ExpandableList), typeof(ExpandableListViewModel)));
-            
+            AddOptionIfImplemented(new MenuOption("Context options", typeof(ContextOptionsViewModel)));
+            AddOptionIfImplemented(new MenuOption("Contrast converter", typeof(ColorViewModel)));
+            AddOptionIfImplemented(new MenuOption("Custom EditText", typeof(CustomEditTextViewModel)));
+            AddOptionIfImplemented(new MenuOption("Device info", typeof(DeviceViewModel)));
+            AddOptionIfImplemented(new MenuOption("Dialog demos", typeof(DialogViewModel)));
+            AddOptionIfImplemented(new MenuOption("DragAndDrop List", typeof(DragAndDropListViewModel)));
+            AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_List), typeof(ListViewModel)));
+            AddOptionIfImplemented(new MenuOption("Logger", typeof(LoggerViewModel)));
+            AddOptionIfImplemented(new MenuOption("Notifications", typeof(NotificationsViewModel)));
+            AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_TreeViewList), typeof(TreeViewListViewModel)));
+            AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_ViewPager), typeof(ViewPagerViewModel)));
+        }
+
+        private void OnNavigation(MenuOption option)
+        {
+            if (option.ViewModelType == typeof(ContextOptionsViewModel))
+                ShowViewModel(option.ViewModelType, new { mainViewModelContext = ViewModelContext });
+            else
+                ShowViewModel(option.ViewModelType);
+        }
+
+        private void AddOptionIfImplemented(MenuOption option)
+        {
+            if (HasRegisteredViewFor(option.ViewModelType))
+                MenuOptions.Add(option);
         }
 
         #endregion

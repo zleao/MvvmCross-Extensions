@@ -1,11 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Cirrious.CrossCore.WeakSubscription;
 
 namespace MvvmCrossUtilities.Libraries.Portable.ViewModels
 {
+    /// <summary>
+    /// View model normally used to represent a view inside a larger view. 
+    /// </summary>
+    /// <typeparam name="TParentViewModel">The type of the parent view model.</typeparam>
     public abstract class ChildViewModel<TParentViewModel> : ViewModel
-       where TParentViewModel : ViewModel
+        where TParentViewModel : ViewModel
     {
         #region Fields
 
@@ -71,7 +76,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.ViewModels
             if (HasDependencies)
             {
                 var notifiableVM = (Parent as INotifyPropertyChanged);
-                if (notifiableVM != null)
+                if(notifiableVM != null)
                     _parentPropertyChangedSubscription = notifiableVM.WeakSubscribe(OnParentPropertyChanged);
             }
         }
@@ -84,7 +89,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.ViewModels
         /// <exception cref="System.NotImplementedException"></exception>
         void OnParentPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var propertyName = "Parent." + e.PropertyName;
+            var propertyName = "Parent."+ e.PropertyName;
             RaiseDependenciesPropertyChanged(propertyName);
         }
 
@@ -117,21 +122,24 @@ namespace MvvmCrossUtilities.Libraries.Portable.ViewModels
         /// Starts doing work.
         /// </summary>
         /// <param name="message"></param>
-        public override void StartWork(string message)
+        /// <param name="isSilent"></param>
+        public override void StartWork(string message, bool isSilent = false)
         {
-            base.StartWork(message);
+            base.StartWork(message, isSilent);
 
-            Parent.StartWork(message);
+            Parent.StartWork(message, isSilent);
         }
 
         /// <summary>
-        /// Finished doing work.
+        /// Signals the the work is finished
         /// </summary>
-        public override void FinishedWork()
+        /// <param name="isSilent"></param>
+        /// <returns></returns>
+        public override async Task FinishWorkAsync(bool isSilent = false)
         {
-            base.FinishedWork();
+            await base.FinishWorkAsync(isSilent);
 
-            Parent.FinishedWork();
+            await Parent.FinishWorkAsync(isSilent);
         }
 
         #endregion

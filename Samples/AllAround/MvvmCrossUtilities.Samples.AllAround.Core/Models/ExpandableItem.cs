@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using Cirrious.MvvmCross.ViewModels;
 using MvvmCrossUtilities.Libraries.Portable.Extensions;
 using MvvmCrossUtilities.Libraries.Portable.Models;
+using Cirrious.CrossCore.UI;
 
 namespace MvvmCrossUtilities.Samples.AllAround.Core.Models
 {
-    public class ExpandableItem : MvxNotifyPropertyChanged, IExpandable
+    public class ExpandableItem : Model, IExpandable
     {
         public string Name
         {
@@ -36,6 +37,20 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.Models
         }
         private string _nickName;
 
+        public MvxColor BackgroundColor
+        {
+            get { return _backgroundColor; }
+            set
+            {
+                if (_backgroundColor != value)
+                {
+                    _backgroundColor = value;
+                    RaisePropertyChanged(() => BackgroundColor);
+                }
+            }
+        }
+        private MvxColor _backgroundColor;
+
         public IList<IExpandable> Children
         {
             get { return _children; }
@@ -52,20 +67,27 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.Models
 
         public bool HasChildren { get; private set; }
 
+        public int Level { get; private set; }
+
         private Action<IExpandable> _getChildrenFunc;
 
         public void GetChildren()
         {
-            if (Children.IsNullOrEmpty())
+            if (_getChildrenFunc != null && Children.IsNullOrEmpty())
                 _getChildrenFunc.Invoke(this);
         }
 
-        public ExpandableItem(string name, string nickname, Action<IExpandable> getChildrenFunc, bool hasChildren)
+        public ExpandableItem(string name, string nickname, MvxColor backgroundColor, Action<IExpandable> getChildrenFunc, bool hasChildren, int level, bool getChildrenInConstructor = false)
         {
             Name = name;
             NickName = nickname;
+            BackgroundColor = backgroundColor;
             _getChildrenFunc = getChildrenFunc;
             HasChildren = hasChildren;
+            Level = level;
+
+            if (getChildrenInConstructor)
+                GetChildren();
         }
     }
 }

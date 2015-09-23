@@ -2,6 +2,9 @@
 
 namespace MvvmCrossUtilities.Plugins.Notification.Messages
 {
+    /// <summary>
+    /// One-Way message with string message
+    /// </summary>
     public abstract class NotificationTextMessage : NotificationOneWayMessage
     {
         #region Properties

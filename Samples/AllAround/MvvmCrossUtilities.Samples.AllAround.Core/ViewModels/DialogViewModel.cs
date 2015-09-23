@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Cirrious.MvvmCross.ViewModels;
+﻿using Cirrious.MvvmCross.ViewModels;
 using MvvmCrossUtilities.Libraries.Portable.Messages.TwoWay;
 using MvvmCrossUtilities.Plugins.Notification.Messages;
 using MvvmCrossUtilities.Plugins.Notification.Messages.Base;
 using MvvmCrossUtilities.Plugins.Notification.Messages.TwoWay;
 using MvvmCrossUtilities.Samples.AllAround.Core.ViewModels.Base;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 {
@@ -24,7 +25,6 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
         {
             get { return "Dialog demos"; }
         }
-
 
         public string DialogTitle
         {
@@ -73,34 +73,33 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 
         #region Methods
 
-        private void OnShowBlockingError()
+        private async void OnShowBlockingError()
         {
-            PublishGenericBlockingNotification(NotificationSeverityEnum.Error, "Blocking error message demo", OnGenericBlockingResult);
-        }
-        private void OnGenericBlockingResult(NotificationResult obj)
-        {
+            await PublishErrorNotificationAsync("Blocking error message demo", NotificationModeEnum.MessageBox);
         }
 
-        private void OnShowGenericQuestion()
+        private async void OnShowGenericQuestion()
         {
-            PublishGenericQuestionNotification("Do you feel lucky?", NotificationTwoWayAnswersGroupEnum.YesNo, OnGenericQuestionResult);
+            var answer = await PublishGenericQuestionNotificationAsync("Do you feel lucky?", NotificationTwoWayAnswersGroupEnum.YesNo);
+            await OnGenericQuestionResultAsync(answer);
         }
-        private void OnGenericQuestionResult(NotificationGenericQuestionResult obj)
+        private Task OnGenericQuestionResultAsync(NotificationGenericQuestionResult obj)
         {
-            PublishInfoNotification(obj.Answer.ToString());
+            return PublishInfoNotificationAsync(obj.Answer.ToString());
         }
 
-        private void OnShowQuestionWithCustomAnswers()
+        private async void OnShowQuestionWithCustomAnswers()
         {
-            PublishQuestionWithCustomAnswerNotification("What's the number I'm thinking!", Items, OnQuestionWithCustomAnswersResult);
+            var answer = await PublishQuestionWithCustomAnswerNotificationAsync("What's the number I'm thinking!", Items);
+            await OnQuestionWithCustomAnswersResultAsync(answer);
         }
-        private void OnQuestionWithCustomAnswersResult(NotificationQuestionCustomAnswerResult obj)
+        private Task OnQuestionWithCustomAnswersResultAsync(NotificationQuestionCustomAnswerResult obj)
         {
             var number = _random.Next(0, 10);
             if (obj.SelectedAnswerIndex == number)
-                PublishInfoNotification("Correct!");
+                return PublishInfoNotificationAsync("Correct!");
             else
-                PublishInfoNotification("Try again... The number was " + number);
+                return PublishInfoNotificationAsync("Try again... The number was " + number);
         }
 
         #endregion

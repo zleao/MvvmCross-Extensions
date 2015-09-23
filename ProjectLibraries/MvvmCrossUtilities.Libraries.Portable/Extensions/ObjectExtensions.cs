@@ -1,33 +1,62 @@
-﻿namespace MvvmCrossUtilities.Libraries.Portable.Extensions
+﻿using System;
+using System.Reflection;
+
+namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 {
+    /// <summary>
+    /// Extensions for object type
+    /// </summary>
     public static class ObjectExtensions
     {
         /// <summary>
         /// Gets the property value.
+        /// Deals with null object
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns></returns>
-        public static object GetPropertyValue(this object source, string propertyName)
+        public static object SafeGetPropertyValue(this object source, string propertyName)
         {
-            if (source == null)
-                return null;
+            if (source != null)
+            {
+                var prop = SafeGetPropertyInfoRecursively(source.GetType(), propertyName);
+                if (prop != null)
+                    return prop.GetValue(source);
+            }
 
-            return source.GetType().GetPropertyValue(propertyName);
+            return null;
         }
 
         /// <summary>
         /// Sets the property value.
+        /// Deals with null object
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
-        public static void SetPropertyValue(this object source, string propertyName, object value)
+        public static void SafeSetPropertyValue(this object source, string propertyName, object value)
         {
-            if (source == null)
-                return;
+            if (source != null)
+            {
+                var prop = SafeGetPropertyInfoRecursively(source.GetType(), propertyName);
+                if (prop != null)
+                    prop.SetValue(source, value);
+            }
+        }
 
-            source.GetType().SetPropertyValue(propertyName, value);
+        private static PropertyInfo SafeGetPropertyInfoRecursively(Type sourceType, string propertyName)
+        {
+            if (sourceType != null)
+            {
+                var typeInfo = sourceType.GetTypeInfo();
+                var prop = typeInfo.GetDeclaredProperty(propertyName);
+                if (prop != null)
+                    return prop;
+
+                return SafeGetPropertyInfoRecursively(typeInfo.BaseType, propertyName);
+            }
+
+            return null;
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 {
+    /// <summary>
+    /// Extensions for string type
+    /// </summary>
     public static class StringExtensions
     {
         /// <summary>
@@ -19,11 +22,12 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Formats the specified source template.
+        /// Deals with null templates
         /// </summary>
         /// <param name="sourceTemplate">The source template.</param>
         /// <param name="args">The args.</param>
         /// <returns></returns>
-        public static string FormatTemplate(this string sourceTemplate, params object[] args)
+        public static string SafeFormatTemplate(this string sourceTemplate, params object[] args)
         {
             if (string.IsNullOrEmpty(sourceTemplate))
                 return sourceTemplate ?? string.Empty;
@@ -33,13 +37,14 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Determines if source contains the specified value.
+        /// Deals with null strings
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="value">The value.</param>
         /// <returns>
         ///   <c>true</c> if source contains the specified value; otherwise, <c>false</c>.
         /// </returns>
-        public static bool Contains(this string source, char value)
+        public static bool SafeContains(this string source, char value)
         {
             if (string.IsNullOrEmpty(source))
                 return false;
@@ -51,31 +56,30 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
         /// Parses the source string value to enum.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum.</typeparam>
-        /// <param name="sourceEnumValue">The source enum value.</param>
+        /// <param name="source">The source enum value.</param>
         /// <param name="ignoreCase">if set to <c>true</c> ignore case.</param>
         /// <returns></returns>
-        public static TEnum Parse2Enum<TEnum>(this string sourceEnumValue, bool ignoreCase = false)
+        public static TEnum Parse2Enum<TEnum>(this string source, bool ignoreCase = false)
         {
-            return (TEnum)Enum.Parse(typeof(TEnum), sourceEnumValue, ignoreCase);
+            return (TEnum)Enum.Parse(typeof(TEnum), source, ignoreCase);
         }
 
         /// <summary>
         /// Parses the source string value to decimal.
         /// </summary>
-        /// <param name="sourceValue">The source value.</param>
-        /// <param name="valueIfNull">The value if null.</param>
+        /// <param name="source">The source value.</param>
+        /// <param name="defaultValue">The value if null.</param>
         /// <param name="throwException">if set to <c>true</c> throw exception.</param>
         /// <returns></returns>
-        public static decimal Parse2Decimal(this string sourceValue, decimal valueIfNull = 0M, bool throwException = false)
+        public static decimal Parse2Decimal(this string source, decimal defaultValue = 0M, bool throwException = false)
         {
-            decimal d = valueIfNull;
+            decimal d = defaultValue;
 
-            if (!sourceValue.IsNullOrEmpty())
+            if (!source.IsNullOrEmpty())
             {
                 try
                 {
-                    var trimmedSource = sourceValue.Replace(',', '.').Trim();
-                    d = Convert.ToDecimal(trimmedSource, new System.Globalization.CultureInfo("en-US"));
+                    d = Convert.ToDecimal(source.Replace(',', '.').Trim(), new System.Globalization.CultureInfo("en-US"));
                 }
                 catch (Exception)
                 {
@@ -90,20 +94,20 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
         /// <summary>
         /// Parses the source string value to boolean.
         /// </summary>
-        /// <param name="sourceValue">The source value.</param>
+        /// <param name="source">The source value.</param>
         /// <param name="defaultValue">The default value. Aplicable to null or empty string</param>
         /// <returns></returns>
-        public static bool Parse2Boolean(this string sourceValue, bool defaultValue = false)
+        public static bool Parse2Boolean(this string source, bool defaultValue = false)
         {
-            if (sourceValue.IsNullOrEmpty())
+            if (source.IsNullOrEmpty())
                 return defaultValue;
 
             #region Test for true/false string
 
-            if (sourceValue.Equals(bool.FalseString))
+            if (source.Equals(bool.FalseString))
                 return false;
 
-            if (sourceValue.Equals(bool.TrueString))
+            if (source.Equals(bool.TrueString))
                 return true;
 
             #endregion
@@ -111,7 +115,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
             #region Test for integer values
 
             int intSourceValue;
-            if (int.TryParse(sourceValue, out intSourceValue))
+            if (int.TryParse(source, out intSourceValue))
             {
                 return intSourceValue > 0;
             }
@@ -120,7 +124,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
             try
             {
-                return Convert.ToBoolean(sourceValue);
+                return Convert.ToBoolean(source);
             }
             catch
             {
@@ -131,17 +135,17 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
         /// <summary>
         /// Parses the source string value to int32.
         /// </summary>
-        /// <param name="sourceValue">The source value.</param>
+        /// <param name="source">The source value.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <returns></returns>
-        public static int Parse2Int(this string sourceValue, int defaultValue = 0)
+        public static int Parse2Int(this string source, int defaultValue = 0)
         {
-            if (sourceValue.IsNullOrEmpty())
+            if (source.IsNullOrEmpty())
                 return defaultValue;
 
             try
             {
-                return Convert.ToInt32(sourceValue);
+                return Convert.ToInt32(source);
             }
             catch
             {
@@ -151,87 +155,111 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Truncates the specified text.
+        /// Deals with null strings
         /// </summary>
-        /// <param name="text">The text.</param>
+        /// <param name="source">The text.</param>
         /// <param name="length">The length.</param>
         /// <returns></returns>
-        public static string Truncate(this string text, int length)
+        public static string SafeTruncate(this string source, int length)
         {
-            return text.Length > length ? text.ToString().Substring(0, length - 1) : text;
+            if (source.IsNullOrEmpty())
+                return string.Empty;
+
+            return source.Length > length ? source.ToString().Substring(0, length) : source;
         }
 
         /// <summary>
         /// Determines whether the specified value is json.
+        /// Deals with null strings
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="source">The value.</param>
         /// <returns>
         ///   <c>true</c> if the specified value is json; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsJson(this string value)
+        public static bool SafeIsJson(this string source)
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(source))
                 return false;
 
-            value = value.Trim();
+            source = source.Trim();
 
-            return value.StartsWith("{") && value.EndsWith("}")
-                || value.StartsWith("[") && value.EndsWith("]");
+            return source.StartsWith("{") && source.EndsWith("}")
+                || source.StartsWith("[") && source.EndsWith("]");
         }
 
-        /// <summary>
-        /// Gets the value if null.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns></returns>
-        public static string GetValueIfNull(this string text)
-        {
-            if (text.IsNullOrEmpty())
-                return "";
-
-            return text;
-        }
-
-        private static Regex _hexRegex = new Regex(@"^[0-9a-f]+$");
         /// <summary>
         /// Determines whether the specified value is hexadecimal.
+        /// Deals with null strings
         /// </summary>
-        /// <param name="text">The text.</param>
+        /// <param name="source">The source.</param>
         /// <returns>
         ///   <c>true</c> if the specified text is hex; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsHex(this string value)
+        public static bool SafeIsHex(this string source)
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(source))
                 return false;
 
-            return _hexRegex.IsMatch(value.Trim().ToLower());
+            return _hexRegex.IsMatch(source.Trim().ToLower());
         }
+        private static Regex _hexRegex = new Regex(@"^[0-9a-f]+$");
+
+        /// <summary>
+        /// Determines whether the specified source is numeric.
+        /// Deals with null strings
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static bool SafeIsNumeric(this string source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return false;
+
+            return _numericRegEx.IsMatch(source);
+        }
+        private static Regex _numericRegEx = new Regex("^\\d+(\\.\\d+)?$");
+
+        /// <summary>
+        /// Determines whether the specified source is integer.
+        /// Deals with null strings
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static bool SafeIsInteger(this string source)
+        {
+            if (string.IsNullOrEmpty(source))
+                return false;
+
+            return _intRegEx.IsMatch(source);
+        }
+        private static Regex _intRegEx = new Regex("^\\d+$");
 
         /// <summary>
         /// Gets the binary from hex.
+        /// Deals with null strings
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="source">The value.</param>
         /// <returns></returns>
-        public static string GetBinaryFromHex(this string value)
+        public static string GetBinaryFromHex(this string source)
         {
-            if (!value.IsHex())
+            if (!source.SafeIsHex())
                 return "";
 
-            return Convert.ToString(Convert.ToInt32(value, 16), 2);
+            return Convert.ToString(Convert.ToInt32(source, 16), 2);
         }
 
         /// <summary>
         /// Trims outer spaces from the specified text.
         /// If text is null, return string.Emtpy
         /// </summary>
-        /// <param name="text">The text.</param>
+        /// <param name="source">The text.</param>
         /// <returns></returns>
-        public static string TrimOrEmpty(this string text)
+        public static string SafeTrim(this string source)
         {
-            if (text.IsNullOrEmpty())
+            if (source.IsNullOrEmpty())
                 return string.Empty;
 
-            return text.Trim();
+            return source.Trim();
         }
 
         /// <summary>
@@ -241,21 +269,59 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
         /// <returns></returns>
         public static string AddCrIfNotEmpty(this string text)
         {
-            return text.IsNullOrEmpty() ? "" : text + "\n";
+            return text.IsNullOrEmpty() ? "" : text + Environment.NewLine;
         }
 
         /// <summary>
-        /// Removes white spaces from the text.
-        /// If null or empty, returns String.Empty.
+        /// Determines whether the beginning of this string instance matches the specified text
+        /// Safe to use with null values
         /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns></returns>
-        public static string Trim(this string text)
+        /// <param name="text">The text to check.</param>
+        /// <param name="filter">The filter to apply.</param>
+        /// <returns>true if value matches the beginning of this string; otherwise, false.</returns>
+        public static bool SafeStartsWith(this string text, string filter)
         {
-            if (text.IsNullOrEmpty())
-                return string.Empty;
-            else
-                return text.Trim();
+            return text.IsNullOrEmpty() ? false : (filter.IsNullOrEmpty() ? false : text.StartsWith(filter));
+        }
+
+        /// <summary>
+        /// Determines whether the beginning of this string instance matches the specified
+        /// string when compared using the specified comparison option.
+        /// Safe to use with null values
+        /// </summary>
+        /// <param name="text">The text to check.</param>
+        /// <param name="filter">The filter to apply.</param>
+        /// <param name="comparisonType"> One of the enumeration values that determines how this string and value are compared</param>
+        /// <returns>
+        /// true if value matches the beginning of this string; otherwise, false.
+        /// </returns>
+        public static bool SafeStartsWith(this string text, string filter, StringComparison comparisonType)
+        {
+            return text.IsNullOrEmpty() ? false : (filter.IsNullOrEmpty() ? false : text.StartsWith(filter, comparisonType));
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the specified System.String object occurs within this string.
+        /// Safe to use with null values
+        /// </summary>
+        /// <param name="text">The text to check.</param>
+        /// <param name="value">The string to seek.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        /// <returns>
+        ///  true if the value parameter occurs within this string.
+        ///  false otherwise OR if value is null or empty
+        /// </returns>
+        public static bool SafeContains(this string text, string value, bool ignoreCase = false)
+        {
+            if (!text.IsNullOrEmpty() && !value.IsNullOrEmpty())
+            {
+                if (ignoreCase)
+                    return (text.ToLower()).Contains(value.ToLower());
+                else
+                    return text.Contains(value);
+            }
+
+            return false;
         }
     }
 }

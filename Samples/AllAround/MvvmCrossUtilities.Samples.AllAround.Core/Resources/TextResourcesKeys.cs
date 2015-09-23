@@ -6,6 +6,8 @@
 
         public const string Label_Button_AddItem = "Label_Button_AddItem";
         public const string Label_Button_AddSelectedItem = "Label_Button_AddSelectedItem";
+        public const string Label_Button_ContextOption_Visible = "Label_Button_ContextOption_Visible";
+        public const string Label_Button_ContextOption_Not_Visible = "Label_Button_ContextOption_Not_Visible";
         public const string Label_Button_List = "Label_Button_List";
         public const string Label_Button_LogFatal = "Label_Button_LogFatal";
         public const string Label_Button_LogException = "Label_Button_LogException";

@@ -90,7 +90,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters
 
         public override int Count
         {
-            get
+            get 
             {
                 return _itemsSource.Count();
             }
@@ -241,13 +241,13 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters
         public string TitlePropertyName
         {
             get { return _titlePropertyName; }
-            set { _titlePropertyName = value; }
+            set { _titlePropertyName = value; } 
         }
         private string _titlePropertyName = string.Empty;
 
         protected string InnerTitlePropertyName
         {
-            get
+            get 
             {
                 string propertyName = "";
 

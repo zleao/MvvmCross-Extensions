@@ -1,4 +1,5 @@
-﻿namespace MvvmCrossUtilities.Plugins.Device
+﻿
+namespace MvvmCrossUtilities.Plugins.Device
 {
     public enum NetworkTypeEnum
     {        

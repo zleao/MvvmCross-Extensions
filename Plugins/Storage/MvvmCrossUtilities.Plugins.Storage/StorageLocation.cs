@@ -1,5 +1,9 @@
-﻿namespace MvvmCrossUtilities.Plugins.Storage
+﻿
+namespace MvvmCrossUtilities.Plugins.Storage
 {
+    /// <summary>
+    /// StorageLocation
+    /// </summary>
     public enum StorageLocation
     {
         /// <summary>

@@ -1,25 +1,31 @@
-﻿using System;
-
-namespace MvvmCrossUtilities.Plugins.Device
+﻿namespace MvvmCrossUtilities.Plugins.Device
 {
     public interface IDevice
     {
         #region Properties
 
         /// <summary>
-        /// Indicates if the back camera is supported
+        /// Indicates if the color camera is supported
         /// </summary>
-        bool BackCameraSupported { get; }
+        bool ColorCameraSupported { get; }
 
         /// <summary>
-        /// Indicates if the front camera is supported
+        /// Indicates if the imager camera is supported
         /// </summary>
-        bool FrontCameraSupported { get; }
+        bool ImagerCameraSupported { get; }
 
         /// <summary>
         /// Returns the serial number of the device
         /// </summary>
         string ID { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has wifi security mixed mode.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has wifi security mixed mode; otherwise, <c>false</c>.
+        /// </value>
+        bool HasWifiSecurityMixedMode { get; }
 
         /// <summary>
         /// Returns the current battery power
@@ -70,6 +76,22 @@ namespace MvvmCrossUtilities.Plugins.Device
         /// </value>
         string Brand { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether has dedicated scanner.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if has dedicated scanner; otherwise, <c>false</c>.
+        /// </value>
+        bool HasDedicatedScanner { get; }
+
+        /// <summary>
+        /// Gets the os version.
+        /// </summary>
+        /// <value>
+        /// The os version.
+        /// </value>
+        string OSVersion { get; }
+
         #endregion
 
         #region Methods
@@ -86,6 +108,12 @@ namespace MvvmCrossUtilities.Plugins.Device
         /// <param name="path"></param>
         /// <returns></returns>
         ulong GetAvailableFreeSpace(string path);
+
+        /// <summary>
+        /// Plays a sound
+        /// </summary>
+        /// <param name="sound">The type of sound to play</param>
+        void PlaySound(SoundTypeEnum sound);
 
         /// <summary>
         /// Sets the current country on the device

@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.IO;
 
-namespace MvvmCrossUtilities.Plugins.Storage.Droid
+namespace MvvmCrossUtilities.Plugins.Storage
 {
     public class FileInfo : IFileInfo
     {
@@ -31,12 +31,12 @@ namespace MvvmCrossUtilities.Plugins.Storage.Droid
 
         public DateTime LastWriteTime { get; private set; }
         public DateTime LastWriteTimeUtc { get; private set; }
-
+        
         #endregion
 
         #region Constructor
-
-        public FileInfo(System.IO.FileInfo fileInfo, StorageLocation location, string relativePath)
+        
+        public FileInfo(System.IO.FileInfo fileInfo)
         {
             if (fileInfo != null)
             {
@@ -45,9 +45,6 @@ namespace MvvmCrossUtilities.Plugins.Storage.Droid
                 FilePath = fileInfo.FullName;
                 FolderPath = fileInfo.Directory.FullName;
                 Length = fileInfo.Length;
-                Location = location;
-                RelativePath = relativePath;
-                RelativePathWithName = Path.Combine(relativePath, Name);
                 CreationTime = fileInfo.CreationTime;
                 CreationTimeUtc = fileInfo.CreationTimeUtc;
                 LastAccessTime = fileInfo.LastAccessTime;
@@ -55,6 +52,14 @@ namespace MvvmCrossUtilities.Plugins.Storage.Droid
                 LastWriteTime = fileInfo.LastWriteTime;
                 LastWriteTimeUtc = fileInfo.LastWriteTimeUtc;
             }
+        }
+
+        public FileInfo(System.IO.FileInfo fileInfo, StorageLocation location, string relativePath)
+            : this(fileInfo)
+        {
+            Location = location;
+            RelativePath = relativePath;
+            RelativePathWithName = Path.Combine(relativePath, Name);
         }
 
         #endregion

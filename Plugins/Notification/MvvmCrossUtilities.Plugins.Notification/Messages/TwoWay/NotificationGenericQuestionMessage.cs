@@ -2,14 +2,14 @@
 
 namespace MvvmCrossUtilities.Plugins.Notification.Messages.TwoWay
 {
+    /// <summary>
+    /// Generic notification for question interface
+    /// </summary>
     public class NotificationGenericQuestionMessage : NotificationTwoWayMessage
     {
         /// <summary>
         /// Gets the question.
         /// </summary>
-        /// <value>
-        /// The question.
-        /// </value>
         public string Question
         {
             get { return _question; }

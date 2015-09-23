@@ -37,6 +37,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
         private int _indentWidth;
         private GravityFlags _indicatorGravity = GravityFlags.NoGravity;
         private bool _collapsible;
+        private bool _selectionEnabled;
         
         private Drawable _collapsedDrawable;
         private Drawable _expandedDrawable;
@@ -61,11 +62,11 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
         }
         private readonly IMvxAndroidBindingContext _bindingContext;
 
-        protected ITreeStateManager<T> TreeStateManager
+        public ITreeStateManager<T> TreeStateManager
         {
             get { return _treeStateManager; }
         }
-        private readonly ITreeStateManager<T> _treeStateManager;
+        private ITreeStateManager<T> _treeStateManager;
 
         public override int Count
         {
@@ -221,7 +222,6 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
             if (SelectedItems == null || !SelectedItems.Contains(dataContext))
             {
                 bindableViewToUse.Checked = false;
-
             }
             else
             {
@@ -250,9 +250,9 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
 
         #region Methods
 
-        protected ITreeStateManager<T> GetManager()
+        public void UpdateTree()
         {
-            return _treeStateManager;
+            NotifyDataSetChanged();
         }
 
         protected void ExpandCollapse(T id)
@@ -280,7 +280,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
             {
                 id.GetChildren();
                 var addChildrenToSelected = (!SingleSelection && SelectedItems.Contains(id));
-                var treeBuilder = new TreeBuilder<T>(GetManager());
+                var treeBuilder = new TreeBuilder<T>(TreeStateManager);
 
                 _ignoreSelectedItemsChanged = true;
 
@@ -312,7 +312,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
             return _treeStateManager.GetVisibleList().ElementAt(position);
         }
 
-        public TreeNodeInfo<T> GetTreeNodeInfo(int position)
+        public virtual TreeNodeInfo<T> GetTreeNodeInfo(int position)
         {
             return _treeStateManager.GetNodeInfo(GetTreeId(position));
         }
@@ -326,9 +326,9 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
         {
             Drawable individualRowDrawable = GetBackgroundDrawable(nodeInfo);
 
-            bindableView.SetBackgroundDrawable(individualRowDrawable == null ? GetDrawableOrDefaultBackground(_rowBackgroundDrawable) : individualRowDrawable);
+            bindableView.Background = (individualRowDrawable == null ? GetDrawableOrDefaultBackground(_rowBackgroundDrawable) : individualRowDrawable);
 
-            LinearLayout.LayoutParams indicatorLayoutParams = new LinearLayout.LayoutParams(CalculateIndentation(nodeInfo), Android.Widget.LinearLayout.LayoutParams.FillParent);
+            LinearLayout.LayoutParams indicatorLayoutParams = new LinearLayout.LayoutParams(CalculateIndentation(nodeInfo), ViewGroup.LayoutParams.MatchParent);
 
             LinearLayout indicatorLayout = bindableView.FindViewById<LinearLayout>(Resource.Id.treeview_list_item_image_layout);
             indicatorLayout.SetGravity(_indicatorGravity);
@@ -336,7 +336,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
 
             ImageView image = bindableView.FindViewById<ImageView>(Resource.Id.treeview_list_item_image);
             image.SetImageDrawable(GetDrawable(nodeInfo));
-            image.SetBackgroundDrawable(GetDrawableOrDefaultBackground(_indicatorBackgroundDrawable));
+            image.Background = GetDrawableOrDefaultBackground(_indicatorBackgroundDrawable);
             image.SetScaleType(Android.Widget.ImageView.ScaleType.Center);
 
             bindableView.SetOnClickListener(this);
@@ -348,7 +348,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
             }
 
 
-            var selectorVisible = !(nodeInfo.IsWithChildren() && !AllowParentSelection);
+            var selectorVisible = _selectionEnabled && !(nodeInfo.IsWithChildren() && !AllowParentSelection);
 
             var singleImage = bindableView.FindViewWithTag(IMAGE_SINGLE_SELECTION_TAG);
             if (singleImage != null)
@@ -443,6 +443,11 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters.TreeView
         public void SetCollapsible(bool collapsible)
         {
             this._collapsible = collapsible;
+        }
+
+        public void SetSelectionEnabled(bool selectionEnabled)
+        {
+            this._selectionEnabled = selectionEnabled;
         }
 
         public void Refresh()

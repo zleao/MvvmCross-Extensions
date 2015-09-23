@@ -26,7 +26,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
             : base(context, attrs, adapter)
         {
             (Adapter as BindableLinearLayoutAdapter).OnItemClick = OnItemClick;
-        }
+        } 
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
             if (ItemClick != null)
                 canSelectItem = ItemClick.CanExecute(item);
 
-            if (canSelectItem && ItemClick != null)
+            if (canSelectItem && ItemClick != null) 
             {
                 ItemClick.Execute(item);
             }

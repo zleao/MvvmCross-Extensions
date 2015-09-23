@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+
+  <include layout="@layout/PageCommon_Titlebar" />
+
+  <Switch
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:text="Item drag"
+        android:textOn="On"
+        android:textOff="Off"
+        android:switchMinWidth="2sp"
+        android:switchPadding="2sp"
+        local:MvxBind="Checked DragEnabled, Mode=TwoWay" />
+  <Switch
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:textSize="16dp"
+      android:text="Item selection"
+      android:textOn="On"
+      android:textOff="Off"
+      android:switchMinWidth="2sp"
+      android:switchPadding="2sp"
+      local:MvxBind="Checked SelectionEnabled, Mode=TwoWay" />
+  <Switch
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:textSize="16dp"
+      android:text="Selection Mode"
+      android:textOn="Single"
+      android:textOff="Multiple"
+      android:switchMinWidth="2sp"
+      android:switchPadding="2sp"
+      local:MvxBind="Checked SingleSelection, Mode=TwoWay; Visible SelectionEnabled" />
+  <BindableDragSortListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal"
+        android:paddingLeft="12dp"
+        local:drag_handle_id="@id/drag_handle"
+        local:MvxItemTemplate="@layout/listitem_selectableitem"
+        local:MvxBind="ItemsSource Items, Mode=OneWay;
+                       SelectedItems SelectedItems;
+                       DragEnabled DragEnabled;
+                       SelectionEnabled SelectionEnabled;
+                       SingleSelection SingleSelection" />
+</LinearLayout>

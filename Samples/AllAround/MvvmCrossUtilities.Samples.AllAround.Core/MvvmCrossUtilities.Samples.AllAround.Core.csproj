@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F24089DE-30F2-456B-89AF-E8316D37B5C7}</ProjectGuid>
@@ -11,7 +11,7 @@
     <RootNamespace>MvvmCrossUtilities.Samples.AllAround.Core</RootNamespace>
     <AssemblyName>MvvmCrossUtilities.Samples.AllAround.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
@@ -36,22 +36,22 @@
     <Compile Include="App.cs" />
     <Compile Include="Converters\ContrastColorConverter.cs" />
     <Compile Include="Models\ExpandableItem.cs" />
+    <Compile Include="Models\ListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\TextResourcesKeys.cs" />
     <Compile Include="Services\LocalisationProvider.cs" />
     <Compile Include="ViewModels\Base\AllAroundViewModel.cs" />
     <Compile Include="ViewModels\Base\AllAroundChildViewModel.cs" />
+    <Compile Include="ViewModels\ContextOptionsViewModel.cs" />
+    <Compile Include="ViewModels\CustomEditTextViewModel.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
+    <Compile Include="ViewModels\DragAndDropListViewModel.cs" />
     <Compile Include="ViewModels\ListViewModel.cs" />
-    <Compile Include="ViewModels\Rest\BaseRestViewModel.cs" />
-    <Compile Include="ViewModels\Rest\ArticlesViewModel.cs" />
-    <Compile Include="Models\Rest\ArticlesSearchResult.cs" />
-    <Compile Include="Models\Rest\Article.cs" />
     <Compile Include="ViewModels\ColorViewModel.cs" />
     <Compile Include="ViewModels\DeviceViewModel.cs" />
     <Compile Include="ViewModels\LoggerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\RestServicesViewModel.cs" />
+    <Compile Include="ViewModels\NotificationsViewModel.cs" />
     <Compile Include="ViewModels\TreeViewListViewModel.cs" />
     <Compile Include="ViewModels\ViewPagerViewModel.cs" />
     <Compile Include="ViewModels\ViewPager\ViewPagerChildViewModel.cs" />
@@ -62,54 +62,49 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Cirrious.CrossCore">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.CrossCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.CrossCore.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Localization">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.Localization.dll</HintPath>
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Color">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.JsonLocalisation">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.JsonLocalisation.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.Plugins.JsonLocalisation.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Color, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Color.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.Color.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.Location">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.Plugins.Location.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.JsonLocalisation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.JsonLocalisation.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.JsonLocalisation.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Plugins.ThreadUtils">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.ThreadUtils.3.1.1\lib\portable-win+net45+sl50+wp8+MonoAndroid+MonoTouch\Cirrious.MvvmCross.Plugins.ThreadUtils.dll</HintPath>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Location, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.Location.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.ThreadUtils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.ThreadUtils.3.5.1\lib\portable-win+net45+wp8+win8+wpa81\Cirrious.MvvmCross.Plugins.ThreadUtils.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Plugins\Device\MvvmCrossUtilities.Plugins.Device\MvvmCrossUtilities.Plugins.Device.csproj">
-      <Project>{e76d06c8-f243-488c-9273-e0c159d3d21a}</Project>
+      <Project>{E76D06C8-F243-488C-9273-E0C159D3D21A}</Project>
       <Name>MvvmCrossUtilities.Plugins.Device</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\Logger\MvvmCrossUtilities.Plugins.Logger\MvvmCrossUtilities.Plugins.Logger.csproj">
-      <Project>{5d08e3ee-4b34-457e-becf-55362a4dae42}</Project>
+      <Project>{5D08E3EE-4B34-457E-BECF-55362A4DAE42}</Project>
       <Name>MvvmCrossUtilities.Plugins.Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\Notification\MvvmCrossUtilities.Plugins.Notification\MvvmCrossUtilities.Plugins.Notification.csproj">
-      <Project>{5986d2ae-6250-4b51-b3d4-5649a85f5631}</Project>
+      <Project>{5986D2AE-6250-4B51-B3D4-5649A85F5631}</Project>
       <Name>MvvmCrossUtilities.Plugins.Notification</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Plugins\Rest\MvvmCrossUtilities.Plugins.Rest\MvvmCrossUtilities.Plugins.Rest.csproj">
-      <Project>{cb330ef1-a43a-4626-9b96-21a8bec63d6a}</Project>
-      <Name>MvvmCrossUtilities.Plugins.Rest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\Storage\MvvmCrossUtilities.Plugins.Storage\MvvmCrossUtilities.Plugins.Storage.csproj">
-      <Project>{e4226e5b-acc4-4cdf-a31d-7c403c21280f}</Project>
+      <Project>{E4226E5B-ACC4-4CDF-A31D-7C403C21280F}</Project>
       <Name>MvvmCrossUtilities.Plugins.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\ProjectLibraries\MvvmCrossUtilities.Libraries.Portable\MvvmCrossUtilities.Libraries.Portable.csproj">
-      <Project>{bf7d3a63-cbca-4283-bbc2-01b2d97e3a6e}</Project>
+      <Project>{BF7D3A63-CBCA-4283-BBC2-01B2D97E3A6E}</Project>
       <Name>MvvmCrossUtilities.Libraries.Portable</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

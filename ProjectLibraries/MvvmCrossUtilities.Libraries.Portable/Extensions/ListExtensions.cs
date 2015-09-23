@@ -1,21 +1,26 @@
-﻿using System;
+﻿using Cirrious.CrossCore.Platform;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 {
+    /// <summary>
+    /// Extensions for IList type
+    /// </summary>
     public static class ListExtensions
     {
         /// <summary>
         /// Finds the zero based index of an item, using the search predicate.
         /// If item not found, returns -1
+        /// Deals with null IList
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <param name="searchPredicate">The search predicate.</param>
         /// <returns></returns>
-        public static int FindIndex<T>(this IList<T> source, Func<T, bool> searchPredicate)
+        public static int SafeFindIndex<T>(this IList<T> source, Func<T, bool> searchPredicate)
         {
             var item = source.FirstOrDefault(searchPredicate);
             if (item != null)
@@ -26,11 +31,12 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Applies the action to every item in the list
+        /// Deals with null IList
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <param name="action">The action.</param>
-        public static IList<T> ForEach<T>(this IList<T> source, Action<T> action)
+        public static IList<T> SafeForEach<T>(this IList<T> source, Action<T> action)
         {
             if (source != null && source.Count > 0)
             {
@@ -45,17 +51,18 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Removes all the items filtered by a predicate.
+        /// Deals with null IList
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <param name="filterPredicate">The filter predicate.</param>
         /// <returns></returns>
-        public static bool RemoveAll<T>(this IList<T> source, Func<T, bool> filterPredicate)
+        public static bool SafeRemoveAll<T>(this IList<T> source, Func<T, bool> filterPredicate)
         {
             try
             {
                 var toRemove = source.Where(filterPredicate).ToList();
-                toRemove.ForEach(r =>
+                toRemove.SafeForEach(r =>
                 {
                     if (source.Contains(r))
                         source.Remove(r);
@@ -71,11 +78,12 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Removes the last item of a IList.
+        /// Deals with null IList
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <returns></returns>
-        public static bool RemoveLast<T>(this IList<T> source)
+        public static bool SafeRemoveLast<T>(this IList<T> source)
         {
             try
             {
@@ -88,23 +96,60 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
             }
             catch (Exception ex)
             {
+                MvxTrace.Error(ex.Message + Environment.NewLine + ex.StackTrace);
                 return false;
             }
         }
 
         /// <summary>
         /// Adds an item to list if it is not allready in the list.
+        /// Deals with null IList
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <param name="itemToAdd">The item to add.</param>
-        public static void AddMissing(this IList source, object itemToAdd)
+        public static void SafeAddMissing(this IList source, object itemToAdd)
         {
             if (source == null)
                 return;
 
             if (!source.Contains(itemToAdd))
                 source.Add(itemToAdd);
+        }
+
+        /// <summary>
+        /// Removes the first occurrence of a specific object from the System.Collections.IList.
+        /// Deals with null IList
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="valueToRemove">The value to remove.</param>
+        public static void SafeRemove(this IList source, object valueToRemove)
+        {
+            if (source != null)
+                source.Remove(valueToRemove);
+        }
+
+        /// <summary>
+        /// Removes all items from the System.Collections.IList.
+        /// Deals with null IList
+        /// </summary>
+        /// <param name="source">The source.</param>
+        public static void SafeClear(this IList source)
+        {
+            if (source != null)
+                source.Clear();
+        }
+
+        /// <summary>
+        /// Determines the index of a specific item in the System.Collections.Generic.IList.
+        /// Deals with null IList
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of source</typeparam>
+        /// <param name="source">The System.Collections.Generic.IList to check for index</param>
+        /// <param name="value">The value to check with</param>
+        /// <returns>The index of item if found in the list; otherwise, -1.</returns>
+        public static int SafeIndexOf<T>(this IList<T> source, T value)
+        {
+            return source != null ? source.IndexOf(value) : -1;
         }
     }
 }

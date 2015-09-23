@@ -182,5 +182,10 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
          * Refreshes views connected to the manager.
          */
         void Refresh();
+
+        /**
+         * Resets the visible list of the manager
+         */
+        void ResetVisibleList();
     }
 }

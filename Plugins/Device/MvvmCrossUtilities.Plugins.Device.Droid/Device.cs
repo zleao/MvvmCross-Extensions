@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
+using Android.Media;
 using Android.Net;
 using Android.OS;
 using Android.Provider;
@@ -18,14 +19,22 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
 {
     public class Device : IDevice
     {
-        #region Constants
+        #region Fields
 
-        private const long MEGA_BYTE = 1048576;
+        AudioManager _audioManager;
+        SoundPool _soundPool;
+        HashMap _soundPoolMap;
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// Gets the application context.
+        /// </summary>
+        /// <value>
+        /// The application context.
+        /// </value>
         protected Context ApplicationContext
         {
             get
@@ -34,20 +43,31 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
             }
         }
 
-        #endregion
-
-        #region IDevice Members
-
-        public bool BackCameraSupported
+        /// <summary>
+        /// Indicates if the color camera is supported
+        /// </summary>
+        public bool ColorCameraSupported
         {
-            get { return ApplicationContext.PackageManager.HasSystemFeature(PackageManager.FeatureCamera); }
+            get
+            {
+                return ApplicationContext.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
+            }
         }
 
-        public bool FrontCameraSupported
+        /// <summary>
+        /// Indicates if the imager camera is supported
+        /// </summary>
+        public bool ImagerCameraSupported
         {
-            get { return ApplicationContext.PackageManager.HasSystemFeature(PackageManager.FeatureCameraFront); }
+            get
+            {
+                return ApplicationContext.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
+            }
         }
 
+        /// <summary>
+        /// Returns the serial number of the device
+        /// </summary>
         public string ID
         {
             get
@@ -66,6 +86,23 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
         }
         private string _id;
 
+        /// <summary>
+        /// Gets a value indicating whether this instance has wifi security mixed mode.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has wifi security mixed mode; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasWifiSecurityMixedMode
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Returns the current battery power
+        /// </summary>
         public BatteryLevelEnum BatteryPower
         {
             get
@@ -101,6 +138,9 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
             }
         }
 
+        /// <summary>
+        /// Returns the type of Network to which the device is currently connected
+        /// </summary>
         public NetworkTypeEnum NetworkType
         {
             get
@@ -146,15 +186,22 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
             }
         }
 
+        /// <summary>
+        /// Returns if the wifi is connected
+        /// </summary>
         public bool WifiConnected
         {
             get
             {
+
                 var connectivityManager = ApplicationContext.GetSystemService(Context.ConnectivityService) as ConnectivityManager;
                 return (connectivityManager.ActiveNetworkInfo.Type == ConnectivityType.Wifi);
             }
         }
 
+        /// <summary>
+        /// Returns the number of phone calls missed
+        /// </summary>
         public int PhoneCallsMissed
         {
             get
@@ -168,6 +215,12 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
             }
         }
 
+        /// <summary>
+        /// Gets the time zone bias.
+        /// </summary>
+        /// <value>
+        /// The time zone bias.
+        /// </value>
         public int TimeZoneBias
         {
             get
@@ -219,24 +272,81 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether has dedicated scanner.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if has dedicated scanner; otherwise, <c>false</c>.
+        /// </value>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public bool HasDedicatedScanner
+        {
+            get
+            {
+                return Helpers.HasDedicatedScanner(Model);
+                //return Helpers.HasDedicatedScanner(Manufacturer, Model);
+            }
+        }
+
+        public string OSVersion
+        {
+            get { return ((int)Android.OS.Build.VERSION.SdkInt).ToString(); }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public Device()
+        {
+            #region Sounds Loading
+
+            //set up our audio player
+            _audioManager = (AudioManager)this.ApplicationContext.GetSystemService(Context.AudioService);
+            _soundPool = new SoundPool(6, Stream.Notification, 0);
+            _soundPoolMap = new HashMap();
+
+            //load fx
+            _soundPoolMap.Put(SoundTypeEnum.OneBeep.ToString(), _soundPool.Load(ApplicationContext, Resource.Raw.OneBeep, 1));
+            _soundPoolMap.Put(SoundTypeEnum.TwoBeeps.ToString(), _soundPool.Load(ApplicationContext, Resource.Raw.TwoBeeps, 1));
+            _soundPoolMap.Put(SoundTypeEnum.FourBeeps.ToString(), _soundPool.Load(ApplicationContext, Resource.Raw.FourBeeps, 1));
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Returns the available virtual memory in MB
+        /// </summary>
         public uint GetAvailableVirtualMemory()
         {
             ActivityManager activityManager = (ActivityManager)ApplicationContext.GetSystemService(Context.ActivityService);
             Android.App.ActivityManager.MemoryInfo mi = new Android.App.ActivityManager.MemoryInfo();
             activityManager.GetMemoryInfo(mi);
-            long availableMegs = mi.AvailMem / MEGA_BYTE;
+            long availableMegs = mi.AvailMem / 1048576L;
 
             return Convert.ToUInt32(availableMegs);
         }
 
-        public ulong GetAvailableFreeSpace(string path)
+        /// <summary>
+        /// Plays a sound
+        /// </summary>
+        /// <param name="sound">The type of sound to play</param>
+        public void PlaySound(SoundTypeEnum sound)
         {
-            StatFs statFs = new StatFs(path);
-            long freeBytes = statFs.FreeBlocks * statFs.BlockSize;
+            var streamVolume = _audioManager.GetStreamVolume(Stream.Notification);
 
-            return (ulong)(freeBytes / MEGA_BYTE);
+            _soundPool.Play((int)_soundPoolMap.Get(sound.ToString()), streamVolume, streamVolume, 1, 0, 1f);
+
         }
 
+        /// <summary>
+        /// Sets the current country on the device
+        /// </summary>
+        /// <param name="locale"></param>
         public void SetDefaultLocale(System.Globalization.CultureInfo locale)
         {
             try
@@ -275,6 +385,19 @@ namespace MvvmCrossUtilities.Plugins.Device.Droid
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Returns the available free space in bytes for a given path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public ulong GetAvailableFreeSpace(string path)
+        {
+            StatFs statFs = new StatFs(path);
+            long freeBytes = statFs.FreeBlocks * statFs.BlockSize;
+
+            return Helpers.ConvertBytesToMegabytes(freeBytes);
+        }
+
+        #endregion        
     }
 }

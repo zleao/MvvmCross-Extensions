@@ -30,12 +30,12 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 
         public bool BackCameraSupported
         {
-            get { return Device.BackCameraSupported; }
+            get { return Device.ColorCameraSupported; }
         }
 
         public bool FrontCameraSupported
         {
-            get { return Device.FrontCameraSupported; }
+            get { return Device.ImagerCameraSupported; }
         }
 
         public uint GetAvailableVirtualMemory

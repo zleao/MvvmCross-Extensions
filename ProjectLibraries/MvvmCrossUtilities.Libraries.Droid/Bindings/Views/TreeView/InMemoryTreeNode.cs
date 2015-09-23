@@ -9,7 +9,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
         #region Fields
 
         private readonly string STRING_FORMAT = "InMemoryTreeNode [id={0}, parent={1}, level={2}, visible={3}, children={4}, childIdListCache={5}]";
-        private static readonly long serialVersionUID = 1L;
+        //private static readonly long serialVersionUID = 1L;
         private readonly List<InMemoryTreeNode<T>> _children = new List<InMemoryTreeNode<T>>();
         private List<T> _childIdListCache = null;
         

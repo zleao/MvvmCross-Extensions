@@ -1,23 +1,10 @@
-﻿namespace MvvmCrossUtilities.Plugins.Notification.Messages.Base
+﻿
+namespace MvvmCrossUtilities.Plugins.Notification.Messages.Base
 {
-    public enum NotificationTwoWayAnswersGroupEnum
-    {
-        None,
-        Ok,
-        YesNo,
-        OkCancel
-    }
-
-    public enum NotificationTwoWayAnswersEnum
-    {
-        Unknown,
-        Yes,
-        No,
-        Ok,
-        Cancel
-    }
-
-    public abstract class NotificationTwoWayMessage : NotificationMessage
+    /// <summary>
+    /// Two-Way notification
+    /// </summary>
+    public abstract class NotificationTwoWayMessage : NotificationMessage, INotificationTwoWayMessage
     {
         /// <summary>
         /// Gets the possible answers.
@@ -30,7 +17,7 @@
             get { return _possibleAnswers; }
         }
         private readonly NotificationTwoWayAnswersGroupEnum _possibleAnswers;
-        
+
         #region Constructor
 
         /// <summary>
@@ -43,7 +30,7 @@
         {
             _possibleAnswers = possibleAnswers;
         }
-        
+
         #endregion
     }
 }

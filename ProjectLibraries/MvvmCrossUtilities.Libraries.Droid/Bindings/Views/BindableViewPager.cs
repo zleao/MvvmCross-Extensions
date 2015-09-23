@@ -21,26 +21,22 @@ using Cirrious.MvvmCross.Binding.Attributes;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters;
 using MvvmCrossUtilities.Libraries.Portable.Extensions;
+using Cirrious.MvvmCross.Binding.ExtensionMethods;
+using Android.Views;
+using Android.Support.V4.View;
+using System;
 
 namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
 {
-    public class BindableViewPager : Android.Support.V4.View.ViewPager
+    public class BindableViewPager : ViewPager
     {
+        #region Fields
 
-        public BindableViewPager(Context context, IAttributeSet attrs)
-            : this(context, attrs, new MvxBindablePagerAdapter(context))
-        { }
+        private bool _ignoreCurrentIndex = false;
 
-        public BindableViewPager(Context context, IAttributeSet attrs, MvxBindablePagerAdapter adapter)
-            : base(context, attrs)
-        {
-            var itemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
-            adapter.ItemTemplateId = itemTemplateId;
-            Adapter = adapter;
+        #endregion
 
-            base.PageSelected += OnPageSelectedHandler;
-        }
-
+        #region Properties
         public string TitlePropertyName
         {
             get { return Adapter.TitlePropertyName; }
@@ -75,6 +71,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
             set
             {
                 _currentPageIndex = 0;
+                _currentPage = null;
 
                 if (value == null)
                 {
@@ -83,15 +80,15 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
                 else if (value is IEnumerable)
                 {
                     Adapter.ItemsSource = value as IEnumerable;
-                    if (Adapter.ItemsSource.CountOrZero() > 0)
-                        OnPageSelectedHandler(this, new PageSelectedEventArgs(CurrentPageIndex));
+                    if (Adapter.ItemsSource.SafeCount() > 0)
+                        ChangeSelectedPage(CurrentPageIndex);
                 }
                 else
                 {
                     var list = new List<object>();
                     list.Add(value);
                     Adapter.ItemsSource = list;
-                    OnPageSelectedHandler(this, new PageSelectedEventArgs(CurrentPageIndex));
+                    ChangeSelectedPage(CurrentPageIndex);
                 }
             }
         }
@@ -113,6 +110,26 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
         }
         private int _currentPageIndex;
 
+        /// <summary>
+        /// Gets or sets the current page.
+        /// </summary>
+        /// <value>
+        /// The current page.
+        /// </value>
+        public object CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                if (_currentPage != value)
+                {
+                    var pageIndex = Adapter.GetPosition(value);
+                    this.SetCurrentItem(pageIndex < 0 ? 0 : pageIndex, true);
+                }
+            }
+        }
+        private object _currentPage;
+
         public ICommand PageSelectedCommand
         {
             get { return _pageSelectedCommand; }
@@ -120,15 +137,56 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
         }
         private ICommand _pageSelectedCommand;
 
+        #endregion
+
+        #region Constructor
+
+        public BindableViewPager(Context context, IAttributeSet attrs)
+            : this(context, attrs, new MvxBindablePagerAdapter(context))
+        { }
+
+        public BindableViewPager(Context context, IAttributeSet attrs, MvxBindablePagerAdapter adapter)
+            : base(context, attrs)
+        {
+            var itemTemplateId = MvxAttributeHelpers.ReadListItemTemplateId(context, attrs);
+            adapter.ItemTemplateId = itemTemplateId;
+            Adapter = adapter;
+
+
+            PageSelected += OnPageSelectedHandler;
+        }
+
+        ~BindableViewPager()
+        {
+            Dispose(true);
+        }
+        #endregion
+
+        #region Methods
+
         private void OnPageSelectedHandler(object sender, PageSelectedEventArgs args)
         {
-            if (_currentPageIndex != args.Position)
+            if (_ignoreCurrentIndex || _currentPageIndex != args.Position)
             {
-                _currentPageIndex = args.Position;
-                if (OnCurrentPageIndexChanged != null)
-                    OnCurrentPageIndexChanged(_currentPageIndex);
+                _ignoreCurrentIndex = false;
+
+                ChangeSelectedPage(args.Position);
+
                 ExecuteCommand(PageSelectedCommand, args.Position);
             }
+        }
+
+        private void ChangeSelectedPage(int pageIndex)
+        {
+            _currentPageIndex = pageIndex;
+
+            if (OnCurrentPageIndexChanged != null)
+                OnCurrentPageIndexChanged(_currentPageIndex);
+
+            _currentPage = Adapter.ItemsSource.ElementAt(_currentPageIndex);
+
+            if (OnCurrentPageChanged != null)
+                OnCurrentPageChanged(_currentPage);
         }
 
         protected virtual void ExecuteCommand(ICommand command, int toPage)
@@ -147,7 +205,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
             return BlockSwipe ? false : base.OnInterceptTouchEvent(ev);
         }
 
-        public override bool OnTouchEvent(Android.Views.MotionEvent e)
+        public override bool OnTouchEvent(MotionEvent e)
         {
             return BlockSwipe ? false : base.OnTouchEvent(e);
         }
@@ -162,7 +220,24 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
             }
         }
 
+        protected override void OnFinishInflate()
+        {
+            base.OnFinishInflate();
+
+            _ignoreCurrentIndex = true;
+            OnPageSelectedHandler(this, new PageSelectedEventArgs(CurrentItem));
+        }
+
+        #endregion
+
+        #region Delegates
+
         public delegate void CurrentPageIndexChangedDelegate(int pageIndex);
         public CurrentPageIndexChangedDelegate OnCurrentPageIndexChanged;
+
+        public delegate void CurrentPageChangedDelegate(object page);
+        public CurrentPageChangedDelegate OnCurrentPageChanged;
+
+        #endregion
     }
 }

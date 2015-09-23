@@ -1,5 +1,9 @@
-﻿namespace MvvmCrossUtilities.Plugins.Storage
+﻿
+namespace MvvmCrossUtilities.Plugins.Storage
 {
+    /// <summary>
+    /// StorageMode
+    /// </summary>
     public enum StorageMode
     {
         /// <summary>

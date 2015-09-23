@@ -64,7 +64,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views.TreeView
         /// <param name="level">The level.</param>
         public void SequentiallyAddNextNode(T id, int level)
         {
-            Log.Debug(TAG, "Adding sequentiall node " + id + " at level " + level);
+            Log.Debug(TAG, "Adding sequential node " + id + " at level " + level);
             if (lastAddedId == null)
             {
                 AddNodeToParentOneLevelDown(default(T), id, level);

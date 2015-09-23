@@ -17,11 +17,6 @@ namespace MvvmCrossUtilities.Samples.AllAround.Droid.Bootstrap
     {
     }
 
-    public class RestPluginBootstrap
-       : MvxPluginBootstrapAction<MvvmCrossUtilities.Plugins.Rest.PluginLoader>
-    {
-    }
-
     public class StoragePluginBootstrap
         : MvxPluginBootstrapAction<MvvmCrossUtilities.Plugins.Storage.PluginLoader>
     {

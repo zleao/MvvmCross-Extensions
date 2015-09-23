@@ -1,17 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Windows.Input;
 using Android.Content;
 using Android.Graphics;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Cirrious.CrossCore.Platform;
-using Cirrious.CrossCore.WeakSubscription;
-using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Views;
+using Cirrious.CrossCore.WeakSubscription;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.Linq;
+using Cirrious.MvvmCross.Binding;
+using Cirrious.CrossCore.Platform;
+using System.Collections.Specialized;
 using MvvmCrossUtilities.Libraries.Droid.Bindings.Adapters;
+using System.Windows.Input;
 
 namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
 {
@@ -145,7 +147,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Views
 
                 this.ChoiceMode = _singleSelection ? ChoiceMode.Single : ChoiceMode.Multiple;
 
-                if (_singleSelection && (SelectedItems == null || SelectedItems.Count > 1))
+                if(_singleSelection && (SelectedItems == null || SelectedItems.Count > 1))
                     SetAllItemsChecked(false);
 
                 InvalidateViews();

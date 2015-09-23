@@ -52,7 +52,6 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
         }
         private string _pageSelectedText;
         
-
         public ObservableCollection<ViewPagerChildViewModel> ChildPages 
         {
             get { return _childPages; }
@@ -76,6 +75,8 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
         public ViewPagerViewModel()
         {
             _pageSelectedCommand = new MvxCommand<int>(OnPageSelected);
+
+            CurrentPageIndex = -1;
 
             for (int i = 1; i < 6; i++)
             {

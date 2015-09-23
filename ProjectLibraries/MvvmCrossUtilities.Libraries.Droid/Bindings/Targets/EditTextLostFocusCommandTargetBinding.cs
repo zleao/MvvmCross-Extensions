@@ -1,8 +1,8 @@
-using System;
-using System.Windows.Input;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
+using System;
+using System.Windows.Input;
 
 namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Targets
 {
@@ -39,7 +39,7 @@ namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Targets
         protected override void SetValueImpl(object target, object value)
         {
             var command = value as ICommand;
-
+            
             _lostFocusCommand = command;
             if (command == null)
             {

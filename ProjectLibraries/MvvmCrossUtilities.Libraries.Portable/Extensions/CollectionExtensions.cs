@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Collections;
+using System.Linq;
 
 namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 {
+    /// <summary>
+    /// Extensions for ICollection type
+    /// </summary>
     public static class CollectionExtensions
     {
         /// <summary>
@@ -22,11 +24,12 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Adds the range of items.
+        /// Deals with null collections
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="target">The target.</param>
+        /// <param name="source">The source.</param>
         /// <param name="items">The items.</param>
-        public static void AddRange<T>(this ICollection<T> source, IEnumerable<T> items)
+        public static void SafeAddRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
             if (source == null || items == null)
                 return;
@@ -49,15 +52,19 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Adds the missing items to the collection.
+        /// Deals with null collections
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source.</param>
         /// <param name="items">The items.</param>
-        public static void AddMissing<T>(this ICollection<T> source, IEnumerable<T> items)
+        public static void SafeAddMissing<T>(this ICollection<T> source, IEnumerable<T> items)
         {
-            AddMissing<T>(source, items, new Func<T, bool>(ShouldAddItem));            
+            SafeAddMissing<T>(source, items, new Func<T, bool>(ShouldAddItem));
         }
 
         /// <summary>
         /// Adds the missing items to the collection.
+        /// Deals with null collections
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
@@ -66,7 +73,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
         /// <remarks>
         /// The missing item is only added if the validation func returns true
         /// </remarks>
-        public static void AddMissing<T>(this ICollection<T> source, IEnumerable<T> items, Func<T,bool> validationFunc)
+        public static void SafeAddMissing<T>(this ICollection<T> source, IEnumerable<T> items, Func<T, bool> validationFunc)
         {
             if (source == null || items == null || validationFunc == null)
                 return;
@@ -101,12 +108,12 @@ namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 
         /// <summary>
         /// Returns the element count of the collection.
-        /// If collection null or empty, returns zero
+        /// If collection is null or empty, returns zero
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <returns></returns>
-        public static int CountOrZero<T>(this ICollection<T> source)
+        public static int SafeCount<T>(this ICollection<T> source)
         {
             return source.IsNullOrEmpty() ? 0 : source.Count;
         }

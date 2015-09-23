@@ -2,7 +2,7 @@
 
 namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels.ViewPager
 {
-    public class ViewPagerChildViewModel : AllAroundChildViewModel<ViewPagerViewModel>
+    public class ViewPagerChildViewModel : AllAroundChildViewModel<AllAroundViewModel>
     {
          #region Properties
 
@@ -25,18 +25,18 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels.ViewPager
             }
         }
         private string _body;
-        
+
         #endregion
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ViewPagerChildViewModel{ViewPagerViewModel}" /> class.
+        /// Initializes a new instance of the <see cref="ViewPagerChildViewModel{AllAroundViewModel}" /> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="title">The title.</param>
         /// <param name="body">The body.</param>
-        public ViewPagerChildViewModel(ViewPagerViewModel parent, string title, string body)
+        public ViewPagerChildViewModel(AllAroundViewModel parent, string title, string body)
             : base(parent)
         {
             _pageTitle = title;

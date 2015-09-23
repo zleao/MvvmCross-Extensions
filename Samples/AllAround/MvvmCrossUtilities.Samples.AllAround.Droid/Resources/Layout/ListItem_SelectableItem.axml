@@ -9,6 +9,7 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:duplicateParentState="true">
   <LinearLayout
+    android:id="@+id/drag_handle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="1"

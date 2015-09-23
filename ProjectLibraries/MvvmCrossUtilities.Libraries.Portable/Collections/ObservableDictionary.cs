@@ -7,6 +7,11 @@ using System.ComponentModel;
 
 namespace MvvmCrossUtilities.Libraries.Portable.Collections
 {
+    /// <summary>
+    /// ObservableDictionary
+    /// </summary>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
+    /// <typeparam name="TValue">The type of the value.</typeparam>
     public class ObservableDictionary<TKey, TValue> :
         IDictionary<TKey, TValue>,
         ICollection<KeyValuePair<TKey, TValue>>,
@@ -20,7 +25,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObservableDictionary{TValue}" /> class.
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey, TValue}"/> class.
         /// </summary>
         public ObservableDictionary()
         {
@@ -28,7 +33,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObservableDictionary{TValue}" /> class.
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TKey, TValue}"/> class.
         /// </summary>
         /// <param name="dictionary">The dictionary.</param>
         public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
@@ -40,7 +45,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObservableDictionary{TValue}" /> class.
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TValue, TValue}" /> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
         public ObservableDictionary(IEqualityComparer<TKey> comparer)
@@ -49,7 +54,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObservableDictionary{TValue}" /> class.
+        /// Initializes a new instance of the <see cref="ObservableDictionary{TValue, TValue}" /> class.
         /// </summary>
         /// <param name="dictionary">The dictionary.</param>
         /// <param name="comparer">The comparer.</param>
@@ -99,10 +104,10 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="`1" /> with the specified key.
+        /// Gets or sets the value with the specified key.
         /// </summary>
         /// <value>
-        /// The <see cref="`1" />.
+        /// The value.
         /// </value>
         /// <param name="key">The key.</param>
         /// <returns></returns>
@@ -166,7 +171,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         /// <param name="items">The items.</param>
         public void AddRange(IDictionary<TKey, TValue> items)
         {
-            if (items != null)
+            if(items != null)
             {
                 foreach (var item in items)
                 {
@@ -178,7 +183,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
         /// <summary>
         /// Clears this instance.
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             DoClearEntries();
         }
@@ -694,6 +699,9 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
             remove { CollectionChanged -= value; }
         }
 
+        /// <summary>
+        /// Occurs when collection changed.
+        /// </summary>
         protected virtual event NotifyCollectionChangedEventHandler CollectionChanged;
 
         #endregion INotifyCollectionChanged
@@ -706,6 +714,9 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
             remove { PropertyChanged -= value; }
         }
 
+        /// <summary>
+        /// Occurs when property changed.
+        /// </summary>
         protected virtual event PropertyChangedEventHandler PropertyChanged;
 
         #endregion INotifyPropertyChanged
@@ -716,21 +727,37 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
 
         #region KeyedDictionaryEntryCollection<TKey>
 
-        protected class KeyedDictionaryEntryCollection<TKey> : KeyedCollection<TKey, DictionaryEntry>
+        /// <summary>
+        /// KeyedDictionaryEntryCollection
+        /// </summary>
+        /// <typeparam name="TKeyEntry">The type of the key.</typeparam>
+        protected class KeyedDictionaryEntryCollection<TKeyEntry> : KeyedCollection<TKeyEntry, DictionaryEntry>
         {
             #region Constructors
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="KeyedDictionaryEntryCollection{TKeyEntry}"/> class.
+            /// </summary>
             public KeyedDictionaryEntryCollection() : base() { }
 
-            public KeyedDictionaryEntryCollection(IEqualityComparer<TKey> comparer) : base(comparer) { }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="KeyedDictionaryEntryCollection{TKeyEntry}"/> class.
+            /// </summary>
+            /// <param name="comparer">The comparer.</param>
+            public KeyedDictionaryEntryCollection(IEqualityComparer<TKeyEntry> comparer) : base(comparer) { }
 
             #endregion
 
             #region Methods
 
-            protected override TKey GetKeyForItem(DictionaryEntry entry)
+            /// <summary>
+            /// Gets the key for item.
+            /// </summary>
+            /// <param name="entry">The entry.</param>
+            /// <returns></returns>
+            protected override TKeyEntry GetKeyForItem(DictionaryEntry entry)
             {
-                return (TKey)entry.Key;
+                return (TKeyEntry)entry.Key;
             }
 
             #endregion Methods
@@ -744,17 +771,22 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
 
         #region Enumerator
 
-        public struct Enumerator<TKey, TValue> : IEnumerator<KeyValuePair<TKey, TValue>>, IDisposable, IDictionaryEnumerator, IEnumerator
+        /// <summary>
+        /// Enumerator
+        /// </summary>
+        /// <typeparam name="TKeyEnumerator">The type of the key.</typeparam>
+        /// <typeparam name="TValueEnumerator">The type of the value.</typeparam>
+        public struct Enumerator<TKeyEnumerator, TValueEnumerator> : IEnumerator<KeyValuePair<TKeyEnumerator, TValueEnumerator>>, IDisposable, IDictionaryEnumerator, IEnumerator
         {
             #region constructors
 
-            internal Enumerator(ObservableDictionary<TKey, TValue> dictionary, bool isDictionaryEntryEnumerator)
+            internal Enumerator(ObservableDictionary<TKeyEnumerator, TValueEnumerator> dictionary, bool isDictionaryEntryEnumerator)
             {
                 _dictionary = dictionary;
                 _version = dictionary._version;
                 _index = -1;
                 _isDictionaryEntryEnumerator = isDictionaryEntryEnumerator;
-                _current = new KeyValuePair<TKey, TValue>();
+                _current = new KeyValuePair<TKeyEnumerator, TValueEnumerator>();
             }
 
             #endregion constructors
@@ -763,7 +795,13 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
 
             #region public
 
-            public KeyValuePair<TKey, TValue> Current
+            /// <summary>
+            /// Gets the current.
+            /// </summary>
+            /// <value>
+            /// The current.
+            /// </value>
+            public KeyValuePair<TKeyEnumerator, TValueEnumerator> Current
             {
                 get
                 {
@@ -780,21 +818,30 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
 
             #region public
 
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
             public void Dispose()
             {
             }
 
+            /// <summary>
+            /// Advances the enumerator to the next element of the collection.
+            /// </summary>
+            /// <returns>
+            /// true if the enumerator was successfully advanced to the next element; false if the enumerator has passed the end of the collection.
+            /// </returns>
             public bool MoveNext()
             {
                 ValidateVersion();
                 _index++;
                 if (_index < _dictionary._keyedEntryCollection.Count)
                 {
-                    _current = new KeyValuePair<TKey, TValue>((TKey)_dictionary._keyedEntryCollection[_index].Key, (TValue)_dictionary._keyedEntryCollection[_index].Value);
+                    _current = new KeyValuePair<TKeyEnumerator, TValueEnumerator>((TKeyEnumerator)_dictionary._keyedEntryCollection[_index].Key, (TValueEnumerator)_dictionary._keyedEntryCollection[_index].Value);
                     return true;
                 }
                 _index = -2;
-                _current = new KeyValuePair<TKey, TValue>();
+                _current = new KeyValuePair<TKeyEnumerator, TValueEnumerator>();
                 return false;
             }
 
@@ -837,7 +884,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
                     {
                         return new DictionaryEntry(_current.Key, _current.Value);
                     }
-                    return new KeyValuePair<TKey, TValue>(_current.Key, _current.Value);
+                    return new KeyValuePair<TKeyEnumerator, TValueEnumerator>(_current.Key, _current.Value);
                 }
             }
 
@@ -845,7 +892,7 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
             {
                 ValidateVersion();
                 _index = -1;
-                _current = new KeyValuePair<TKey, TValue>();
+                _current = new KeyValuePair<TKeyEnumerator, TValueEnumerator>();
             }
 
             #endregion IEnumerator implemenation
@@ -881,10 +928,10 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
 
             #region fields
 
-            private ObservableDictionary<TKey, TValue> _dictionary;
+            private ObservableDictionary<TKeyEnumerator, TValueEnumerator> _dictionary;
             private int _version;
             private int _index;
-            private KeyValuePair<TKey, TValue> _current;
+            private KeyValuePair<TKeyEnumerator, TValueEnumerator> _current;
             private bool _isDictionaryEntryEnumerator;
 
             #endregion fields
@@ -896,6 +943,9 @@ namespace MvvmCrossUtilities.Libraries.Portable.Collections
 
         #region Fields
 
+        /// <summary>
+        /// The keyed entry collection
+        /// </summary>
         protected KeyedDictionaryEntryCollection<TKey> _keyedEntryCollection;
 
         private int _countCache = 0;

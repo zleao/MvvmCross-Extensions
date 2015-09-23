@@ -1,8 +1,8 @@
-using System;
 using Cirrious.CrossCore.Platform;
 using Cirrious.MvvmCross.Binding;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using MvvmCrossUtilities.Libraries.Droid.Bindings.Views;
+using System;
 
 namespace MvvmCrossUtilities.Libraries.Droid.Bindings.Targets
 {

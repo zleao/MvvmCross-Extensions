@@ -1,14 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using Cirrious.MvvmCross.ViewModels;
 using MvvmCrossUtilities.Libraries.Portable.Models;
+using MvvmCrossUtilities.Libraries.Portable.Utilities;
 using MvvmCrossUtilities.Samples.AllAround.Core.Models;
 using MvvmCrossUtilities.Samples.AllAround.Core.ViewModels.Base;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 {
     public class TreeViewListViewModel : AllAroundViewModel
     {
+        #region Constants
+
+        private const int MAX_DEPTH = 4;
+
+        #endregion
+
         #region Fields
 
         private Random _random = new Random();
@@ -20,8 +30,16 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
         public ObservableCollection<ExpandableItem> Items
         {
             get { return _items; }
+            set
+            {
+                if (_items != value)
+                {
+                    _items = value;
+                    RaisePropertyChanged(() => Items);
+                }
+            }
         }
-        private ObservableCollection<ExpandableItem> _items = new ObservableCollection<ExpandableItem>();
+        private ObservableCollection<ExpandableItem> _items;
 
         public ObservableCollection<ExpandableItem> SelectedItems
         {
@@ -85,43 +103,70 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
         }
         private bool _allowParentSelection = false;
 
+        public int NumberOfItems
+        {
+            get { return _numberOfItems; }
+            set
+            {
+                if (_numberOfItems != value)
+                {
+                    _numberOfItems = value;
+                    RaisePropertyChanged(() => NumberOfItems);
+                }
+            }
+        }
+        private int _numberOfItems;
+
+        #endregion
+
+        #region Commands
+
+        public ICommand UpdateTreeViewCommand
+        {
+            get { return _updateTreeViewCommand; }
+        }
+        private readonly ICommand _updateTreeViewCommand;
+
         #endregion
 
         #region Constructor
 
         public TreeViewListViewModel()
         {
-            CreateRootNodes();
+            _updateTreeViewCommand = new MvxCommand(UpdateTreeView);
+
+            NumberOfItems = 5;
         }
 
         #endregion
 
         #region Methods
 
-        private void CreateRootNodes()
+        private Task CreateRootNodesAsync()
         {
-            for (int i = 1; i <= 5; i++)
+            var items = new List<ExpandableItem>();
+
+            for (int i = 1; i <= NumberOfItems; i++)
             {
-                Items.Add(CreateNewItem("Item " + i));
+                items.Add(CreateNewItem("Item " + i, 0));
             }
+
+            InvokeOnMainThread(() =>
+            {
+                Items = new ObservableCollection<ExpandableItem>(items);
+            });
+
+            return Task.FromResult(true);
         }
 
-        private ExpandableItem CreateNewItem(string nodeName)
+        private ExpandableItem CreateNewItem(string nodeName, int level)
         {
-            var dotCount = 0;
-            foreach (var item in nodeName)
-            {
-                if (item == '.')
-                    dotCount++;
-            }
-
-            var hasChildren = (dotCount >= MAX_DEPTH || _random.NextDouble() < 0.5 ? false : true);
+            var hasChildren = level < MAX_DEPTH ? (_random.NextDouble() < 0.5 ? false : true) : false;
             var nickName = hasChildren ? "Group" : "Single";
 
-            return new ExpandableItem(nodeName, nickName, GetChildren, hasChildren);
+            return new ExpandableItem(nodeName, nickName, Color.Aqua, GetChildren, hasChildren, level);
         }
 
-        private readonly int MAX_DEPTH = 2;
         private void GetChildren(IExpandable node)
         {
             if (node != null && node.HasChildren)
@@ -135,11 +180,16 @@ namespace MvvmCrossUtilities.Samples.AllAround.Core.ViewModels
 
                 for (int i = 1; i <= numberOfChildren; i++)
                 {
-                    childrenList.Add(CreateNewItem(nodeName + "." + i));
+                    childrenList.Add(CreateNewItem(nodeName + "." + i, node.Level + 1));
                 }
 
                 node.Children = childrenList;
             }
+        }
+
+        private void UpdateTreeView()
+        {
+            DoWorkAsync(CreateRootNodesAsync, "Processing...");
         }
 
         #endregion

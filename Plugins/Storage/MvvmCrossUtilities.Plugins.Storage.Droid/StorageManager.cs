@@ -4,7 +4,7 @@ using Cirrious.CrossCore.Droid;
 
 namespace MvvmCrossUtilities.Plugins.Storage.Droid
 {
-    public class StorageManager : BaseStorageManager
+    public class StorageManager : StorageManagerCommon_Droid_WPF
     {
         private const string BASE_PRIVATE_ANDROID_DATA_PATH = "Android/data";
         private const string BASE_PUBLIC_ANDROID_DATA_PATH = "Data";

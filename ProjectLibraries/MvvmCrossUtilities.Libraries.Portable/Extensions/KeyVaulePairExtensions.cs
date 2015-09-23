@@ -2,6 +2,9 @@
 
 namespace MvvmCrossUtilities.Libraries.Portable.Extensions
 {
+    /// <summary>
+    /// Extensions for KeyValuePair type
+    /// </summary>
     public static class KeyVaulePairExtensions
     {
         /// <summary>

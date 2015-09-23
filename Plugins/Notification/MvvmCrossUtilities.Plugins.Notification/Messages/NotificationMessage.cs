@@ -5,7 +5,7 @@ namespace MvvmCrossUtilities.Plugins.Notification.Messages
     /// <summary>
     /// Base class for notification messages that provides weak refrence storage of the sender
     /// </summary>
-    public abstract class NotificationMessage
+    public abstract class NotificationMessage : INotificationMessage
     {
         #region Properties
 

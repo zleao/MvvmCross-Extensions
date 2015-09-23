@@ -1,23 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Cirrious.CrossCore.Core;
+﻿using Cirrious.CrossCore.Core;
+using Cirrious.CrossCore.Platform;
+using MvvmCrossUtilities.Plugins.Notification.Core;
+using MvvmCrossUtilities.Plugins.Notification.Core.Async.Subscriptions;
+using MvvmCrossUtilities.Plugins.Notification.Core.Async.Subscriptions.Single;
+using MvvmCrossUtilities.Plugins.Notification.Core.Async.Subscriptions.Void;
+using MvvmCrossUtilities.Plugins.Notification.Core.Async.ThreadRunners;
 using MvvmCrossUtilities.Plugins.Notification.Exceptions;
 using MvvmCrossUtilities.Plugins.Notification.Messages;
 using MvvmCrossUtilities.Plugins.Notification.Messages.Base;
-using MvvmCrossUtilities.Plugins.Notification.Subscriptions;
-using MvvmCrossUtilities.Plugins.Notification.Subscriptions.OneWay;
-using MvvmCrossUtilities.Plugins.Notification.ThreadRunners;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MvvmCrossUtilities.Plugins.Notification
 {
+    /// <summary>
+    /// Notification service plugin
+    /// </summary>
     public class NotificationManager : INotificationService
     {
         #region Fields
 
-        private readonly Dictionary<Type, List<Subscription>> _subscriptions = new Dictionary<Type, List<Subscription>>();
+        private SemaphoreSlim _purgeSemaphore = new SemaphoreSlim(1, 1);
 
-        private readonly Dictionary<Type, bool> _scheduledPurges = new Dictionary<Type, bool>();
+        private volatile Dictionary<Type, ISubscription> _subscriptions = new Dictionary<Type, ISubscription>();
+        private volatile Dictionary<string, List<INotificationMessage>> _pendingNotifications = new Dictionary<string, List<INotificationMessage>>();
 
         #endregion
 
@@ -25,195 +34,217 @@ namespace MvvmCrossUtilities.Plugins.Notification
 
         #region OneWay Subscription
 
-        public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction) where TMessage : NotificationOneWayMessage
+        /// <summary>
+        /// Subscribes an one-way notification with the default context and with a weak reference
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="asyncDeliveryAction">The asynchronous delivery action.</param>
+        /// <returns></returns>
+        public SubscriptionToken Subscribe<TMessage>(Func<TMessage, Task> asyncDeliveryAction)
+            where TMessage : NotificationMessage
         {
-            return Subscribe<TMessage>(deliveryAction, Subscription.DefaultContext);
+            return Subscribe<TMessage>(asyncDeliveryAction, AsyncSubscription.DefaultContext);
         }
 
-        public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction, string context) where TMessage : NotificationOneWayMessage
+        /// <summary>
+        /// Subscribes an one-way notification with a weak reference
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="asyncDeliveryAction">The asynchronous delivery action.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public SubscriptionToken Subscribe<TMessage>(Func<TMessage, Task> asyncDeliveryAction, string context)
+            where TMessage : NotificationMessage
         {
-            return Subscribe<TMessage>(deliveryAction, context, SubscriptionTypeEnum.Weak);
+            return Subscribe<TMessage>(asyncDeliveryAction, context, SubscriptionTypeEnum.Weak);
         }
 
-        public SubscriptionToken Subscribe<TMessage>(Action<TMessage> deliveryAction, string context, SubscriptionTypeEnum reference) where TMessage : NotificationOneWayMessage
+        /// <summary>
+        /// Subscribes an one-way notification
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <param name="asyncDeliveryAction">The asynchronous delivery action.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="reference">The reference.</param>
+        /// <returns></returns>
+        public SubscriptionToken Subscribe<TMessage>(Func<TMessage, Task> asyncDeliveryAction, string context, SubscriptionTypeEnum reference)
+            where TMessage : NotificationMessage
         {
-            return SubscribeInternal(deliveryAction, new SimpleActionRunner(), reference, context);
+            return CommonSubscribe<TMessage>(asyncDeliveryAction, new SimpleAsyncActionRunner(), reference, context);
         }
 
-        public SubscriptionToken SubscribeOnMainThread<TMessage>(Action<TMessage> deliveryAction, string context = Subscription.DefaultContext, SubscriptionTypeEnum reference = SubscriptionTypeEnum.Weak) where TMessage : NotificationOneWayMessage
+        private SubscriptionToken CommonSubscribe<TMessage>(Func<TMessage, Task> asyncDeliveryAction, IAsyncActionRunner asyncActionRunner, SubscriptionTypeEnum reference, string context)
+            where TMessage : NotificationMessage
         {
-            return SubscribeInternal(deliveryAction, new MainThreadActionRunner(), reference, context);
-        }
-
-        public SubscriptionToken SubscribeOnThreadPoolThread<TMessage>(Action<TMessage> deliveryAction, string context = Subscription.DefaultContext, SubscriptionTypeEnum reference = SubscriptionTypeEnum.Weak) where TMessage : NotificationOneWayMessage
-        {
-            return SubscribeInternal(deliveryAction, new ThreadPoolActionRunner(), reference, context);
-        }
-
-        private SubscriptionToken SubscribeInternal<TMessage>(Action<TMessage> deliveryAction, IActionRunner actionRunner, SubscriptionTypeEnum reference, string context) where TMessage : NotificationOneWayMessage
-        {
-            if (deliveryAction == null)
+            if (asyncDeliveryAction == null)
             {
-                throw new ArgumentNullException("deliveryAction");
+                throw new ArgumentNullException("asyncDeliveryAction");
             }
 
-            Subscription subscription;
+            AsyncSubscription asyncSubscription;
 
             switch (reference)
             {
                 case SubscriptionTypeEnum.Strong:
-                    subscription = new OneWayStrongSubscription<TMessage>(actionRunner, deliveryAction, context);
+                    asyncSubscription = new VoidAsyncStrongSubscription<TMessage>(asyncActionRunner, asyncDeliveryAction, context);
                     break;
                 case SubscriptionTypeEnum.Weak:
-                    subscription = new OneWayWeakSubscription<TMessage>(actionRunner, deliveryAction, context);
+                    asyncSubscription = new VoidAsyncWeakSubscription<TMessage>(asyncActionRunner, asyncDeliveryAction, context);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("reference", "reference type unexpected " + reference);
             }
 
-            lock (this)
+            var messageType = typeof(TMessage);
+
+            if (_subscriptions.ContainsKey(messageType))
             {
-                List<Subscription> messageSubscriptions;
-
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    messageSubscriptions = new List<Subscription>();
-                    _subscriptions[typeof(TMessage)] = messageSubscriptions;
-                }
-
-                messageSubscriptions.Add(subscription);
-
-                PublishSubscriberChangeMessage<TMessage>(messageSubscriptions);
+                MvxTrace.Trace("Replacing subscription {0} with context {1} for {2}", asyncSubscription.Id, asyncSubscription.Context, messageType.Name);
+                _subscriptions[messageType] = asyncSubscription;
+            }
+            else
+            {
+                MvxTrace.Trace("Adding subscription {0} with context {1} for {2}", asyncSubscription.Id, asyncSubscription.Context, messageType.Name);
+                _subscriptions.Add(messageType, asyncSubscription);
             }
 
-            return new SubscriptionToken(typeof(TMessage), context, subscription.Id, deliveryAction);
+            return new SubscriptionToken(messageType, context, asyncSubscription.Id, asyncDeliveryAction);
         }
 
         #endregion
 
         #region TwoWay Subscription
 
-        public SubscriptionToken Subscribe<TMessage, TResult>(Func<TMessage, TResult> deliveryAction)
-            where TMessage : NotificationTwoWayMessage
+        /// <summary>
+        /// Subscribes a two-way notification with the default context and with a weak reference
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="asyncDeliveryAction">The asynchronous delivery action.</param>
+        /// <returns></returns>
+        public SubscriptionToken Subscribe<TMessage, TResult>(Func<TMessage, Task<TResult>> asyncDeliveryAction)
+            where TMessage : NotificationMessage
             where TResult : NotificationResult
         {
-            return Subscribe<TMessage, TResult>(deliveryAction, Subscription.DefaultContext);
+            return Subscribe<TMessage, TResult>(asyncDeliveryAction, AsyncSubscription.DefaultContext);
         }
 
-        public SubscriptionToken Subscribe<TMessage, TResult>(Func<TMessage, TResult> deliveryAction, string context)
-            where TMessage : NotificationTwoWayMessage
+        /// <summary>
+        /// Subscribes a two-way notification with a weak reference
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="asyncDeliveryAction">The asynchronous delivery action.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public SubscriptionToken Subscribe<TMessage, TResult>(Func<TMessage, Task<TResult>> asyncDeliveryAction, string context)
+            where TMessage : NotificationMessage
             where TResult : NotificationResult
         {
-            return Subscribe<TMessage, TResult>(deliveryAction, context, SubscriptionTypeEnum.Weak);
+            return Subscribe<TMessage, TResult>(asyncDeliveryAction, context, SubscriptionTypeEnum.Weak);
         }
 
-        public SubscriptionToken Subscribe<TMessage, TResult>(Func<TMessage, TResult> deliveryAction, string context, SubscriptionTypeEnum reference)
-            where TMessage : NotificationTwoWayMessage
+        /// <summary>
+        /// Subscribes a two-way notification
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the message.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="asyncDeliveryAction">The asynchronous delivery action.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="reference">The reference.</param>
+        /// <returns></returns>
+        public SubscriptionToken Subscribe<TMessage, TResult>(Func<TMessage, Task<TResult>> asyncDeliveryAction, string context, SubscriptionTypeEnum reference)
+            where TMessage : NotificationMessage
             where TResult : NotificationResult
         {
-            return SubscribeInternal<TMessage, TResult>(deliveryAction, new SimpleActionRunner(), reference, context);
+            return CommonSubscribe<TMessage, TResult>(asyncDeliveryAction, new SimpleAsyncActionRunner<TResult>(), reference, context);
         }
 
-        public SubscriptionToken SubscribeOnMainThread<TMessage, TResult>(Func<TMessage, TResult> deliveryAction, string context = Subscription.DefaultContext, SubscriptionTypeEnum reference = SubscriptionTypeEnum.Weak)
-            where TMessage : NotificationTwoWayMessage
+        private SubscriptionToken CommonSubscribe<TMessage, TResult>(Func<TMessage, Task<TResult>> asyncDeliveryAction, IAsyncActionRunner<TResult> asyncActionRunner, SubscriptionTypeEnum reference, string context)
+            where TMessage : NotificationMessage
             where TResult : NotificationResult
         {
-            return SubscribeInternal(deliveryAction, new MainThreadActionRunner(), reference, context);
-        }
-
-        public SubscriptionToken SubscribeOnThreadPoolThread<TMessage, TResult>(Func<TMessage, TResult> deliveryAction, string context = Subscription.DefaultContext, SubscriptionTypeEnum reference = SubscriptionTypeEnum.Weak)
-            where TMessage : NotificationTwoWayMessage
-            where TResult : NotificationResult
-        {
-            return SubscribeInternal(deliveryAction, new ThreadPoolActionRunner(), reference, context);
-        }
-
-        private SubscriptionToken SubscribeInternal<TMessage, TResult>(Func<TMessage, TResult> deliveryAction, IActionRunner actionRunner, SubscriptionTypeEnum reference, string context)
-            where TMessage : NotificationTwoWayMessage
-            where TResult : NotificationResult
-        {
-            if (deliveryAction == null)
+            if (asyncDeliveryAction == null)
             {
-                throw new ArgumentNullException("deliveryAction");
+                throw new ArgumentNullException("asyncDeliveryAction");
             }
 
-            Subscription subscription;
+            AsyncSubscription<TResult> asyncSubscription;
 
             switch (reference)
             {
                 case SubscriptionTypeEnum.Strong:
-                    subscription = new TwoWayStrongSubscription<TMessage, TResult>(actionRunner, deliveryAction, context);
+                    asyncSubscription = new SingleAsyncStrongSubscription<TMessage, TResult>(asyncActionRunner, asyncDeliveryAction, context);
                     break;
                 case SubscriptionTypeEnum.Weak:
-                    subscription = new TwoWayWeakSubscription<TMessage, TResult>(actionRunner, deliveryAction, context);
+                    asyncSubscription = new SingleAsyncWeakSubscription<TMessage, TResult>(asyncActionRunner, asyncDeliveryAction, context);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("reference", "reference type unexpected " + reference);
             }
 
-            lock (this)
+            var messageType = typeof(TMessage);
+
+            if (_subscriptions.ContainsKey(messageType))
             {
-                List<Subscription> messageSubscriptions;
-
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    messageSubscriptions = new List<Subscription>();
-                    _subscriptions[typeof(TMessage)] = messageSubscriptions;
-                }
-
-                messageSubscriptions.Add(subscription);
-
-                PublishSubscriberChangeMessage<TMessage>(messageSubscriptions);
+                MvxTrace.Trace("Replacing subscription {0} with context {1} for {2}", asyncSubscription.Id, asyncSubscription.Context, messageType.Name);
+                _subscriptions[messageType] = asyncSubscription;
+            }
+            else
+            {
+                MvxTrace.Trace("Adding subscription {0} with context {1} for {2}", asyncSubscription.Id, asyncSubscription.Context, messageType.Name);
+                _subscriptions.Add(messageType, asyncSubscription);
             }
 
-            return new SubscriptionToken(typeof(TMessage), context, subscription.Id, deliveryAction);
+            return new SubscriptionToken(messageType, context, asyncSubscription.Id, asyncDeliveryAction);
         }
 
         #endregion
 
         #region Unsubscription
 
+        /// <summary>
+        /// Unsubscribesthe message with the specified token
+        /// </summary>
+        /// <param name="subscriptionToken">The subscription token.</param>
         public void Unsubscribe(SubscriptionToken subscriptionToken)
         {
             if (subscriptionToken != null)
             {
-                lock (this)
+                ISubscription asyncSubscription;
+                if (_subscriptions.TryGetValue(subscriptionToken.MessageType, out asyncSubscription))
                 {
-                    List<Subscription> messageSubscriptions;
-
-                    if (_subscriptions.TryGetValue(subscriptionToken.MessageType, out messageSubscriptions))
+                    if (asyncSubscription != null && asyncSubscription.Id == subscriptionToken.Id)
                     {
-                        var subscriptionToRemove = messageSubscriptions.FirstOrDefault(s => s.Id.Equals(subscriptionToken.Id));
-                        if (subscriptionToRemove != null)
-                        {
-                            messageSubscriptions.Remove(subscriptionToRemove);
+                        MvxTrace.Trace("Removing subscription {0}", subscriptionToken.Id);
 
-                            PublishSubscriberChangeMessage(subscriptionToken.MessageType, messageSubscriptions);
-                        }
+                        _subscriptions.Remove(subscriptionToken.MessageType);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Unsubscribe all messages from a particular message type.
+        /// </summary>
+        /// <typeparam name="TMessage">Type of message</typeparam>
         public void Unsubscribe<TMessage>() where TMessage : NotificationMessage
         {
-            var messageType = typeof(TMessage);
-            lock (this)
+            Unsubscribe(typeof(TMessage));
+        }
+
+        /// <summary>
+        /// Unsubscribe all messages from a particular message type
+        /// </summary>
+        /// <param name="messageType">Type of message.</param>
+        public void Unsubscribe(Type messageType)
+        {
+            ISubscription asyncSubscription;
+            if (_subscriptions.TryGetValue(messageType, out asyncSubscription))
             {
-                List<Subscription> messageSubscriptions;
+                MvxTrace.Trace("Removing subscription {0}", asyncSubscription.Id);
 
-                if (_subscriptions.TryGetValue(messageType, out messageSubscriptions))
-                {
-                    if (messageSubscriptions.Count > 0)
-                    {
-                        foreach (var subscription in messageSubscriptions)
-                        {
-                            messageSubscriptions.Remove(subscription);
-                        }
-
-                        PublishSubscriberChangeMessage(messageType, messageSubscriptions);
-                    }
-                }
+                _subscriptions.Remove(messageType);
             }
         }
 
@@ -223,249 +254,356 @@ namespace MvvmCrossUtilities.Plugins.Notification
 
         #region Publish message
 
-        public void Publish<TMessage>(TMessage message) where TMessage : NotificationOneWayMessage
+        #region OneWay publish
+
+        /// <summary>
+        /// Publish a message, using the async/await pattern
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <returns></returns>
+        public Task PublishAsync(INotificationMessage message)
         {
-            Publish<TMessage>(message, Subscription.DefaultContext);
+            return PublishAsync(message, AsyncSubscription.DefaultContext);
         }
 
-        public void Publish<TMessage>(TMessage message, string context) where TMessage : NotificationOneWayMessage
+        /// <summary>
+        /// Publish a message, using the async/await pattern
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="context">The context of the message.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">message</exception>
+        public async Task PublishAsync(INotificationMessage message, string context)
         {
             if (message == null)
                 throw new ArgumentNullException("message");
 
-            var messageType = typeof(TMessage);
+            var messageType = message.GetType();
             if (messageType == typeof(NotificationMessage))
             {
+                MvxTrace.Warning("NotificationMessage publishing not allowed - this normally suggests non-specific generic used in calling code");
                 return;
             }
 
-
-            var toNotify = GetSubscriptionsFor<TMessage>(context);
-            if (toNotify == null || toNotify.Count() == 0)
+            var toNotify = GetSingleSubscriptionFor(messageType, context);
+            if (toNotify == null)
             {
+                MvxTrace.Trace("Nothing registered for messages of type {0} with context {1}", messageType.Name, context);
                 return;
             }
 
-            var allSucceeded = true;
-            foreach (var subscription in toNotify)
+            var asyncSubscription = toNotify as VoidAsyncSubscription;
+            if (asyncSubscription == null)
             {
-                var typedSubscription = subscription as OneWaySubscription<TMessage>;
-                allSucceeded &= typedSubscription.Invoke(message);
+                MvxTrace.Trace("Nothing registered for messages of type {0}", messageType.Name);
+                return;
             }
 
-            if (!allSucceeded)
-            {
-                SchedulePurge(messageType);
-            }
+            await asyncSubscription.InvokeAsync(message);
         }
 
-
-        public void Publish<TMessage, TResult>(TMessage message, Action<TResult> OnResultCallback, Action<NotificationErrorException> OnErrorCallback)
-            where TMessage : NotificationTwoWayMessage
-            where TResult : NotificationResult
-        {
-            Publish<TMessage, TResult>(message, OnResultCallback, OnErrorCallback, Subscription.DefaultContext);
-        }
-
-        public void Publish<TMessage, TResult>(TMessage message, Action<TResult> OnResultCallback, Action<NotificationErrorException> OnErrorCallback, string context)
-            where TMessage : NotificationTwoWayMessage
-            where TResult : NotificationResult
+        /// <summary>
+        /// Adds a message to the pending async notification queue
+        /// </summary>
+        /// <param name="message">The message to store.</param>
+        /// <param name="context">The context of the message.</param>
+        /// <param name="tryNormalPublish">if set to <c>true</c> tries to do normal publish, before storing the notification for delayed publish.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">message</exception>
+        public async Task DelayedPublishAsync(INotificationMessage message, string context, bool tryNormalPublish)
         {
             if (message == null)
                 throw new ArgumentNullException("message");
 
-            var messageType = typeof(TMessage);
+            var messageType = message.GetType();
             if (messageType == typeof(NotificationMessage))
             {
+                MvxTrace.Warning("NotificationMessage publishing not allowed - this normally suggests non-specific generic used in calling code");
                 return;
             }
 
-
-            var toNotify = GetSubscriptionsFor<TMessage>(context);
-            if (toNotify == null || toNotify.Count() == 0)
+            if (tryNormalPublish)
             {
+                if (HasSubscriptionForContext(messageType, context))
+                    await PublishAsync(message, context);
+                else
+                    MvxTrace.Warning(string.Format("Failed to normal publish the '{0}' message for context '{1}'. Adding it to delayed publish...", messageType.FullName, context));
+            }
+
+            AddToPendingNotificationList(message, context);
+        }
+
+        /// <summary>
+        /// Publishes the pending async notifications for a particular context
+        /// and makes sure that they're not published to the sender that added them to the pending list
+        /// </summary>
+        /// <param name="currentPublisher">The current publisher that is requesting to publish de pending messages.</param>
+        /// <param name="context">The context of the pending messages.</param>
+        /// <returns></returns>
+        public async Task PublishPendingAsyncNotificationsAsync(object currentPublisher, string context)
+        {
+            if (string.IsNullOrEmpty(context))
+            {
+                MvxTrace.Warning("PublishPendingNotificationsFor - Context is null or empty. Assuming default");
+                context = AsyncSubscription.DefaultContext;
+            }
+
+            if (_pendingNotifications.ContainsKey(context) && _pendingNotifications[context].Count() > 0)
+            {
+                var msgsCount = _pendingNotifications[context].Where(m => m.Sender != currentPublisher).Count();
+                if (msgsCount > 0)
+                {
+                    MvxTrace.Trace("Found {0} pending message(s) with context {1} available for current publisher ({2})", msgsCount, context, currentPublisher);
+
+                    foreach (var msg in _pendingNotifications[context].ToArray())
+                    {
+                        if (HasSubscriptionForContext(msg.GetType(), context))
+                        {
+                            await PublishAsync(msg, context);
+                            _pendingNotifications[context].Remove(msg);
+                        }
+                    }
+                }
+                else
+                {
+                    MvxTrace.Trace("Found {0} pending message(s) with context {1} but NONE available for current publisher ({2})",
+                        _pendingNotifications[context].Count(),
+                        context,
+                        currentPublisher);
+                }
+            }
+            else
+            {
+                MvxTrace.Trace("No pending messages found with context {0}", context);
                 return;
-            }
-
-            var allSucceeded = true;
-            foreach (var subscription in toNotify)
-            {
-                var typedSubscription = subscription as TwoWaySubscription<TMessage, TResult>;
-                allSucceeded &= typedSubscription.Invoke(message, OnResultCallback, OnErrorCallback);
-            }
-
-            if (!allSucceeded)
-            {
-                SchedulePurge(messageType);
             }
         }
 
         #endregion
 
-        #region General methods
+        #region TwoWay publish
 
-        private IEnumerable<Subscription> GetSubscriptionsFor<TMessage>(string context) where TMessage : NotificationMessage
+        /// <summary>
+        /// Publish a message to a single subscriptor (the first one), using the async/await pattern
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        public Task<TResult> PublishAsync<TResult>(INotificationMessage message)
+            where TResult : NotificationResult
         {
-            lock (this)
+            return PublishAsync<TResult>(message, AsyncSubscription.DefaultContext);
+        }
+
+        /// <summary>
+        /// Publish a message to a single subscriptor (the first one), using the async/await pattern
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="message">The message.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">message</exception>
+        public async Task<TResult> PublishAsync<TResult>(INotificationMessage message, string context)
+            where TResult : NotificationResult
+        {
+            if (message == null)
+                throw new ArgumentNullException("message");
+
+            var messageType = message.GetType();
+            if (messageType == typeof(NotificationMessage))
             {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    return null;
-                }
-
-                //The .ToArray() is used to create a static list.
-                return (messageSubscriptions.Where(s => s.Context == context)).ToArray();
+                MvxTrace.Warning("NotificationMessage publishing not allowed - this normally suggests non-specific generic used in calling code");
+                return default(TResult);
             }
-        }
 
-
-        protected virtual void PublishSubscriberChangeMessage<TMessage>(List<Subscription> messageSubscriptions) where TMessage : NotificationMessage
-        {
-            PublishSubscriberChangeMessage(typeof(TMessage), messageSubscriptions);
-        }
-
-        protected virtual void PublishSubscriberChangeMessage(Type messageType, List<Subscription> messageSubscriptions)
-        {
-            //var newCount = messageSubscriptions == null ? 0 : messageSubscriptions.Count;
-            //Publish(new NotificationSubscriberChangeMessage(this, messageType, newCount));
-        }
-
-
-        public bool HasSubscriptionsFor<TMessage>() where TMessage : NotificationMessage
-        {
-            lock (this)
+            var toNotify = GetSingleSubscriptionFor(messageType, context);
+            if (toNotify == null)
             {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    return false;
-                }
-                return messageSubscriptions.Any();
+                MvxTrace.Trace("Nothing registered for async messages of type {0} with context {1}", messageType.Name, context);
+                return default(TResult);
             }
+
+            var asyncSubscription = toNotify as SingleAsyncSubscription<TResult>;
+            if (asyncSubscription == null)
+            {
+                MvxTrace.Trace("Nothing registered for async messages of type {0} with result {1}", messageType.Name, typeof(TResult).Name);
+                return default(TResult);
+            }
+
+            return await asyncSubscription.InvokeAsync(message);
         }
 
-        public int CountSubscriptionsFor<TMessage>() where TMessage : NotificationMessage
+        #endregion
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Has subscription for TMessage
+        /// </summary>
+        /// <typeparam name="TMessage"></typeparam>
+        /// <returns></returns>
+        public bool HasSubscriptionFor<TMessage>() where TMessage : NotificationMessage
         {
-            lock (this)
-            {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    return 0;
-                }
-                return messageSubscriptions.Count;
-            }
+            return HasSubscriptionFor(typeof(TMessage));
         }
 
-        public bool HasSubscriptionsForContext<TMessage>(string context) where TMessage : NotificationMessage
+        /// <summary>
+        /// Checks if there's subscriptions for messageType
+        /// </summary>
+        /// <param name="messageType">Type of the message.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public bool HasSubscriptionFor(Type messageType)
         {
-            lock (this)
+            ISubscription asyncSubscription;
+            if (_subscriptions.TryGetValue(messageType, out asyncSubscription))
             {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    return false;
-                }
-                return messageSubscriptions.Any(x => x.Context == context);
+                return asyncSubscription != null && asyncSubscription.IsAlive;
             }
+
+            return false;
         }
 
-        public int CountSubscriptionsForContext<TMessage>(string context) where TMessage : NotificationMessage
+        /// <summary>
+        /// Has subscription for TMessage with a Context value of context
+        /// </summary>
+        /// <typeparam name="TMessage"></typeparam>
+        /// <param name="context">Context of the subscription</param>
+        /// <returns></returns>
+        public bool HasSubscriptionForContext<TMessage>(string context) where TMessage : NotificationMessage
         {
-            lock (this)
-            {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    return 0;
-                }
-                return messageSubscriptions.Count(x => x.Context == context);
-            }
+            return HasSubscriptionForContext(typeof(TMessage), context);
         }
 
-        public IEnumerable<string> GetSubscriptionsContextFor<TMessage>() where TMessage : NotificationMessage
+        /// <summary>
+        /// Check if there's subscriptions of messageType for the specified context
+        /// </summary>
+        /// <param name="messageType">Type of the message.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public bool HasSubscriptionForContext(Type messageType, string context)
         {
-            lock (this)
+            ISubscription asyncSubscription;
+            if (_subscriptions.TryGetValue(messageType, out asyncSubscription))
             {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(typeof(TMessage), out messageSubscriptions))
-                {
-                    return new List<string>(0);
-                }
-
-                //The .ToArray() is used to create a static list.
-                return (messageSubscriptions.Select(x => x.Context).Distinct()).ToArray();
+                return asyncSubscription != null && asyncSubscription.IsAlive && asyncSubscription.Context == context;
             }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get the context of the subscription for TMessage
+        /// </summary>
+        /// <typeparam name="TMessage"></typeparam>
+        /// <returns></returns>
+        public string GetSubscriptionContextFor<TMessage>() where TMessage : NotificationMessage
+        {
+            return GetSubscriptionContextFor(typeof(TMessage));
+        }
+
+        /// <summary>
+        /// Get all the distinct context of subscriptions for messageType
+        /// </summary>
+        /// <param name="messageType">Type of the message.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public string GetSubscriptionContextFor(Type messageType)
+        {
+            ISubscription asyncSubscription;
+            if (_subscriptions.TryGetValue(messageType, out asyncSubscription))
+            {
+                if (asyncSubscription != null)
+                    return asyncSubscription.Context;
+            }
+
+            return null;
+        }
+
+
+        private ISubscription GetSingleSubscriptionFor(Type messageType, string context)
+        {
+            ISubscription asyncSubscription;
+            if (!_subscriptions.TryGetValue(messageType, out asyncSubscription))
+            {
+                return null;
+            }
+
+            return asyncSubscription;
+        }
+
+        /// <summary>
+        /// Adds a message to the pending notification list, for the specified context.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="context">The context.</param>
+        private void AddToPendingNotificationList(INotificationMessage message, string context)
+        {
+            var messageType = message.GetType();
+            if (string.IsNullOrEmpty(context))
+            {
+                MvxTrace.Warning("AddToPendingNotificationList - Context of message type {0} is null or empty. Assuming default", messageType.Name);
+                context = AsyncSubscription.DefaultContext;
+            }
+
+            if (!_pendingNotifications.ContainsKey(context))
+                _pendingNotifications.Add(context, new List<INotificationMessage>());
+
+            MvxTrace.Trace("AddToPendingAsyncNotificationList - Adding message of type {0} with context '{1}' to pending notification list", messageType.Name, context);
+
+            _pendingNotifications[context].Add(message);
         }
 
         #endregion
 
         #region Message purging
 
-        public void RequestPurge(Type messageType)
+        /// <summary>
+        /// Schedules a check on all subscribers for the specified messageType. If any are not alive, they will be removed
+        /// </summary>
+        /// <param name="messageType">The type of the message to check</param>
+        public Task RequestPurgeAsync(Type messageType)
         {
-            SchedulePurge(messageType);
+            return SchedulePurgeAsync(messageType);
         }
 
-        public void RequestPurgeAll()
+        /// <summary>
+        /// Schedules a check on all subscribers for all messageType. If any are not alive, they will be removed
+        /// </summary>
+        public Task RequestPurgeAllAsync()
         {
-            lock (this)
-            {
-                SchedulePurge(_subscriptions.Keys.ToArray());
-            }
+            return SchedulePurgeAsync(_subscriptions.Keys.ToArray());
         }
 
-        private void SchedulePurge(params Type[] messageTypes)
+        private Task SchedulePurgeAsync(params Type[] messageTypes)
         {
-            lock (this)
+            return Task.Run(async () =>
             {
-                var threadPoolTaskAlreadyRequested = _scheduledPurges.Count > 0;
-                foreach (var messageType in messageTypes)
-                    _scheduledPurges[messageType] = true;
-
-                if (!threadPoolTaskAlreadyRequested)
+                try
                 {
-                    MvxAsyncDispatcher.BeginAsync(DoPurge);
+                    await Task.Run(() => _purgeSemaphore.Wait());
+
+                    foreach (var type in messageTypes)
+                    {
+                        ISubscription asyncSubscription;
+                        if (_subscriptions.TryGetValue(type, out asyncSubscription))
+                        {
+                            if (!asyncSubscription.IsAlive)
+                            {
+                                MvxTrace.Trace("Purging subscription of type {0}", type.Name);
+                                _subscriptions.Remove(type);
+                            }
+                        }
+
+                    }
                 }
-            }
-        }
-
-        private void DoPurge()
-        {
-            List<Type> toPurge = null;
-            lock (this)
-            {
-                toPurge = _scheduledPurges.Select(x => x.Key).ToList();
-                _scheduledPurges.Clear();
-            }
-
-            foreach (var type in toPurge)
-            {
-                PurgeMessagesOfType(type);
-            }
-        }
-
-        private void PurgeMessagesOfType(Type type)
-        {
-            lock (this)
-            {
-                List<Subscription> messageSubscriptions;
-                if (!_subscriptions.TryGetValue(type, out messageSubscriptions))
+                finally
                 {
-                    return;
+                    _purgeSemaphore.Release();
                 }
-
-                var deadSubscriptions = new List<Subscription>();
-                deadSubscriptions.AddRange(messageSubscriptions.Where(s => !s.IsAlive));
-
-                foreach (var item in deadSubscriptions)
-                {
-                    messageSubscriptions.Remove(item);
-                }
-
-                PublishSubscriberChangeMessage(type, messageSubscriptions);
-            }
+            });
         }
 
         #endregion
