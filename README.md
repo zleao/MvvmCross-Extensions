@@ -1,4 +1,4 @@
-#MvvmCross Utilities
+#MvvmCross Extensions
 
 Set of libraries to use with MvvmCross projects.
 It contains base classes for views and viewmodels, specific platform controls, plugins and samples.
@@ -17,6 +17,9 @@ This is an ongoing project and every help/sugestion is welcome :)
 	- Added async support
 	- Removed strong reference events from ViewModel
 	- Added new features in all modules (see description for more details)
+
+##Future Releases
+- **2016/09/06** Plannig on a full revanp, that started with the change of the repository name. I´m planning on updating the existing functionalites, and add some more. Also want to create the nuget packages for each library.
 
 ##Libraries
 Includes base classes for views and view models, and some features and accelerators for more common usage in apps.
