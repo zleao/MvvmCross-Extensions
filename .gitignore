@@ -14,6 +14,7 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+.vs/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -94,7 +95,7 @@ publish/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-#packages/
+packages/
 
 # Windows Azure Build Output
 csx
@@ -151,3 +152,8 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+
+
+# MvxExtensions project related files and folders
+Binaries/
+Resources.designer.cs

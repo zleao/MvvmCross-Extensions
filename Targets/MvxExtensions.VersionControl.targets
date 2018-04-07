@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Major>4</Major>
+    <Minor>4</Minor>
+    <Build>1</Build>
+  </PropertyGroup>
+  <Choose>
+
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Libraries.Droid.Core' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Libraries.Portable.Core' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Logger' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Logger.Droid' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Logger.Wpf' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Notification' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Storage' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Storage.Droid' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(ProjectName)'=='MvxExtensions.Plugins.Storage.Wpf' ">
+      <PropertyGroup>
+        <Revision>0</Revision>
+      </PropertyGroup>
+    </When>
+    
+  </Choose>
+</Project>
