@@ -1,4 +1,4 @@
-﻿namespace MvxExtensions.Plugins.Storage.CommonFiles
+﻿namespace MvxExtensions.Plugins.Storage
 {
     /// <summary>
     /// Represents the information regarding a folder

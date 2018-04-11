@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace MvxExtensions.Plugins.Storage.CommonFiles
+namespace MvxExtensions.Plugins.Storage
 {
     /// <summary>
     /// Storage helpers

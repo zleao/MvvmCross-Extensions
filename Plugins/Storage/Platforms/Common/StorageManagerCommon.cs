@@ -5,11 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
-#if MONODROID
-namespace MvxExtensions.Plugins.Storage.Droid
-#else
-namespace MvxExtensions.Plugins.Storage.Wpf
-#endif
+namespace MvxExtensions.Plugins.Storage.Platforms.Common
 {
     /// <summary>
     /// Basse class for the storage plugin implementation

@@ -1,12 +1,16 @@
-using MvvmCross.Platform;
-using MvvmCross.Platform.Plugins;
+﻿using MvvmCross;
+using MvvmCross.Plugin;
 
+#if ANDROID
 namespace MvxExtensions.Plugins.Storage.Droid
+#elif XAML
+namespace MvxExtensions.Plugins.Storage.Wpf
+#else
+namespace MvxExtensions.Plugins.Storage
+#endif
 {
-    /// <summary>
-    /// Base class for plugin initialization
-    /// </summary>
-    /// <seealso cref="MvvmCross.Platform.Plugins.IMvxPlugin" />
+    [MvxPlugin]
+    [Preserve(AllMembers = true)]
     public class Plugin : IMvxPlugin
     {
         /// <summary>

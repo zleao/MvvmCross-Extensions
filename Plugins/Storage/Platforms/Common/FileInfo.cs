@@ -1,13 +1,7 @@
 ﻿using System;
 using System.IO;
 
-#if WINDOWS_PHONE
-namespace MvxExtensions.Plugins.Storage.WindowsPhone
-#elif MONODROID
-namespace MvxExtensions.Plugins.Storage.Droid
-#else
-namespace MvxExtensions.Plugins.Storage.Wpf
-#endif
+namespace MvxExtensions.Plugins.Storage.Platforms.Common
 {
     /// <summary>
     /// Information of a file

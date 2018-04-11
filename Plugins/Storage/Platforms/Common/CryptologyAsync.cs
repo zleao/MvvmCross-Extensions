@@ -6,19 +6,19 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using MvvmCross.Platform.Platform;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Exceptions;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Collections.Generic;
-using MvxExtensions.Plugins.Storage.CommonFiles;
+using MvvmCross.Logging;
+using MvvmCross.Plugin.Storage;
+using MvvmCross.Exceptions;
 
-#if MONODROID
-namespace MvxExtensions.Plugins.Storage.Droid
-#else
-namespace MvxExtensions.Plugins.Storage.Wpf
+#if ANDROID
+using MvxExtensions.Plugins.Storage.Droid;
+#elif XAML
+using MvxExtensions.Plugins.Storage.Wpf;
 #endif
+
+namespace MvxExtensions.Plugins.Storage.Platforms.Common
 {
     internal sealed class CryptologyAsync : BaseCryptologyAsync
     {
@@ -136,7 +136,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
 
                     case EncryptionModeEnum.UNKNOWN:
                     default:
-                        MvxTrace.Warning("EncryptStreamToFile: encryption mode unknown");
+                        MvxPluginLog.Instance.Warn("EncryptStreamToFile: encryption mode unknown");
                         break;
                 }
             });
@@ -167,7 +167,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
                 if (ag.InnerException.GetType() == typeof(CryptographicException))
                     throw new InvalidDataException("Please supply a correct password");
 
-                MvxTrace.Error(ag.ToLongString());
+                MvxPluginLog.Instance.Error(ag.ToLongString());
                 throw;
             }
             catch (CryptographicException ex)
@@ -221,7 +221,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
                                 break;
 
                             case InnerEncryptionModeEnum.UNKNOWN:
-                                MvxTrace.Warning("DecryptFileToStream: encryption mode unknown. Returning stream as is...");
+                                MvxPluginLog.Instance.Warn("DecryptFileToStream: encryption mode unknown. Returning stream as is...");
                                 if (input.CanSeek)
                                     input.Seek(0, SeekOrigin.Begin);
                                 await CopyStreamAsync(input, decryptedMemoryStream);
@@ -504,7 +504,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
             }
             catch (Exception ex)
             {
-                MvxTrace.Error(ex.Message);
+                MvxPluginLog.Instance.Error(ex.Message);
                 return InnerEncryptionModeEnum.UNKNOWN;
             }
         }

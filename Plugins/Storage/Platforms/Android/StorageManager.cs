@@ -1,9 +1,9 @@
-using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid;
 using Android.OS;
+using MvvmCross;
+using MvvmCross.Platforms.Android;
+using MvxExtensions.Plugins.Storage.Platforms.Common;
 
 namespace MvxExtensions.Plugins.Storage.Droid
 {

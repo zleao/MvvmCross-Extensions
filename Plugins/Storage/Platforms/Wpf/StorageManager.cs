@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvxExtensions.Plugins.Storage.Platforms.Common;
+using System;
 using System.Reflection;
 
 namespace MvxExtensions.Plugins.Storage.Wpf
@@ -6,7 +7,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
     /// <summary>
     /// WPF implementation of the Storage plugin
     /// </summary>
-    /// <seealso cref="MvxExtensions.Plugins.Storage.Wpf.StorageManagerCommon_Droid_WPF" />
+    /// <seealso cref="Platforms.Common.StorageManagerCommon_Droid_WPF" />
     public class StorageManager : StorageManagerCommon_Droid_WPF
     {
         private string AppName

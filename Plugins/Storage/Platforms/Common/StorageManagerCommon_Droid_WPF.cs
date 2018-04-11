@@ -1,5 +1,5 @@
-﻿using MvvmCross.Platform.Platform;
-using MvxExtensions.Plugins.Storage.CommonFiles;
+﻿using MvvmCross.Logging;
+using MvvmCross.Plugin.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,11 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-#if MONODROID
-namespace MvxExtensions.Plugins.Storage.Droid
-#else
-namespace MvxExtensions.Plugins.Storage.Wpf
-#endif
+namespace MvxExtensions.Plugins.Storage.Platforms.Common
 {
     /// <summary>
     /// Storage plugin implementation for Android and WPF
@@ -355,7 +351,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
                     throw;
                 else
                 {
-                    MvxTrace.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
+                     MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
                     return false;
                 }
             }
@@ -365,7 +361,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
             }
             catch (Exception exception)
             {
-                MvxTrace.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, exception.Message);
+                 MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, exception.Message);
                 return false;
             }
         }
@@ -381,7 +377,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
         {
             try
             {
-                if (System.IO.File.Exists(fromFullPath))
+                if (File.Exists(fromFullPath))
                 {
                     await EnsureFolderExistsAsync(toFullPath.Replace(GetFileName(toFullPath), string.Empty));
 
@@ -394,7 +390,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
                     throw;
                 else
                 {
-                    MvxTrace.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
+                     MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
                     throw;
                 }
             }
@@ -404,7 +400,7 @@ namespace MvxExtensions.Plugins.Storage.Wpf
             }
             catch (Exception exception)
             {
-                MvxTrace.Error("Error during file clone {0} : {1} : {2}", fromFullPath, toFullPath, exception.Message);
+                MvxPluginLog.Instance.Trace("Error during file clone {0} : {1} : {2}", fromFullPath, toFullPath, exception.Message);
                 throw;
             }
         }
