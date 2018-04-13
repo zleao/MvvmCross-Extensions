@@ -1,6 +1,7 @@
-﻿using MvvmCross.Logging;
+﻿using MvvmCross;
+using MvvmCross.Logging;
 
-namespace MvvmCross.Plugin.Storage
+namespace MvxExtensions.Plugins.Storage
 {
     internal static class MvxPluginLog
     {

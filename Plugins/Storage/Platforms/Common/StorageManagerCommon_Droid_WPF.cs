@@ -1,5 +1,4 @@
 ﻿using MvvmCross.Logging;
-using MvvmCross.Plugin.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
