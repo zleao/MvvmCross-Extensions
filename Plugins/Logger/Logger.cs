@@ -1,5 +1,5 @@
-using MvvmCross.Platform;
-using MvvmCross.Platform.Platform;
+using MvvmCross.Base;
+using MvvmCross.Logging;
 using MvxExtensions.Plugins.Storage;
 using System;
 using System.Collections.Generic;
@@ -7,11 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-#if MONODROID
-namespace MvxExtensions.Plugins.Logger.Droid
-#else
-namespace MvxExtensions.Plugins.Logger.Wpf
-#endif
+namespace MvxExtensions.Plugins.Logger
 {
     /// <summary>
     /// Implementation of the ILogger
@@ -40,37 +36,14 @@ namespace MvxExtensions.Plugins.Logger.Wpf
 
         #endregion
 
+        #region Fields
+
+        private readonly IStorageManager _storageManager;
+        private readonly IMvxJsonConverter _jsonConverter;
+
+        #endregion
+        
         #region Properties
-
-        /// <summary>
-        /// Gets the storage manager.
-        /// </summary>
-        /// <value>
-        /// The storage manager.
-        /// </value>
-        protected IStorageManager StorageManager
-        {
-            get
-            {
-                return _storageManager ?? (_storageManager = Mvx.Resolve<IStorageManager>());
-            }
-        }
-        private IStorageManager _storageManager;
-
-        /// <summary>
-        /// Gets the json converter.
-        /// </summary>
-        /// <value>
-        /// The json converter.
-        /// </value>
-        protected IMvxJsonConverter JsonConverter
-        {
-            get
-            {
-                return _jsonConverter ?? (_jsonConverter = Mvx.Resolve<IMvxJsonConverter>());
-            }
-        }
-        private IMvxJsonConverter _jsonConverter;
 
         /// <summary>
         /// Gets the current thread identifier.
@@ -106,7 +79,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
         /// </value>
         public string LogBaseNativePath
         {
-            get { return StorageManager.NativePath(StorageLocation.ExternalPublic, DEFAULT_LOGFOLDER); }
+            get { return _storageManager.NativePath(StorageLocation.ExternalPublic, DEFAULT_LOGFOLDER); }
         }
 
         /// <summary>
@@ -130,10 +103,14 @@ namespace MvxExtensions.Plugins.Logger.Wpf
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Logger"/> class.
+        /// Initializes a new instance of the <see cref="Logger" /> class.
         /// </summary>
-        public Logger()
+        /// <param name="storageManager">The storage manager.</param>
+        /// <param name="jsonConverter">The json converter.</param>
+        public Logger(IStorageManager storageManager, IMvxJsonConverter jsonConverter)
         {
+            _storageManager = storageManager;
+            _jsonConverter = jsonConverter;
         }
 
         #endregion
@@ -153,7 +130,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
             }
             else
             {
-                MvxTrace.Warning("Log encryption was not activated because password is empty");
+                MvxPluginLog.Instance.Warn("Log encryption was not activated because password is empty");
             }
         }
 
@@ -414,7 +391,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
             if (methodName != null)
                 return LogMethodExecutionTimeAsync(method, (ignore) => { return methodName; }, logFileName);
 
-            return Task.FromResult<T>(default(T));
+            return Task.FromResult<T>(default);
         }
         /// <summary>
         /// Logs the method execution time asynchronous.
@@ -439,7 +416,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
         {
             if (method != null)
             {
-                T result = default(T);
+                T result = default;
 
                 var startDateTime = DateTime.Now;
                 result = method.Invoke();
@@ -452,7 +429,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
                 return result;
             }
 
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -534,7 +511,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
             if (methodName != null)
                 return LogAsyncMethodExecutionTimeAsync<T>(asyncMethod, (ignore) => { return methodName; }, logFileName);
 
-            return Task.FromResult<T>(default(T));
+            return Task.FromResult<T>(default);
         }
         /// <summary>
         /// Logs the asynchronous method execution time.
@@ -559,7 +536,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
         {
             if (asyncMethod != null)
             {
-                T result = default(T);
+                T result = default;
 
                 var startDateTime = DateTime.Now;
                 result = await asyncMethod.Invoke();
@@ -572,7 +549,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
                 return result;
             }
 
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -587,12 +564,12 @@ namespace MvxExtensions.Plugins.Logger.Wpf
             var folderPath = DEFAULT_LOGFOLDER;
             if (!string.IsNullOrEmpty(relativeLogFolderPath))
             {
-                folderPath = StorageManager.PathCombine(DEFAULT_LOGFOLDER, relativeLogFolderPath);
+                folderPath = _storageManager.PathCombine(DEFAULT_LOGFOLDER, relativeLogFolderPath);
             }
 
-            if (await StorageManager.FolderExistsAsync(StorageLocation.ExternalPublic, folderPath))
+            if (await _storageManager.FolderExistsAsync(StorageLocation.ExternalPublic, folderPath))
             {
-                logsList = (await StorageManager.GetFilesInAsync(StorageLocation.ExternalPublic, false, folderPath)).ToList();
+                logsList = (await _storageManager.GetFilesInAsync(StorageLocation.ExternalPublic, false, folderPath)).ToList();
             }
 
             return logsList;
@@ -612,7 +589,7 @@ namespace MvxExtensions.Plugins.Logger.Wpf
             var currentDate = DateTimeOffset.Now;
             var deletedLogFilesCounter = 0;
 
-            var logFiles = await StorageManager.GetFilesInAsync(StorageLocation.ExternalPublic, true, DEFAULT_LOGFOLDER, DEFAULT_LOG_FILE_EXTENSION, SearchMode.EndsWith);
+            var logFiles = await _storageManager.GetFilesInAsync(StorageLocation.ExternalPublic, true, DEFAULT_LOGFOLDER, DEFAULT_LOG_FILE_EXTENSION, SearchMode.EndsWith);
             foreach (var log in logFiles)
             {
                 var deleteFile = false;
@@ -639,9 +616,9 @@ namespace MvxExtensions.Plugins.Logger.Wpf
 
                 if (deleteFile)
                 {
-                    await StorageManager.DeleteFileAsync(logFullPath);
+                    await _storageManager.DeleteFileAsync(logFullPath);
                     if (logDetails != null)
-                        await StorageManager.DeleteFileAsync(GetLogDetailsPath(logFullPath));
+                        await _storageManager.DeleteFileAsync(GetLogDetailsPath(logFullPath));
 
                     deletedLogFilesCounter++;
                 }
@@ -653,16 +630,16 @@ namespace MvxExtensions.Plugins.Logger.Wpf
 
         private async Task LogCommonAsync(LogTypeEnum logType, string logFileName, string contents, Exception ex = null)
         {
-            var logRelativePath = StorageManager.PathCombine(DEFAULT_LOGFOLDER, logFileName + DEFAULT_LOG_FILE_EXTENSION);
-            var logFullPath = StorageManager.NativePath(StorageLocation.ExternalPublic, logRelativePath);
+            var logRelativePath = _storageManager.PathCombine(DEFAULT_LOGFOLDER, logFileName + DEFAULT_LOG_FILE_EXTENSION);
+            var logFullPath = _storageManager.NativePath(StorageLocation.ExternalPublic, logRelativePath);
 
             if (EncryptionActivated)
             {
-                await StorageManager.WriteEncryptedFileAsync(StorageMode.CreateOrAppend, logFullPath, contents, Password);
+                await _storageManager.WriteEncryptedFileAsync(StorageMode.CreateOrAppend, logFullPath, contents, Password);
             }
             else
             {
-                await StorageManager.WriteFileAsync(StorageMode.CreateOrAppend, logFullPath, contents);
+                await _storageManager.WriteFileAsync(StorageMode.CreateOrAppend, logFullPath, contents);
             }
 
             await WriteLogInfoAsync(logType, logFullPath);
@@ -676,16 +653,16 @@ namespace MvxExtensions.Plugins.Logger.Wpf
 
             logDetails.IncrementLogCounter(logType);
 
-            var contents = JsonConverter.SerializeObject(logDetails);
+            var contents = _jsonConverter.SerializeObject(logDetails);
             var logInfoFullPath = GetLogDetailsPath(logFullPath);
 
             if (EncryptionActivated)
             {
-                await StorageManager.WriteEncryptedFileAsync(StorageMode.Create, logInfoFullPath, contents, Password);
+                await _storageManager.WriteEncryptedFileAsync(StorageMode.Create, logInfoFullPath, contents, Password);
             }
             else
             {
-                await StorageManager.WriteFileAsync(StorageMode.Create, logInfoFullPath, contents);
+                await _storageManager.WriteFileAsync(StorageMode.Create, logInfoFullPath, contents);
             }
         }
 
@@ -695,19 +672,19 @@ namespace MvxExtensions.Plugins.Logger.Wpf
 
             var logInfoFullPath = GetLogDetailsPath(logFullPath);
 
-            if (await StorageManager.FileExistsAsync(logInfoFullPath))
+            if (await _storageManager.FileExistsAsync(logInfoFullPath))
             {
                 string existingLogDetailsString = null;
                 if (EncryptionActivated)
-                    existingLogDetailsString = await StorageManager.TryReadTextEncryptedFileAsync(logInfoFullPath, Password);
+                    existingLogDetailsString = await _storageManager.TryReadTextEncryptedFileAsync(logInfoFullPath, Password);
                 if (string.IsNullOrEmpty(existingLogDetailsString))
-                    existingLogDetailsString = await StorageManager.TryReadTextFileAsync(logInfoFullPath);
+                    existingLogDetailsString = await _storageManager.TryReadTextFileAsync(logInfoFullPath);
 
                 if (!string.IsNullOrEmpty(existingLogDetailsString))
                 {
                     try
                     {
-                        var existingLogDetails = JsonConverter.DeserializeObject<LogDetails>(existingLogDetailsString);
+                        var existingLogDetails = _jsonConverter.DeserializeObject<LogDetails>(existingLogDetailsString);
                         if (existingLogDetails != null)
                             logDetails = existingLogDetails;
                     }
