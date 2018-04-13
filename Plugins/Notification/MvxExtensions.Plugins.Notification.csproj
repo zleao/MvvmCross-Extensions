@@ -1,0 +1,20 @@
+<Project Sdk="MSBuild.Sdk.Extras/1.2.2">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MvxExtensions.Plugins.Notification</AssemblyName>
+    <RootNamespace>MvxExtensions.Plugins.Notification</RootNamespace>
+    <Description></Description>
+    <PackageId>MvxExtensions.Plugins.Notification</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MvxExtensions.Plugins.Notification\**" />
+    <EmbeddedResource Remove="MvxExtensions.Plugins.Notification\**" />
+    <None Remove="MvxExtensions.Plugins.Notification\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.0.0-beta.8" />
+  </ItemGroup>
+</Project>
