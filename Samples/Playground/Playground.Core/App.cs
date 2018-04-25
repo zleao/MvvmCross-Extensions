@@ -1,5 +1,9 @@
-﻿using MvvmCross.IoC;
+﻿using MvvmCross;
+using MvvmCross.IoC;
+using MvvmCross.Localization;
 using MvvmCross.ViewModels;
+using Playground.Core.Services;
+using Playground.Core.ViewModels;
 
 namespace Playground.Core
 {
@@ -11,6 +15,8 @@ namespace Playground.Core
                 .EndingWith("Service")
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
+
+            Mvx.RegisterSingleton<IMvxTextProvider>(new TextProviderBuilder("EN").TextProvider);
 
             RegisterAppStart<MainViewModel>();
         }

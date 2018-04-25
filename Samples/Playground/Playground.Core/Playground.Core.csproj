@@ -5,10 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.0.0-beta.8" />
+    <None Remove="Resources\EN\MainViewModel.json" />
+    <None Remove="Resources\EN\NotificationsViewModel.json" />
+    <None Remove="Resources\TextResources.EN.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\EN\NotificationsViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\MainViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\Common.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.0.0" />
+    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj" />
+    <ProjectReference Include="..\..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj" />
     <ProjectReference Include="..\..\..\Plugins\Storage\MvxExtensions.Plugins.Storage.csproj" />
   </ItemGroup>
 
