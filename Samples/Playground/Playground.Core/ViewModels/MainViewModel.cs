@@ -1,8 +1,7 @@
 ﻿using MvvmCross.Commands;
-using MvvmCross.Localization;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
+using MvxExtensions.Plugins.Notification;
 using Playground.Core.Models;
 using Playground.Core.Resources;
 using System.Collections.ObjectModel;
@@ -13,14 +12,6 @@ namespace Playground.Core.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        #region Fields
-
-        private readonly IMvxNavigationService _navigationService;
-        private readonly IMvxLogProvider _logProvider;
-        private readonly IMvxViewModelLoader _mvxViewModelLoader;
-
-        #endregion
-
         #region Properties
 
         private ObservableCollection<MenuOption> _menuOptions = new ObservableCollection<MenuOption>();
@@ -40,14 +31,9 @@ namespace Playground.Core.ViewModels
 
         #region Commands
 
-        public MainViewModel(IMvxNavigationService navigationService,
-                             IMvxLogProvider logProvider,
-                             IMvxViewModelLoader mvxViewModelLoader)
+        public MainViewModel(IMvxNavigationService navigationService, IMvxLogProvider logProvider, INotificationService notificationManager)
+            : base(navigationService, logProvider, notificationManager)
         {
-            _navigationService = navigationService;
-            _logProvider = logProvider;
-            _mvxViewModelLoader = mvxViewModelLoader;
-
             NavigateCommand = new MvxAsyncCommand<MenuOption>(OnNavigateAsync);
         }
 
@@ -64,7 +50,7 @@ namespace Playground.Core.ViewModels
 
         private async Task OnNavigateAsync(MenuOption option)
         {
-            await _navigationService.Navigate(option.ViewModelType);
+            await NavigationService.Navigate(option.ViewModelType);
         }
 
         private void AddMenuOption(MenuOption option)

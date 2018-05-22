@@ -3,13 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\EN\MainViewModel.json" />
-    <None Remove="Resources\EN\NotificationsViewModel.json" />
-    <None Remove="Resources\TextResources.EN.json" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <EmbeddedResource Include="Resources\EN\NotificationsViewModel.json" />
     <EmbeddedResource Include="Resources\EN\MainViewModel.json" />

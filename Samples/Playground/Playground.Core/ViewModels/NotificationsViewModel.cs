@@ -1,80 +1,69 @@
-﻿using MvvmCross.Localization;
-using MvvmCross.ViewModels;
+﻿using MvvmCross.Commands;
+using MvvmCross.Logging;
+using MvvmCross.Navigation;
+using MvxExtensions.Plugins.Notification;
+using MvxExtensions.Plugins.Notification.Messages;
+using MvxExtensions.Plugins.Notification.Messages.TwoWay.Question;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Playground.Core.ViewModels
 {
     public class NotificationsViewModel : BaseViewModel
     {
-        //#region Fields
+        #region Fields
 
-        //private string _mainViewModelContext = null;
+        private string _mainViewModelContext = null;
 
-        //#endregion
+        #endregion
 
-        //#region Commands
+        #region Commands
 
-        //public ICommand ErrorNotificationCommand
-        //{
-        //    get { return _errorNotificationCommand; }
-        //}
-        //private readonly ICommand _errorNotificationCommand;
+        public ICommand ErrorNotificationCommand { get; }
+        public ICommand QuestionNotificationCommand { get; }
+        public ICommand DelayedNotificationCommand { get; }
 
-        //public ICommand QuestionNotificationCommand
-        //{
-        //    get { return _questionNotificationCommand; }
-        //}
-        //private readonly ICommand _questionNotificationCommand;
+        #endregion
 
-        //public ICommand DelayedNotificationCommand
-        //{
-        //    get { return _delayedNotificationCommand; }
-        //}
-        //private readonly ICommand _delayedNotificationCommand;
+        #region Constructor
 
-        //#endregion
+        public NotificationsViewModel(IMvxNavigationService navigationService, IMvxLogProvider logProvider, INotificationService notificationManager)
+            : base(navigationService, logProvider, notificationManager)
+        {
+            ErrorNotificationCommand = new MvxAsyncCommand(OnErrorNotificationAsync);
+            QuestionNotificationCommand = new MvxAsyncCommand(OnQuestionNotificationAsync);
+            DelayedNotificationCommand = new MvxAsyncCommand(OnDelayedNotificationAsync);
+        }
 
-        //#region Constructor
+        #endregion
 
-        //public NotificationsViewModel(IMvxLanguageBinder textSource,
-        //                              IMvxJsonConverter jsonConverter,
-        //                              INotificationService notificationManager,
-        //                              ILoggerManager loggerManager)
-        //    : base(textSource, jsonConverter, notificationManager, loggerManager)
-        //{
-        //    _errorNotificationCommand = new MvxCommand(OnErrorNotification);
-        //    _questionNotificationCommand = new MvxCommand(OnQuestionNotification);
-        //    _delayedNotificationCommand = new MvxCommand(OnDelayedNotification);
-        //}
+        #region Methods
 
-        //#endregion
+        public void Init(string mainViewModelContext)
+        {
+            _mainViewModelContext = mainViewModelContext;
+        }
 
-        //#region Methods
+        private Task OnErrorNotificationAsync()
+        {
+            return NotificationManager.PublishErrorNotificationAsync("Error notification", NotificationModeEnum.MessageBox);
+        }
 
-        //public void Init(string mainViewModelContext)
-        //{
-        //    _mainViewModelContext = mainViewModelContext;
-        //}
+        private async Task OnQuestionNotificationAsync()
+        {
+            var answer = await NotificationManager.PublishGenericQuestionNotificationAsync("Do you feel lucky?", NotificationTwoWayAnswersGroupEnum.YesNo);
+            if (answer.Answer == NotificationTwoWayAnswersEnum.Yes)
+                await NotificationManager.PublishSuccessNotificationAsync("That's the spirit!");
+            else
+                await NotificationManager.PublishWarningNotificationAsync("You can do it!");
+        }
 
-        //private async void OnErrorNotification()
-        //{
-        //    await NotificationManager.PublishErrorNotificationAsync("Error notification", NotificationModeEnum.MessageBox);
-        //}
+        private async Task OnDelayedNotificationAsync()
+        {
+            await NotificationManager.DelayedPublishSuccessNotificationAsync("Delayed notification sent by NotificationsViewModel", NotificationModeEnum.MessageBox, _mainViewModelContext);
+            await NotificationManager.PublishInfoNotificationAsync("Go back to the Main to be able to see the delayed notification work his/her magic", NotificationModeEnum.MessageBox);
+        }
 
-        //private async void OnQuestionNotification()
-        //{
-        //    var answer = await NotificationManager.PublishGenericQuestionNotificationAsync("Do you feel lucky?", NotificationTwoWayAnswersGroupEnum.YesNo);
-        //    if (answer.Answer == NotificationTwoWayAnswersEnum.Yes)
-        //        await NotificationManager.PublishSuccessNotificationAsync("That's the spirit!");
-        //    else
-        //        await NotificationManager.PublishWarningNotificationAsync("You can do it!");
-        //}
-
-        //private async void OnDelayedNotification()
-        //{
-        //    await NotificationManager.DelayedPublishSuccessNotificationAsync("Delayed notification sent by NotificationsViewModel", NotificationModeEnum.MessageBox, _mainViewModelContext);
-        //    await NotificationManager.PublishInfoNotificationAsync("Go back to the Main to be able to see the delayed notification work his/her magic", NotificationModeEnum.MessageBox);
-        //}
-
-        //#endregion
+        #endregion
     }
 }
