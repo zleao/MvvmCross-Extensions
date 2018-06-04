@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Logging;
 
 namespace MvxExtensions.Extensions
 {
@@ -60,7 +59,7 @@ namespace MvxExtensions.Extensions
         /// <param name="items">The items.</param>
         public static void SafeAddMissing<T>(this ICollection<T> source, IEnumerable<T> items)
         {
-            SafeAddMissing<T>(source, items, new Func<T, bool>(ShouldAddItem));
+            SafeAddMissing(source, items, ShouldAddItem);
         }
 
         /// <summary>

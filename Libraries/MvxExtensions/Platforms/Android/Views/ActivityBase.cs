@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
@@ -25,6 +26,7 @@ using MvxExtensions.Plugins.Notification.Messages.OneWay;
 using MvxExtensions.Plugins.Notification.Messages.TwoWay.Question;
 using MvxExtensions.Plugins.Notification.Messages.TwoWay.Result;
 using MvxExtensions.ViewModels;
+using AndroidResource = Android.Resource;
 
 namespace MvxExtensions.Platforms.Android.Views
 {
@@ -458,20 +460,18 @@ namespace MvxExtensions.Platforms.Android.Views
         /// <returns></returns>
         protected virtual int GetIconFromSeverity(NotificationSeverityEnum severity)
         {
-            //TODO: uncomment once I figure out how to include drawables
-            //switch (severity)
-            //{
-            //    case NotificationSeverityEnum.Error:
-            //    case NotificationSeverityEnum.Warning:
-            //        return Android.Resource.Drawable.IcDialogAlert;
+            switch (severity)
+            {
+                case NotificationSeverityEnum.Error:
+                case NotificationSeverityEnum.Warning:
+                    return AndroidResource.Drawable.IcDialogAlert;
 
-            //    case NotificationSeverityEnum.Info:
-            //    case NotificationSeverityEnum.Success:
-            //        return Android.Resource.Drawable.IcDialogInfo;
-            //}
-
-            //return Android.Resource.Drawable.IcDialogAlert;
-            return -1;
+                case NotificationSeverityEnum.Info:
+                case NotificationSeverityEnum.Success:
+                    return AndroidResource.Drawable.IcDialogInfo;
+                default:
+                   return AndroidResource.Drawable.IcDialogAlert;
+            }
         }
 
 
