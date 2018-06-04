@@ -1,30 +1,45 @@
-﻿using MvvmCross.Localization;
+﻿using MvvmCross.Base;
+using MvvmCross.Localization;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using MvxExtensions.Plugins.Notification;
+using MvxExtensions.ViewModels;
 
 namespace Playground.Core.ViewModels
 {
-    public abstract class BaseViewModel : MvxViewModel
+    public abstract class BaseViewModel : ViewModel
     {
+        #region Constants
+
+        private static readonly string ProjectBaseName = "Playground.Core";
+
+        #endregion
+
+        #region Fields
+        
+
+        #endregion
+
         #region Properties
 
-        public IMvxLanguageBinder TextSourceCommon => new MvxLanguageBinder("Playground.Core", "Common");
-        public IMvxLanguageBinder TextSource => new MvxLanguageBinder("Playground.Core", GetType().Name);
         protected IMvxNavigationService NavigationService {get;}
-        protected IMvxLogProvider LogProvider {get;}
-        public INotificationService NotificationManager { get; }
 
         #endregion
 
         #region Constructor
 
-        public BaseViewModel(IMvxNavigationService navigationService, IMvxLogProvider logProvider, INotificationService notificationManager)
+        protected BaseViewModel(string textSourceFileName, 
+                                IMvxJsonConverter jsonConverter, 
+                                INotificationService notificationManager, 
+                                IMvxLogProvider logProvider, 
+                                IMvxNavigationService navigationService)
+            : base(new MvxLanguageBinder(ProjectBaseName, textSourceFileName), 
+                   new MvxLanguageBinder(ProjectBaseName, "Common"), 
+                   jsonConverter, 
+                   notificationManager, 
+                   logProvider)
         {
             NavigationService = navigationService;
-            LogProvider = logProvider;
-            NotificationManager = notificationManager;
         }
 
         #endregion

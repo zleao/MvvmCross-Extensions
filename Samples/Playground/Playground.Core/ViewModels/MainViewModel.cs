@@ -1,4 +1,5 @@
-﻿using MvvmCross.Commands;
+﻿using MvvmCross.Base;
+using MvvmCross.Commands;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvxExtensions.Plugins.Notification;
@@ -17,8 +18,8 @@ namespace Playground.Core.ViewModels
         private ObservableCollection<MenuOption> _menuOptions = new ObservableCollection<MenuOption>();
         public ObservableCollection<MenuOption> MenuOptions
         {
-            get { return _menuOptions; }
-            set { SetProperty(ref _menuOptions, value); }
+            get => _menuOptions;
+            set => SetProperty(ref _menuOptions, value);
         }
 
         #endregion
@@ -31,8 +32,11 @@ namespace Playground.Core.ViewModels
 
         #region Commands
 
-        public MainViewModel(IMvxNavigationService navigationService, IMvxLogProvider logProvider, INotificationService notificationManager)
-            : base(navigationService, logProvider, notificationManager)
+        public MainViewModel(IMvxJsonConverter jsonConverter,
+                             INotificationService notificationManager,
+                             IMvxLogProvider logProvider,
+                             IMvxNavigationService navigationService)
+            : base(nameof(MainViewModel), jsonConverter, notificationManager, logProvider, navigationService)
         {
             NavigateCommand = new MvxAsyncCommand<MenuOption>(OnNavigateAsync);
         }

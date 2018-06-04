@@ -1,3 +1,12 @@
 ﻿{
-	"Label_Application_Title" : "MvxExtensions"
+	"Label_Application_Title" : "MvxExtensions",
+	"Label_Yes" : "Yes",
+	"Label_No" : "No",
+	"Label_Ok" : "Ok",
+	"Label_Cancel" : "Cancel",
+	"Label_Dialog_Title_Error" : "Error",
+	"Label_Dialog_Title_Information" : "Information",
+	"Label_Dialog_Title_Message" : "Message",
+	"Label_Dialog_Title_Warning" : "Warning",
+  "Message_Info_UnderConstruction": "Under Construction" 
 }

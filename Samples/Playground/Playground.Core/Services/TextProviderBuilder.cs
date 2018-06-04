@@ -9,7 +9,7 @@ namespace Playground.Core.Services
     public class TextProviderBuilder : MvxTextProviderBuilder
     {
         public TextProviderBuilder(string localizationFolder)
-            : base("Playground.Core", "Resources", new MvxEmbeddedJsonDictionaryTextProvider(false))
+            : base("Playground.Core", "Resources", new MvxEmbeddedJsonDictionaryTextProvider())
         {
             if (!string.IsNullOrWhiteSpace(localizationFolder))
             {

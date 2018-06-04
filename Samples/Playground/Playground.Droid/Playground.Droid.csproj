@@ -169,7 +169,7 @@
     <AndroidResource Include="Resources\layout\SplashScreen.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\NotificationsView.axml">
+    <AndroidResource Include="Resources\layout\Page_NotificationsView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -188,6 +188,14 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\MvxExtensions\MvxExtensions.csproj">
+      <Project>{bed5f20a-cacf-437c-8a32-2a76d66a91c0}</Project>
+      <Name>MvxExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj">
+      <Project>{8829789f-08f2-4e88-ae5a-58f3952f778e}</Project>
+      <Name>MvxExtensions.Plugins.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Playground.Core\Playground.Core.csproj">
       <Project>{45af8427-db12-4724-b883-00821db40f48}</Project>
       <Name>Playground.Core</Name>

@@ -1,4 +1,5 @@
-﻿using MvvmCross.Commands;
+﻿using MvvmCross.Base;
+using MvvmCross.Commands;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvxExtensions.Plugins.Notification;
@@ -27,8 +28,11 @@ namespace Playground.Core.ViewModels
 
         #region Constructor
 
-        public NotificationsViewModel(IMvxNavigationService navigationService, IMvxLogProvider logProvider, INotificationService notificationManager)
-            : base(navigationService, logProvider, notificationManager)
+        public NotificationsViewModel(IMvxJsonConverter jsonConverter,
+                                      INotificationService notificationManager,
+                                      IMvxLogProvider logProvider,
+                                      IMvxNavigationService navigationService)
+            : base(nameof(NotificationsViewModel), jsonConverter, notificationManager, logProvider, navigationService)
         {
             ErrorNotificationCommand = new MvxAsyncCommand(OnErrorNotificationAsync);
             QuestionNotificationCommand = new MvxAsyncCommand(OnQuestionNotificationAsync);
