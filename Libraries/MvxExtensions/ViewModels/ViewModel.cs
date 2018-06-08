@@ -22,7 +22,6 @@ using System.Windows.Input;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
-using MvvmCross.Core;
 using MvvmCross.Logging;
 using MvvmCross.Plugin.JsonLocalization;
 using MvvmCross.ViewModels;
@@ -630,176 +629,110 @@ namespace MvxExtensions.ViewModels
             InitializeMethodDependencies(GetType());
 
             InitializePropertyChanged();
-
-            //TODO: See if this call can be made in one of the VM lifecycle
-            SubscribeLongRunningMessageEvents();
         }
 
         #endregion
 
-        //TODO: Refactor the VieeModel lifecycle, by using the lifecycle provided by mvx
         #region ViewModel Lifecycle
 
-//        /// <summary>
-//        /// Gets a value indicating whether the correspondent view is visible or hidden.
-//        /// Controled by the method [IsVisible(bool value)]
-//        /// </summary>
-//        /// <value>
-//        ///   <c>true</c> if [is view visible]; otherwise, <c>false</c>.
-//        /// </value>
-//        public bool IsViewVisible
-//        {
-//            get { return _isViewVisible; }
-//            private set
-//            {
-//                if (_isViewVisible != value)
-//                {
-//                    _isViewVisible = value;
-//                    if (value)
-//                    {
-//                        IsViewKilled = false;
-//                        OnViewShown();
-//                    }
-//                    else
-//                        OnViewHidden();
-//                }
-//            }
-//        }
-//        private bool _isViewVisible;
+        public override void ViewCreated()
+        {
+            SubscribeLongRunningMessageEvents();
+         
+            base.ViewCreated();
+        }
 
-//        /// <summary>
-//        /// Indicates if the view associated with this view model has been destroyed.
-//        /// </summary>
-//        public bool IsViewKilled
-//        {
-//            get => _isViewKilled;
-//            private set
-//            {
-//                if (_isViewKilled != value)
-//                {
-//                    _isViewKilled = value;
-//                    RaisePropertyChanged(() => IsViewKilled);
-//                }
-//            }
-//        }
-//        private bool _isViewKilled;
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
 
+            #pragma warning disable 4014
+            DoWorkAsync(OnViewShownAsync, isSilent: true);
+            #pragma warning restore 4014
+        }
+       
+        protected virtual async Task OnViewShownAsync()
+        {
+            if (_initialGenericMessages.Count > 0)
+            {
+                foreach (var message in _initialGenericMessages)
+                {
+                    await NotificationManager.PublishAsync(message);
+                }
+                _initialGenericMessages.Clear();
+            }
 
-//        /// <summary>
-//        /// Used to signal that a view is about to be shown/hidden
-//        /// </summary>
-//        /// <param name="value">if set to <c>true</c> the view is about to be shown. Othrewise is about to be hidden</param>
-//        public void ChangeVisibility(bool value)
-//        {
-//            IsViewVisible = value;
-//        }
+            if (NotificationManager != null)
+            {
+                await NotificationManager.PublishPendingNotificationsAsync(this, ViewModelContext);
+                await NotificationManager.PublishPendingNotificationsAsync(this);
+            }
+        }
 
-//        /// <summary>
-//        /// Used to signal that the view is about to be destroyed
-//        /// </summary>
-//        public void KillMe()
-//        {
-//            //ensure that the view visibility indicator is set to hidden
-//            ChangeVisibility(false);
-//            IsViewKilled = true;
-//            OnViewKilled();
-//        }
+        public override void ViewDisappeared()
+        {
+            UnsubscribeMessageEvents();
 
+            base.ViewDisappeared();
+        }
 
-//        private void OnViewShown()
-//        {
-//#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-//            DoWorkAsync(OnViewShownAsync, isSilent: true);
-//#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-//        }
-//        /// <summary>
-//        /// Called when view shown.
-//        /// </summary>
-//        protected virtual async Task OnViewShownAsync()
-//        {
-//            if (_initialGenericMessages.Count > 0)
-//            {
-//                foreach (var message in _initialGenericMessages)
-//                {
-//                    await NotificationManager.PublishAsync(message);
-//                }
-//                _initialGenericMessages.Clear();
-//            }
+        public override void ViewDestroy(bool viewFinishing = true)
+        {
+            UnsubscribeLongRunningMessageEvents();
 
-//            if (NotificationManager != null)
-//            {
-//                await NotificationManager.PublishPendingNotificationsAsync(this, ViewModelContext);
-//                await NotificationManager.PublishPendingNotificationsAsync(this);
-//            }
-//        }
+            base.ViewDestroy(viewFinishing);
+        }
 
-//        /// <summary>
-//        /// Called when view hidden.
-//        /// </summary>
-//        protected virtual void OnViewHidden()
-//        {
-//            UnsubscribeMessageEvents();
-//        }
+        private readonly string _longRunningNotificationTokenBaseName = typeof(LongRunningSubscriptionToken).Name;
 
-//        /// <summary>
-//        /// Called when view killed.
-//        /// </summary>
-//        protected virtual void OnViewKilled()
-//        {
-//            UnsubscribeLongRunningMessageEvents();
-//        }
+        /// <summary>
+        /// Saves the state to bundle.
+        /// </summary>
+        /// <param name="bundle">The bundle.</param>
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            if (_longRunningMessageTokens.SafeCount() > 0)
+            {
+                foreach (var token in _longRunningMessageTokens)
+                {
+                    var serializedInfo = JsonConverter.SerializeObject(new LongRunnigNotificationSaveBundle()
+                    {
+                        Context = token.Token.Context,
+                        MessageType = token.Token.MessageType,
+                        MethodName = token.AsyncDeliveryActionName,
+                        UnsubscribeOnArrival = token.UnsubscribeOnArrival
+                    });
+                    bundle.Data.Add(_longRunningNotificationTokenBaseName + "_" + token.Token.Id.ToString(), serializedInfo);
+                }
+            }
 
+            base.SaveStateToBundle(bundle);
+        }
 
-//        private readonly string _longRunningNotificationTokenBaseName = typeof(LongRunningSubscriptionToken).Name;
+        /// <summary>
+        /// Reloads state from bundle.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            foreach (var item in state.Data)
+            {
+                if (item.Key.StartsWith(_longRunningNotificationTokenBaseName))
+                {
+                    var savedInfo = JsonConverter.DeserializeObject<LongRunnigNotificationSaveBundle>(item.Value);
+                    var method = GetType().GetRuntimeMethods().SafeFirstOrDefault(m => m.Name == savedInfo.MethodName);
+                    Task MethodHandler(INotificationOneWayMessage arg) => (Task)method.Invoke(this, new object[] { arg });
 
-//        /// <summary>
-//        /// Saves the state to bundle.
-//        /// </summary>
-//        /// <param name="bundle">The bundle.</param>
-//        protected override void SaveStateToBundle(IMvxBundle bundle)
-//        {
-//            if (_longRunningMessageTokens.SafeCount() > 0)
-//            {
-//                foreach (var token in _longRunningMessageTokens)
-//                {
-//                    var serializedInfo = JsonConverter.SerializeObject(new LongRunnigNotificationSaveBundle()
-//                    {
-//                        Context = token.Token.Context,
-//                        MessageType = token.Token.MessageType,
-//                        MethodName = token.AsyncDeliveryActionName,
-//                        UnsubscribeOnArrival = token.UnsubscribeOnArrival
-//                    });
-//                    bundle.Data.Add(_longRunningNotificationTokenBaseName + "_" + token.Token.Id.ToString(), serializedInfo);
-//                }
-//            }
+                    SubscribeLongRunningEvent(savedInfo.MessageType,
+                                              MethodHandler,
+                                              savedInfo.MethodName,
+                                              savedInfo.UnsubscribeOnArrival,
+                                              savedInfo.Context);
+                }
+            }
 
-//            base.SaveStateToBundle(bundle);
-//        }
-
-//        /// <summary>
-//        /// Reloads state from bundle.
-//        /// </summary>
-//        /// <param name="state">The state.</param>
-//        protected override void ReloadFromBundle(IMvxBundle state)
-//        {
-//            foreach (var item in state.Data)
-//            {
-//                if (item.Key.StartsWith(_longRunningNotificationTokenBaseName))
-//                {
-//                    var savedInfo = JsonConverter.DeserializeObject<LongRunnigNotificationSaveBundle>(item.Value);
-//                    var method = GetType().GetRuntimeMethods().SafeFirstOrDefault(m => m.Name == savedInfo.MethodName);
-//                    Task MethodHandler(INotificationOneWayMessage arg) => (Task) method.Invoke(this, new object[] {arg});
-
-//                    SubscribeLongRunningEvent(savedInfo.MessageType,
-//                                              MethodHandler,
-//                                              savedInfo.MethodName,
-//                                              savedInfo.UnsubscribeOnArrival,
-//                                              savedInfo.Context);
-//                }
-//            }
-
-//            base.ReloadFromBundle(state);
-//        }
+            base.ReloadFromBundle(state);
+        }
 
         #endregion
 
