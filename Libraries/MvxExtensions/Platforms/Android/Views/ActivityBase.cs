@@ -442,8 +442,10 @@ namespace MvxExtensions.Platforms.Android.Views
                 case NotificationSeverityEnum.Error:
                     return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Error");
 
-                case NotificationSeverityEnum.Info:
                 case NotificationSeverityEnum.Success:
+                    return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Success");
+
+                case NotificationSeverityEnum.Info:
                     return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Information");
 
                 case NotificationSeverityEnum.Warning:

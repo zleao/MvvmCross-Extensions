@@ -1,23 +1,31 @@
-﻿using Android.App;
+﻿using System.Reflection;
+using Android.App;
 using Android.OS;
-using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
-using Playground.Core.Resources;
+using MvxExtensions.Platforms.Android.Views;
 using Playground.Core.ViewModels;
 
 namespace Playground.Droid.Views
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme")]
-    public class MainView : MvxAppCompatActivity<MainViewModel>
+    public class MainView : AppCompatActivityBase<MainViewModel>
     {
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override void OnCreate(Bundle bundle)
         {
-            base.OnCreate(savedInstanceState);
+            base.OnCreate(bundle);
 
-            SetContentView(Resource.Layout.MainView);
+            Title = ViewModel.PageTitle;
+        }
 
-            Title = ViewModel.TextSourceCommon.GetText(TextResourcesKeys.Label_Application_Title);
+        protected override int GetResourceIdFromImageId(string imageId)
+        {
+            return Resources.GetIdentifier("ic_action_" + imageId, "drawable", ApplicationContext.PackageName);
+        }
+
+        protected override FieldInfo GetPageViewFieldInfo(string pageName)
+        {
+            return typeof(Resource.Layout).GetField(pageName);
         }
     }
 }

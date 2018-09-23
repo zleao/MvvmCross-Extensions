@@ -6,6 +6,7 @@
 	"Label_Cancel" : "Cancel",
 	"Label_Dialog_Title_Error" : "Error",
 	"Label_Dialog_Title_Information" : "Information",
+	"Label_Dialog_Title_Success" : "Success",
 	"Label_Dialog_Title_Message" : "Message",
 	"Label_Dialog_Title_Warning" : "Warning",
   "Message_Info_UnderConstruction": "Under Construction" 

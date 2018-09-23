@@ -8,6 +8,8 @@ using Playground.Core.Resources;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MvxExtensions.Plugins.Notification.Messages;
+using MvxExtensions.Plugins.Notification.Messages.OneWay;
 
 namespace Playground.Core.ViewModels
 {
@@ -43,6 +45,17 @@ namespace Playground.Core.ViewModels
 
         #endregion
 
+        #region Subscriptions
+
+        protected override void SubscribeLongRunningMessageEvents()
+        {
+            base.SubscribeLongRunningMessageEvents();
+
+            SubscribeLongRunningEvent<NotificationGenericMessage>(OnNotificationGenericMessageAsync, nameof(OnNotificationGenericMessageAsync), context: ViewModelContext);
+        }
+
+        #endregion
+
         #region Methods
 
         public override Task Initialize()
@@ -60,6 +73,11 @@ namespace Playground.Core.ViewModels
         private void AddMenuOption(MenuOption option)
         {
             MenuOptions.Add(option);
+        }
+
+        private Task OnNotificationGenericMessageAsync(NotificationGenericMessage msg)
+        {
+            return NotificationManager.PublishSuccessNotificationAsync(msg.Message, NotificationModeEnum.MessageBox);
         }
 
         #endregion

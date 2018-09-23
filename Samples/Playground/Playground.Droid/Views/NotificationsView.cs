@@ -10,16 +10,14 @@ namespace Playground.Droid.Views
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme")]
-    public class NotificationsView : ActivityBase<NotificationsViewModel>
+    public class NotificationsView : AppCompatActivityBase<NotificationsViewModel>
     {
-        //protected override void OnCreate(Bundle savedInstanceState)
-        //{
-        //    base.OnCreate(savedInstanceState);
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
 
-        //    SetContentView(Resource.Layout.NotificationsView);
-
-        //    Title = ViewModel.TextSource.GetText(TextResourcesKeys.Label_Page_Title_Notifications);
-        //}
+            Title = ViewModel.PageTitle;
+        }
 
         protected override int GetResourceIdFromImageId(string imageId)
         {
