@@ -867,21 +867,6 @@ namespace MvxExtensions.ViewModels
 
         #endregion
 
-        //TODO: Rethink the finalizing/disposal strategy
-        #region Finalizers
-
-        ///// <summary>
-        ///// Releases unmanaged resources and performs other cleanup operations before the
-        ///// <see cref="ColorSpace.Model"/> is reclaimed by garbage collection.
-        ///// </summary>
-        //~ViewModel()
-        //{
-
-        //    Dispose(false);
-        //}
-
-        #endregion
-
         //TODO: Refactor navigation with MvxNavigationService
         #region Navigation
 
