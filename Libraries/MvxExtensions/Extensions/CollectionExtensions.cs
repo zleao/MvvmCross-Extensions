@@ -36,9 +36,10 @@ namespace MvxExtensions.Extensions
 
             try
             {
-                if (items.Any())
+                var enumeratedItems = items.ToList();
+                if (enumeratedItems.Any())
                 {
-                    foreach (var item in items)
+                    foreach (var item in enumeratedItems)
                     {
                         source.Add(item);
                     }
@@ -80,9 +81,10 @@ namespace MvxExtensions.Extensions
 
             try
             {
-                if (items.Any())
+                var enumeratedItems = items.ToList();
+                if (enumeratedItems.Any())
                 {
-                    foreach (T item in items)
+                    foreach (T item in enumeratedItems)
                     {
                         if (!source.Contains(item) && validationFunc.Invoke(item))
                             source.Add(item);
