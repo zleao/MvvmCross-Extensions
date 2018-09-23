@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Playground.Core.ViewModels
 {
-    public class NotificationsViewModel : BaseViewModel
+    public class NotificationsViewModel : BaseViewModel<string>
     {
         #region Fields
 
@@ -43,11 +43,11 @@ namespace Playground.Core.ViewModels
 
         #region Methods
 
-        public void Init(string mainViewModelContext)
+        public override void Prepare(string parameter)
         {
-            _mainViewModelContext = mainViewModelContext;
+            _mainViewModelContext = parameter;
         }
-
+        
         private Task OnErrorNotificationAsync()
         {
             return NotificationManager.PublishErrorNotificationAsync("Error notification", NotificationModeEnum.MessageBox);

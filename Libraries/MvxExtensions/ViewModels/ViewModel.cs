@@ -35,7 +35,6 @@ namespace MvxExtensions.ViewModels
     /// </summary>
     public abstract class ViewModel : MvxViewModel, IDisposable
     {
-
         #region Fields
 
         private int _busyCount;
@@ -1176,5 +1175,19 @@ namespace MvxExtensions.ViewModels
         }
 
         #endregion
+    }
+
+    public abstract class ViewModel<TParameter> : ViewModel, IMvxViewModel<TParameter>
+    {
+        protected ViewModel(IMvxLanguageBinder textSource, 
+                            IMvxLanguageBinder textSourceCommon, 
+                            IMvxJsonConverter jsonConverter, 
+                            INotificationService notificationManager, 
+                            IMvxLogProvider logProvider) 
+            : base(textSource, textSourceCommon, jsonConverter, notificationManager, logProvider)
+        {
+        }
+
+        public abstract void Prepare(TParameter parameter);
     }
 }

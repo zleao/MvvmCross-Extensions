@@ -54,7 +54,7 @@ namespace Playground.Core.ViewModels
 
         private async Task OnNavigateAsync(MenuOption option)
         {
-            await NavigationService.Navigate(option.ViewModelType);
+            await NavigationService.Navigate(option.ViewModelType, ViewModelContext);
         }
 
         private void AddMenuOption(MenuOption option)
