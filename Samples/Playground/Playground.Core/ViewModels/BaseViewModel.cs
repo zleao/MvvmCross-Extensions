@@ -11,18 +11,7 @@ namespace Playground.Core.ViewModels
     {
         #region Constants
 
-        private static readonly string ProjectBaseName = "Playground.Core";
-
-        #endregion
-
-        #region Fields
-        
-
-        #endregion
-
-        #region Properties
-
-        protected IMvxNavigationService NavigationService {get;}
+        private const string ProjectBaseName = "Playground.Core";
 
         #endregion
 
@@ -37,9 +26,9 @@ namespace Playground.Core.ViewModels
                    new MvxLanguageBinder(ProjectBaseName, "Common"), 
                    jsonConverter, 
                    notificationManager, 
-                   logProvider)
+                   logProvider,
+                   navigationService)
         {
-            NavigationService = navigationService;
         }
 
         #endregion
@@ -49,18 +38,7 @@ namespace Playground.Core.ViewModels
     {
         #region Constants
 
-        private static readonly string ProjectBaseName = "Playground.Core";
-
-        #endregion
-
-        #region Fields
-        
-
-        #endregion
-
-        #region Properties
-
-        protected IMvxNavigationService NavigationService {get;}
+        private const string ProjectBaseName = "Playground.Core";
 
         #endregion
 
@@ -72,12 +50,12 @@ namespace Playground.Core.ViewModels
             IMvxLogProvider logProvider, 
             IMvxNavigationService navigationService)
             : base(new MvxLanguageBinder(ProjectBaseName, textSourceFileName), 
-                new MvxLanguageBinder(ProjectBaseName, "Common"), 
-                jsonConverter, 
-                notificationManager, 
-                logProvider)
+                   new MvxLanguageBinder(ProjectBaseName, "Common"), 
+                   jsonConverter, 
+                   notificationManager, 
+                   logProvider,
+                   navigationService)
         {
-            NavigationService = navigationService;
         }
 
         #endregion

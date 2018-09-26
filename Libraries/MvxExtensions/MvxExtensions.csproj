@@ -21,6 +21,7 @@
     <Compile Include="Platforms\Common\**\*.cs" />
     <AndroidResource Include="Resources\**\*.axml" SubType="Designer" Generator="MSBuild:UpdateAndroidResources" />
     <PackageReference Include="MvvmCross.Droid.Support.V7.AppCompat" Version="6.0.0" />
+    <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

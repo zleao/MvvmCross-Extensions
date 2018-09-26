@@ -23,6 +23,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
+using MvvmCross.Navigation;
 using MvvmCross.Plugin.JsonLocalization;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
@@ -138,6 +139,46 @@ namespace MvxExtensions.ViewModels
         ///   <c>true</c> if this instance is hosted; otherwise, <c>false</c>.
         /// </value>
         protected bool IsHosted { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModel" /> class.
+        /// </summary>
+        /// <param name="textSource">The text source.</param>
+        /// <param name="textSourceCommon">The text source common.</param>
+        /// <param name="jsonConverter">The json converter.</param>
+        /// <param name="notificationManager">The notification manager.</param>
+        /// <param name="logProvider">The log provider.</param>
+        /// <exception cref="System.NullReferenceException">IMvxJsonConverter
+        /// or
+        /// INotificationService
+        /// or
+        /// IMvxLanguageBinder</exception>
+        protected ViewModel(IMvxLanguageBinder textSource,
+            IMvxLanguageBinder textSourceCommon,
+            IMvxJsonConverter jsonConverter,
+            INotificationService notificationManager,
+            IMvxLogProvider logProvider,
+            IMvxNavigationService navigationService)
+        {
+            TextSource = textSource.ThrowIfIoComponentIsNull(nameof(textSource));
+            TextSourceCommon = textSourceCommon.ThrowIfIoComponentIsNull(nameof(textSourceCommon));
+            JsonConverter = jsonConverter.ThrowIfIoComponentIsNull(nameof(jsonConverter));
+            NotificationManager = notificationManager.ThrowIfIoComponentIsNull(nameof(notificationManager));
+            LogProvider = logProvider.ThrowIfIoComponentIsNull(nameof(logProvider));
+            NavigationService = navigationService;
+
+            BackCommand = new MvxCommand(OnBack);
+
+            InitializePropertyDependencies(GetType());
+
+            InitializeMethodDependencies(GetType());
+
+            InitializePropertyChanged();
+        }
 
         #endregion
 
@@ -594,44 +635,6 @@ namespace MvxExtensions.ViewModels
 
         #endregion
 
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModel" /> class.
-        /// </summary>
-        /// <param name="textSource">The text source.</param>
-        /// <param name="textSourceCommon">The text source common.</param>
-        /// <param name="jsonConverter">The json converter.</param>
-        /// <param name="notificationManager">The notification manager.</param>
-        /// <param name="logProvider">The log provider.</param>
-        /// <exception cref="System.NullReferenceException">IMvxJsonConverter
-        /// or
-        /// INotificationService
-        /// or
-        /// IMvxLanguageBinder</exception>
-        protected ViewModel(IMvxLanguageBinder textSource,
-                         IMvxLanguageBinder textSourceCommon,
-                         IMvxJsonConverter jsonConverter,
-                         INotificationService notificationManager,
-                         IMvxLogProvider logProvider)
-        {
-            TextSource = textSource.ThrowIfIoComponentIsNull(nameof(textSource));
-            TextSourceCommon = textSourceCommon.ThrowIfIoComponentIsNull(nameof(textSourceCommon));
-            JsonConverter = jsonConverter.ThrowIfIoComponentIsNull(nameof(jsonConverter));
-            NotificationManager = notificationManager.ThrowIfIoComponentIsNull(nameof(notificationManager));
-            LogProvider = logProvider.ThrowIfIoComponentIsNull(nameof(logProvider));
-
-            BackCommand = new MvxCommand(OnBack);
-
-            InitializePropertyDependencies(GetType());
-
-            InitializeMethodDependencies(GetType());
-
-            InitializePropertyChanged();
-        }
-
-        #endregion
-
         #region ViewModel Lifecycle
 
         public override void ViewCreated()
@@ -867,185 +870,9 @@ namespace MvxExtensions.ViewModels
 
         #endregion
 
-        //TODO: Refactor navigation with MvxNavigationService
         #region Navigation
-
-        ///// <summary>
-        ///// Shows a view model.
-        ///// </summary>
-        ///// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        ///// <param name="parameterValuesObject">The parameter values object.</param>
-        ///// <param name="presentationBundle">The presentation bundle.</param>
-        ///// <param name="requestedBy">The requested by.</param>
-        ///// <param name="removeCurrentViewFromStack">if set to <c>true</c> removes the current view from application stack.</param>
-        ///// <param name="clearBackStack">if set to <c>true</c> clears the entire back stack of the application.</param>
-        ///// <returns></returns>
-        //protected bool ShowViewModel<TViewModel>(object parameterValuesObject,
-        //                                         IMvxBundle presentationBundle = null,
-        //                                         MvxRequestedBy requestedBy = null,
-        //                                         bool removeCurrentViewFromStack = false,
-        //                                         bool clearBackStack = false)
-        //    where TViewModel : IMvxViewModel
-        //{
-        //    return ShowViewModel(
-        //        typeof(TViewModel),
-        //        parameterValuesObject.ToSimplePropertyDictionary(),
-        //        presentationBundle,
-        //        requestedBy,
-        //        removeCurrentViewFromStack,
-        //        clearBackStack);
-        //}
-
-        ///// <summary>
-        ///// Forces navigation to the specified view model.
-        ///// </summary>
-        ///// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        ///// <param name="parameterValues">The parameter values.</param>
-        ///// <param name="presentationBundle">The presentation bundle.</param>
-        ///// <param name="requestedBy">The requested by.</param>
-        ///// <param name="removeCurrentViewFromStack">if set to <c>true</c> removes the current view from application stack.</param>
-        ///// <param name="clearBackStack">if set to <c>true</c> clears the entire back stack of the application.</param>
-        ///// <returns></returns>
-        //protected bool ShowViewModel<TViewModel>(IDictionary<string, string> parameterValues,
-        //                                         IMvxBundle presentationBundle = null,
-        //                                         MvxRequestedBy requestedBy = null,
-        //                                         bool removeCurrentViewFromStack = false,
-        //                                         bool clearBackStack = false)
-        //    where TViewModel : IMvxViewModel
-        //{
-        //    return ShowViewModel(
-        //        typeof(TViewModel),
-        //        new MvxBundle(parameterValues.ToSimplePropertyDictionary()),
-        //        presentationBundle,
-        //        requestedBy,
-        //        removeCurrentViewFromStack,
-        //        clearBackStack);
-        //}
-
-        ///// <summary>
-        ///// Forces navigation to the specified view model.
-        ///// </summary>
-        ///// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        ///// <param name="parameterBundle">The parameter bundle.</param>
-        ///// <param name="presentationBundle">The presentation bundle.</param>
-        ///// <param name="requestedBy">The requested by.</param>
-        ///// <param name="removeCurrentViewFromStack">if set to <c>true</c> removes the current view from application stack.</param>
-        ///// <param name="clearBackStack">if set to <c>true</c> clears the entire back stack of the application.</param>
-        ///// <returns></returns>
-        //protected bool ShowViewModel<TViewModel>(IMvxBundle parameterBundle = null,
-        //                                         IMvxBundle presentationBundle = null,
-        //                                         MvxRequestedBy requestedBy = null,
-        //                                         bool removeCurrentViewFromStack = false,
-        //                                         bool clearBackStack = false)
-        //    where TViewModel : IMvxViewModel
-        //{
-        //    return ShowViewModel(
-        //        typeof(TViewModel),
-        //        parameterBundle,
-        //        presentationBundle,
-        //        requestedBy,
-        //        removeCurrentViewFromStack,
-        //        clearBackStack);
-        //}
-
-
-        ///// <summary>
-        ///// Forces navigation to the specified view model.
-        ///// </summary>
-        ///// <param name="viewModelType">Type of the view model.</param>
-        ///// <param name="parameterValuesObject">The parameter values object.</param>
-        ///// <param name="presentationBundle">The presentation bundle.</param>
-        ///// <param name="requestedBy">The requested by.</param>
-        ///// <param name="removeCurrentViewFromStack">if set to <c>true</c> removes the current view from application stack.</param>
-        ///// <param name="clearBackStack">if set to <c>true</c> clears the entire back stack of the application.</param>
-        ///// <returns></returns>
-        //protected bool ShowViewModel(Type viewModelType,
-        //                             object parameterValuesObject,
-        //                             IMvxBundle presentationBundle = null,
-        //                             MvxRequestedBy requestedBy = null,
-        //                             bool removeCurrentViewFromStack = false,
-        //                             bool clearBackStack = false)
-        //{
-        //    return ShowViewModel(viewModelType,
-        //                         new MvxBundle(parameterValuesObject.ToSimplePropertyDictionary()),
-        //                         presentationBundle,
-        //                         requestedBy,
-        //                         removeCurrentViewFromStack,
-        //                         clearBackStack);
-        //}
-
-        ///// <summary>
-        ///// Forces navigation to the specified view model.
-        ///// </summary>
-        ///// <param name="viewModelType">Type of the view model.</param>
-        ///// <param name="parameterValues">The parameter values.</param>
-        ///// <param name="presentationBundle">The presentation bundle.</param>
-        ///// <param name="requestedBy">The requested by.</param>
-        ///// <param name="removeCurrentViewFromStack">if set to <c>true</c> removes the current view from application stack.</param>
-        ///// <param name="clearBackStack">if set to <c>true</c> clears the entire back stack of the application.</param>
-        ///// <returns></returns>
-        //protected bool ShowViewModel(Type viewModelType,
-        //                             IDictionary<string, string> parameterValues,
-        //                             IMvxBundle presentationBundle = null,
-        //                             MvxRequestedBy requestedBy = null,
-        //                             bool removeCurrentViewFromStack = false,
-        //                             bool clearBackStack = false)
-        //{
-        //    return ShowViewModel(viewModelType,
-        //                         new MvxBundle(parameterValues),
-        //                         presentationBundle,
-        //                         requestedBy,
-        //                         removeCurrentViewFromStack,
-        //                         clearBackStack);
-        //}
-
-        ///// <summary>
-        ///// Forces navigation to the specified view model.
-        ///// </summary>
-        ///// <param name="viewModelType">Type of the view model.</param>
-        ///// <param name="parameterBundle">The parameter bundle.</param>
-        ///// <param name="presentationBundle">The presentation bundle.</param>
-        ///// <param name="requestedBy">The requested by.</param>
-        ///// <param name="removeCurrentViewFromStack">if set to <c>true</c> removes the current view from application stack.</param>
-        ///// <param name="clearBackStack">if set to <c>true</c> clears the entire back stack of the application.</param>
-        ///// <returns></returns>
-        //protected bool ShowViewModel(Type viewModelType,
-        //                             IMvxBundle parameterBundle = null,
-        //                             IMvxBundle presentationBundle = null,
-        //                             MvxRequestedBy requestedBy = null,
-        //                             bool removeCurrentViewFromStack = false,
-        //                             bool clearBackStack = false)
-        //{
-        //    return ShowViewModelImpl(viewModelType, parameterBundle, presentationBundle, requestedBy, removeCurrentViewFromStack, clearBackStack);
-        //}
-
-
-        //internal virtual bool ShowViewModelImpl(Type viewModelType, IMvxBundle parameterBundle, IMvxBundle presentationBundle,
-        //                                         MvxRequestedBy requestedBy,
-        //                                         bool removeCurrentViewFromStack,
-        //                                         bool clearBackStack)
-        //{
-        //    MvxTrace.Trace("Showing ViewModel {0} - RemoveViewFromStack: {1}", viewModelType.Name, removeCurrentViewFromStack);
-
-        //    var viewDispatcher = ViewDispatcher as IViewDispatcher;
-        //    if (viewDispatcher != null)
-        //    {
-        //        return viewDispatcher.ShowViewModel(new MvxViewModelRequest(
-        //                                                viewModelType,
-        //                                                parameterBundle,
-        //                                                presentationBundle,
-        //                                                requestedBy),
-        //                                            removeCurrentViewFromStack,
-        //                                            clearBackStack);
-        //    }
-
-        //    MvxTrace.Error("ShowViewModel -> IViewDispatcher not found. Navigation will be aborted");
-        //    return false;
-        //}
-
-        #endregion
-
-        #region Back Managment
+        
+        protected IMvxNavigationService NavigationService { get; }
 
         /// <summary>
         /// The back command.
@@ -1057,8 +884,7 @@ namespace MvxExtensions.ViewModels
         /// </summary>
         protected virtual void OnBack()
         {
-            //TODO: USe thew new navigation service
-            //Close(this);
+            NavigationService.Close(this);
         }
 
         #endregion
@@ -1168,8 +994,9 @@ namespace MvxExtensions.ViewModels
                             IMvxLanguageBinder textSourceCommon, 
                             IMvxJsonConverter jsonConverter, 
                             INotificationService notificationManager, 
-                            IMvxLogProvider logProvider) 
-            : base(textSource, textSourceCommon, jsonConverter, notificationManager, logProvider)
+                            IMvxLogProvider logProvider,
+                            IMvxNavigationService navigationService) 
+            : base(textSource, textSourceCommon, jsonConverter, notificationManager, logProvider, navigationService)
         {
         }
 
