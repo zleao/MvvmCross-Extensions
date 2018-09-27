@@ -8,13 +8,21 @@ using Playground.Core.Resources;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MvxExtensions.Attributes;
 using MvxExtensions.Plugins.Notification.Messages;
 using MvxExtensions.Plugins.Notification.Messages.OneWay;
 
 namespace Playground.Core.ViewModels
 {
+    [SingletonViewModel]
     public class MainViewModel : BaseViewModel
     {
+        #region Fields
+
+        private bool _isInitialized;
+
+        #endregion
+        
         #region Properties
 
         private ObservableCollection<MenuOption> _menuOptions = new ObservableCollection<MenuOption>();
@@ -60,14 +68,24 @@ namespace Playground.Core.ViewModels
 
         public override Task Initialize()
         {
-            AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Notifications), typeof(NotificationsViewModel)));
+            if (!_isInitialized)
+            {
+                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Notifications), typeof(NotificationsViewModel)));
+                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Navigation), typeof(NavigationViewModel)));
+                _isInitialized = true;
+            }
 
             return base.Initialize();
         }
 
-        private async Task OnNavigateAsync(MenuOption option)
+        private Task OnNavigateAsync(MenuOption option)
         {
-            await NavigationService.Navigate(option.ViewModelType, ViewModelContext);
+            if (option.ViewModelType == typeof(NotificationsViewModel))
+            {
+                return NavigationService.Navigate(option.ViewModelType, ViewModelContext);
+            }
+
+            return NavigationService.Navigate(option.ViewModelType);
         }
 
         private void AddMenuOption(MenuOption option)

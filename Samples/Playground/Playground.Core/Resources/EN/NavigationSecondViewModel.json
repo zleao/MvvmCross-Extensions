@@ -1,0 +1,7 @@
+﻿{
+	"Label_Page_Title_NavigationSecond" : "Navigation Second",
+  "Label_Button_NavigateAndClearStack" :  "Navigate and Clear Stack",
+  "Text_Description_NavigateAndClearStack" :  "Navigate to app main view view and clear the navigation stack, leaving only the main view",
+	"Text_NavigateMode_RemoveSelf" :  "The 'Navigation' view was removed from the stack. If you 'go back' now you be redirected to the main view",
+	"Text_NavigateMode_Normal" :  "The 'Navigation' view is in the back stack and will be show if you 'go back'"
+}

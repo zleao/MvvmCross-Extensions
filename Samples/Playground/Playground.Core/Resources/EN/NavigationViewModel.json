@@ -1,0 +1,7 @@
+﻿{
+	"Label_Page_Title_Navigation" : "Navigation",
+  "Label_Button_NavigateAndRemoveSelf" :  "Navigate and Remove Self",
+  "Label_Button_Navigate" :  "Navigate",
+  "Text_Description_NavigateAndRemoveSelf" :  "Navigate to second navigation view and remove the current view from stack",
+	"Text_Description_Navigate" :  "Navigate to second navigation view and keep the current view from stack"
+}

@@ -7,11 +7,11 @@ namespace Playground.Droid.Views
 {
     [MvxActivityPresentation]
     [Activity(Theme = "@style/AppTheme")]
-    public class MainView : BaseAppCompatView<MainViewModel>
+    public class NavigationSecondView : BaseAppCompatView<NavigationSecondViewModel>
     {
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
+            base.OnCreate(savedInstanceState);
 
             Title = ViewModel.PageTitle;
         }
