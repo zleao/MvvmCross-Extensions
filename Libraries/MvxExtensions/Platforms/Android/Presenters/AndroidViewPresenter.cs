@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
 using MvvmCross.Platforms.Android.Presenters;
@@ -16,16 +17,22 @@ namespace MvxExtensions.Platforms.Android.Presenters
         protected override Intent CreateIntentForRequest(MvxViewModelRequest request)
         {
             var intent = base.CreateIntentForRequest(request);
-
-            switch (request.ParameterValues?[NavigationModes.NavigationMode])
+            try
             {
-                case NavigationModes.NavigationModeClearStack:
-                    intent.AddFlags(ActivityFlags.ClearTask);
-                    break;
-
-                case NavigationModes.NavigationModeRemoveSelf:
+                var navigationMode = request.PresentationValues?[NavigationModes.NavigationMode];
+            
+                if (navigationMode == NavigationModes.NavigationModeClearStack)
+                {
+                    intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
+                }
+                else if (navigationMode == NavigationModes.NavigationModeRemoveSelf)
+                {
                     CurrentActivity?.Finish();
-                    break;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
             return intent;
