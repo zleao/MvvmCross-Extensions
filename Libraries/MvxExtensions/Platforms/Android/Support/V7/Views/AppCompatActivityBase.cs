@@ -1,4 +1,11 @@
-﻿using Android.App;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
@@ -10,6 +17,7 @@ using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 using MvvmCross.WeakSubscription;
 using MvxExtensions.Extensions;
+using MvxExtensions.Platforms.Android.Views;
 using MvxExtensions.Plugins.Notification;
 using MvxExtensions.Plugins.Notification.Core;
 using MvxExtensions.Plugins.Notification.Core.Async.Subscriptions;
@@ -19,16 +27,9 @@ using MvxExtensions.Plugins.Notification.Messages.OneWay;
 using MvxExtensions.Plugins.Notification.Messages.TwoWay.Question;
 using MvxExtensions.Plugins.Notification.Messages.TwoWay.Result;
 using MvxExtensions.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using AndroidResource = Android.Resource;
 
-namespace MvxExtensions.Platforms.Android.Views
+namespace MvxExtensions.Platforms.Android.Support.V7.Views
 {
     public abstract class AppCompatActivityBase<TViewModel> : MvxAppCompatActivity<TViewModel>
         where TViewModel : ViewModel

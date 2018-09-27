@@ -6,7 +6,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.ViewModels;
 using MvxExtensions.Statics;
 
-namespace MvxExtensions.Platforms.Android.Presenters
+namespace MvxExtensions.Platforms.Android.Support.V7.Presenters
 {
     public class AndroidAppCompatViewPresenter : MvxAppCompatViewPresenter
     {

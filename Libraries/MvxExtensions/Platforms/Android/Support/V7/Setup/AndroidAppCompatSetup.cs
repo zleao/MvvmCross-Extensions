@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using MvvmCross;
-using MvvmCross.Platforms.Android.Presenters;
-using MvxExtensions.Platforms.Android.Presenters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
+using MvxExtensions.Platforms.Android.Support.V7.Presenters;
 
-namespace MvxExtensions.Platforms.Android.Setup
+namespace MvxExtensions.Platforms.Android.Support.V7.Setup
 {
     public abstract class AndroidAppCompatSetup : MvxAppCompatSetup
     {

@@ -2,6 +2,7 @@
 using Playground.Core;
 using Serilog;
 using MvxExtensions.Platforms.Android.Setup;
+using MvxExtensions.Platforms.Android.Support.V7.Setup;
 
 namespace Playground.Droid
 {

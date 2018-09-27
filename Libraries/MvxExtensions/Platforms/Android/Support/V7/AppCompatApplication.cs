@@ -3,9 +3,9 @@ using Android.Runtime;
 using MvvmCross.Core;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
-using MvxExtensions.Platforms.Android.Setup;
+using MvxExtensions.Platforms.Android.Support.V7.Setup;
 
-namespace MvxExtensions.Platforms.Android
+namespace MvxExtensions.Platforms.Android.Support.V7
 {
     public abstract class AppCompatApplication<TMvxAndroidSetup, TApplication> : MvxAndroidApplication
         where TMvxAndroidSetup : AndroidAppCompatSetup<TApplication>, new()
