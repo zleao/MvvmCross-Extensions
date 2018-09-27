@@ -20,7 +20,7 @@ namespace MvxExtensions.Plugins.Storage.Droid
         {
             get
             {
-                return _context ?? (_context = Mvx.Resolve<IMvxAndroidGlobals>().ApplicationContext);
+                return _context ?? (_context = Mvx.IoCProvider.Resolve<IMvxAndroidGlobals>().ApplicationContext);
             }
         }
         private Context _context;

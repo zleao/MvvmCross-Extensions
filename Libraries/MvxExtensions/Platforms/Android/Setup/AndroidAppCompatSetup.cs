@@ -24,9 +24,9 @@ namespace MvxExtensions.Platforms.Android.Setup
     }
 
     public class AndroidAppCompatSetup<TApplication> : AndroidAppCompatSetup
-        where TApplication : IMvxApplication, new()
+        where TApplication : class, IMvxApplication, new()
     {
-        protected override IMvxApplication CreateApp() => Mvx.IocConstruct<TApplication>();
+        protected override IMvxApplication CreateApp() => Mvx.IoCProvider.IoCConstruct<TApplication>();
 
         public override IEnumerable<Assembly> GetViewModelAssemblies()
         {

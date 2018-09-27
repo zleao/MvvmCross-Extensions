@@ -12,7 +12,7 @@ namespace MvxExtensions.Plugins.Notification
         /// </summary>
         public void Load()
         {
-            Mvx.RegisterSingleton<INotificationService>(new NotificationManager());
+            Mvx.IoCProvider.RegisterSingleton<INotificationService>(new NotificationManager());
         }
     }
 }

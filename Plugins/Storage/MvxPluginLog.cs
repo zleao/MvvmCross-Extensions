@@ -5,6 +5,6 @@ namespace MvxExtensions.Plugins.Storage
 {
     internal static class MvxPluginLog
     {
-        internal static IMvxLog Instance { get; } = Mvx.Resolve<IMvxLogProvider>().GetLogFor("MvxPlugin");
+        internal static IMvxLog Instance { get; } = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("MvxPlugin");
     }
 }

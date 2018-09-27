@@ -620,7 +620,7 @@ namespace MvxExtensions.ViewModels
         {
             try
             {
-                var textBuilder = Mvx.Resolve<IMvxTextProviderBuilder>();
+                var textBuilder = Mvx.IoCProvider.Resolve<IMvxTextProviderBuilder>();
 
                 textBuilder.LoadResources(newLanguage);
 
@@ -777,7 +777,7 @@ namespace MvxExtensions.ViewModels
         /// <returns></returns>
         public static bool HasRegisteredViewFor(Type viewModelType)
         {
-            var viewsContainer = Mvx.Resolve<IMvxViewsContainer>();
+            var viewsContainer = Mvx.IoCProvider.Resolve<IMvxViewsContainer>();
             if (viewsContainer != null)
             {
                 try

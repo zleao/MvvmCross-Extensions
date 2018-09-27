@@ -1,4 +1,5 @@
 ﻿using MvvmCross;
+using MvvmCross.IoC;
 using MvvmCross.Plugin;
 
 namespace MvxExtensions.Plugins.Logger
@@ -12,7 +13,7 @@ namespace MvxExtensions.Plugins.Logger
         /// </summary>
         public void Load()
         {
-            Mvx.LazyConstructAndRegisterSingleton<ILogger, Logger>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ILogger, Logger>();
         }
     }
 }

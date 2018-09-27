@@ -1,4 +1,5 @@
 ﻿using MvvmCross;
+using MvvmCross.IoC;
 using MvvmCross.Plugin;
 
 #if ANDROID
@@ -18,7 +19,7 @@ namespace MvxExtensions.Plugins.Storage
         /// </summary>
         public void Load()
         {
-            Mvx.LazyConstructAndRegisterSingleton<IStorageManager, StorageManager>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IStorageManager, StorageManager>();
         }
     }
 }

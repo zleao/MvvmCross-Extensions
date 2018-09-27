@@ -9,7 +9,7 @@ namespace MvxExtensions.Platforms.Android
 {
     public abstract class AppCompatApplication<TMvxAndroidSetup, TApplication> : MvxAndroidApplication
         where TMvxAndroidSetup : AndroidAppCompatSetup<TApplication>, new()
-        where TApplication : IMvxApplication, new()
+        where TApplication : class, IMvxApplication, new()
     {
         protected AppCompatApplication() : base()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -18,8 +19,9 @@ namespace MvxExtensions.Extensions
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public static Task NavigateAndRemoveSelf(this IMvxNavigationService navigationService, Type viewModelType, IMvxBundle presentationBundle = null)
+        public static Task NavigateAndRemoveSelf(this IMvxNavigationService navigationService, Type viewModelType, IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default (CancellationToken))
         {
             if (presentationBundle == null)
             {
@@ -28,7 +30,7 @@ namespace MvxExtensions.Extensions
 
             presentationBundle.Data.SafeAddOrUpdate(NavigationModes.NavigationMode, NavigationModes.NavigationModeRemoveSelf);
 
-            return navigationService?.Navigate(viewModelType, presentationBundle);
+            return navigationService?.Navigate(viewModelType, presentationBundle, cancellationToken);
         }
 
         /// <summary>
@@ -103,8 +105,9 @@ namespace MvxExtensions.Extensions
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public static Task NavigateAndClearStack(this IMvxNavigationService navigationService, Type viewModelType, IMvxBundle presentationBundle = null)
+        public static Task NavigateAndClearStack(this IMvxNavigationService navigationService, Type viewModelType, IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default (CancellationToken))
         {
             if (presentationBundle == null)
             {
@@ -113,7 +116,7 @@ namespace MvxExtensions.Extensions
 
             presentationBundle.Data.SafeAddOrUpdate(NavigationModes.NavigationMode, NavigationModes.NavigationModeClearStack);
 
-            return navigationService?.Navigate(viewModelType, presentationBundle);
+            return navigationService?.Navigate(viewModelType, presentationBundle, cancellationToken);
         }
 
         /// <summary>
