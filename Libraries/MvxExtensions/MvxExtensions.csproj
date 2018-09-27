@@ -1,0 +1,38 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+  
+  <PropertyGroup>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
+    <AssemblyName>MvxExtensions</AssemblyName>
+    <RootNamespace>MvxExtensions</RootNamespace>
+    <Description></Description>
+    <PackageId>MvxExtensions</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Platforms\**\*.cs" />
+    <None Include="Platforms\**\*.cs" />
+    <Compile Remove="Resources\*.cs" />
+    <None Include="Resources\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <Compile Include="Platforms\Android\**\*.cs" />
+    <Compile Include="Platforms\Common\**\*.cs" />
+    <AndroidResource Include="Resources\**\*.axml" SubType="Designer" Generator="MSBuild:UpdateAndroidResources" />
+    <PackageReference Include="MvvmCross.Droid.Support.V7.AppCompat" Version="6.2.0" />
+    <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView" Version="6.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.2.0" />
+    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj" />
+    <ProjectReference Include="..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj" />
+  </ItemGroup>
+
+</Project>

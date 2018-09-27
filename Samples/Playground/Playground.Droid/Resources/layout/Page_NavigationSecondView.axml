@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_weight="1">
+
+    <LinearLayout 
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+      
+	  <TextView
+		android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:layout_margin="10dp"
+		local:MvxBind="Text NavigationModeDescription"/>
+
+	  <TextView
+		android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:layout_marginTop="30dp"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+		android:layout_marginBottom="10dp"
+		local:MvxLang="Text Text_Description_NavigateAndClearStack"/>
+
+      <Button 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:MvxLang="Text Label_Button_NavigateAndClearStack"
+        local:MvxBind="Click NavigateAndClearStackCommand;" />
+      
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>

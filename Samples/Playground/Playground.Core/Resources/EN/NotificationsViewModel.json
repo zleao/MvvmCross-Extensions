@@ -1,0 +1,6 @@
+﻿{
+	"Label_Page_Title_Notifications" : "Notifications",
+  "Label_Button_ErrorNotification" :  "Error Notification",
+  "Label_Button_QuestionNotification" :  "Question Notification",
+  "Label_Button_DelayedNotification" :  "Delayed Notification"
+}

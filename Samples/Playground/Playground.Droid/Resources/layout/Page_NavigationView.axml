@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_weight="1">
+
+    <LinearLayout 
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+      
+	  <TextView
+		android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:layout_margin = "10dp"
+		local:MvxLang="Text Text_Description_NavigateAndRemoveSelf"/>
+
+      <Button 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:layout_marginBottom="30dp"
+        local:MvxLang="Text Label_Button_NavigateAndRemoveSelf"
+        local:MvxBind="Click NavigateAndRemoveSelfCommand;" />
+      
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="10dp"
+		local:MvxLang="Text Text_Description_Navigate"/>
+
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:MvxLang="Text Label_Button_Navigate"
+        local:MvxBind="Click NavigateCommand;" />
+      
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>

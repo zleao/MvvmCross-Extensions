@@ -1,0 +1,19 @@
+<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MvxExtensions.Plugins.Logger</AssemblyName>
+    <RootNamespace>MvxExtensions.Plugins.Logger</RootNamespace>
+    <Description></Description>
+    <PackageId>MvxExtensions.Plugins.Logger</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Storage\MvxExtensions.Plugins.Storage.csproj" />
+  </ItemGroup>
+
+</Project>

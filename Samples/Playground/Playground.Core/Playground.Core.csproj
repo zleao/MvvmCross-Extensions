@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\EN\NavigationSecondViewModel.json" />
+    <None Remove="Resources\EN\NavigationViewModel.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EN\NavigationSecondViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\NavigationViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\NotificationsViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\MainViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\Common.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.2.0" />
+    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\MvxExtensions\MvxExtensions.csproj" />
+    <ProjectReference Include="..\..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj" />
+    <ProjectReference Include="..\..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj" />
+    <ProjectReference Include="..\..\..\Plugins\Storage\MvxExtensions.Plugins.Storage.csproj" />
+  </ItemGroup>
+
+</Project>

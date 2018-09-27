@@ -1,0 +1,15 @@
+<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>MvxExtensions.Plugins.Notification</AssemblyName>
+    <RootNamespace>MvxExtensions.Plugins.Notification</RootNamespace>
+    <Description></Description>
+    <PackageId>MvxExtensions.Plugins.Notification</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.2.0" />
+  </ItemGroup>
+  
+</Project>

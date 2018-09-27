@@ -1,0 +1,34 @@
+<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
+    <AssemblyName>MvxExtensions.Plugins.Storage</AssemblyName>
+    <RootNamespace>MvxExtensions.Plugins.Storage</RootNamespace>
+    <Description></Description>
+    <PackageId>MvxExtensions.Plugins.Storage</PackageId>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Platforms\**\*.cs" />
+    <None Include="Platforms\**\*.cs" />
+    <Compile Remove="Resources\*.cs" />
+    <None Include="Resources\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <Compile Include="Platforms\Android\**\*.cs" />
+    <Compile Include="Platforms\Common\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
+    <Compile Include="Platforms\Net\**\*.cs" />
+    <Compile Include="Platforms\Wpf\**\*.cs" />
+    <Compile Include="Platforms\Common\**\*.cs" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="MvvmCross" Version="6.2.0" />
+  </ItemGroup>
+
+</Project>

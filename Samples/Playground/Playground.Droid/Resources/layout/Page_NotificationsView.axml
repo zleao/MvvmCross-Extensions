@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+  
+  <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_weight="1">
+
+    <LinearLayout 
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+      
+      <Button 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        local:MvxLang="Text Label_Button_ErrorNotification"
+        local:MvxBind="Click ErrorNotificationCommand;" />
+      
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        local:MvxLang="Text Label_Button_QuestionNotification"
+        local:MvxBind="Click QuestionNotificationCommand;" />
+      
+      <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        local:MvxLang="Text Label_Button_DelayedNotification"
+        local:MvxBind="Click DelayedNotificationCommand;" />
+      
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>
