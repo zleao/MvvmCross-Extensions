@@ -23,7 +23,7 @@ namespace MvxExtensions.Platforms.Android.Presenters
             
                 if (navigationMode == NavigationModes.NavigationModeClearStack)
                 {
-                    intent.AddFlags(ActivityFlags.ClearTop | ActivityFlags.NewTask);
+                    intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
                 }
                 else if (navigationMode == NavigationModes.NavigationModeRemoveSelf)
                 {
