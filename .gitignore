@@ -157,3 +157,5 @@ $RECYCLE.BIN/
 # MvxExtensions project related files and folders
 Binaries/
 Resources.designer.cs
+
+nugets/
