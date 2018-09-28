@@ -1,7 +1,7 @@
-using Android.Content;
 using System.Threading;
+using Android.Content;
 
-namespace MvxExtensions.Platforms.Android.Views
+namespace MvxExtensions.Platforms.Droid.Views
 {
     internal class DialogCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
     {

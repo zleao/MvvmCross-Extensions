@@ -5,9 +5,9 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
-using MvxExtensions.Platforms.Android.Support.V7.Presenters;
+using MvxExtensions.Platforms.Droid.Support.V7.Presenters;
 
-namespace MvxExtensions.Platforms.Android.Support.V7.Setup
+namespace MvxExtensions.Platforms.Droid.Support.V7.Setup
 {
     public abstract class AndroidAppCompatSetup : MvxAppCompatSetup
     {

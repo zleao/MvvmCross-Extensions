@@ -2,7 +2,7 @@
 using System;
 using Android.Runtime;
 using MvxExtensions.Platforms.Android;
-using MvxExtensions.Platforms.Android.Support.V7;
+using MvxExtensions.Platforms.Droid.Support.V7;
 using Playground.Core;
 
 namespace Playground.Droid

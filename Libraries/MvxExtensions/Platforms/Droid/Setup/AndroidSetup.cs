@@ -4,9 +4,9 @@ using MvvmCross;
 using MvvmCross.Platforms.Android.Core;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
-using MvxExtensions.Platforms.Android.Presenters;
+using MvxExtensions.Platforms.Droid.Presenters;
 
-namespace MvxExtensions.Platforms.Android.Setup
+namespace MvxExtensions.Platforms.Droid.Setup
 {
     public abstract class AndroidSetup : MvxAndroidSetup
     {

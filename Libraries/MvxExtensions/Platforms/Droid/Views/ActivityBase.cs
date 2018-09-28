@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
@@ -28,7 +27,7 @@ using MvxExtensions.Plugins.Notification.Messages.TwoWay.Result;
 using MvxExtensions.ViewModels;
 using AndroidResource = Android.Resource;
 
-namespace MvxExtensions.Platforms.Android.Views
+namespace MvxExtensions.Platforms.Droid.Views
 {
     public abstract class ActivityBase<TViewModel> : MvxActivity<TViewModel>
         where TViewModel : ViewModel

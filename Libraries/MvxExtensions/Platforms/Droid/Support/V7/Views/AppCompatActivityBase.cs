@@ -17,7 +17,7 @@ using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 using MvvmCross.WeakSubscription;
 using MvxExtensions.Extensions;
-using MvxExtensions.Platforms.Android.Views;
+using MvxExtensions.Platforms.Droid.Views;
 using MvxExtensions.Plugins.Notification;
 using MvxExtensions.Plugins.Notification.Core;
 using MvxExtensions.Plugins.Notification.Core.Async.Subscriptions;
@@ -29,7 +29,7 @@ using MvxExtensions.Plugins.Notification.Messages.TwoWay.Result;
 using MvxExtensions.ViewModels;
 using AndroidResource = Android.Resource;
 
-namespace MvxExtensions.Platforms.Android.Support.V7.Views
+namespace MvxExtensions.Platforms.Droid.Support.V7.Views
 {
     public abstract class AppCompatActivityBase<TViewModel> : MvxAppCompatActivity<TViewModel>
         where TViewModel : ViewModel
