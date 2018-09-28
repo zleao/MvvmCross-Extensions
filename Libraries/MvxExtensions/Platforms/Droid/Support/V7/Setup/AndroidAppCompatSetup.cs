@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using MvvmCross;
+using MvvmCross.Binding;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
+using MvxExtensions.Platforms.Droid.Components.Binding;
 using MvxExtensions.Platforms.Droid.Support.V7.Presenters;
 
 namespace MvxExtensions.Platforms.Droid.Support.V7.Setup
@@ -20,6 +22,11 @@ namespace MvxExtensions.Platforms.Droid.Support.V7.Setup
         protected override IMvxAndroidViewPresenter CreateViewPresenter()
         {
             return new AndroidAppCompatViewPresenter(AndroidViewAssemblies);
+        }
+
+        protected override MvxBindingBuilder CreateBindingBuilder()
+        {
+            return new AndroidBindingBuilder();
         }
     }
 
