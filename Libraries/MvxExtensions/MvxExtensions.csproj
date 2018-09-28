@@ -5,8 +5,9 @@
     <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
     <AssemblyName>MvxExtensions</AssemblyName>
     <RootNamespace>MvxExtensions</RootNamespace>
-    <Description></Description>
     <PackageId>MvxExtensions</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
