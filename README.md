@@ -1,3 +1,5 @@
+[![Build status](https://zleaopereira.visualstudio.com/CrossDevelopment/_apis/build/status/MvxExtensions)](https://zleaopereira.visualstudio.com/CrossDevelopment/_build/latest?definitionId=1)
+
 # MvvmCross Extensions
 
 Set of libraries that extend the awesome [MvvmCross](http://mvvmcross.com/) framework.
