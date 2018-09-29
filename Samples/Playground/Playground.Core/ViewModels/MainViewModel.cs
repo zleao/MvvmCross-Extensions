@@ -72,6 +72,10 @@ namespace Playground.Core.ViewModels
             {
                 AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Notifications), typeof(NotificationsViewModel)));
                 AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Navigation), typeof(NavigationViewModel)));
+                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_BindingsTest), typeof(BindingsTestViewModel)));
+                
+                //Need to have an initialized flag, because despite the fact that this viewmodel is singleton
+                //the lifecycle will still be executed every time the view is (re)loaded
                 _isInitialized = true;
             }
 
