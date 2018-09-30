@@ -7,6 +7,7 @@ using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvxExtensions.Platforms.Droid.Components.Binding;
+using MvxExtensions.Platforms.Droid.Components.Controls;
 using MvxExtensions.Platforms.Droid.Support.V7.Presenters;
 
 namespace MvxExtensions.Platforms.Droid.Support.V7.Setup
@@ -16,7 +17,8 @@ namespace MvxExtensions.Platforms.Droid.Support.V7.Setup
         protected override IEnumerable<Assembly> AndroidViewAssemblies =>
             new List<Assembly>(base.AndroidViewAssemblies)
             {
-                typeof(MvxRecyclerView).Assembly
+                typeof(MvxRecyclerView).Assembly,
+                typeof(NumericEditText).Assembly
             };
 
         protected override IMvxAndroidViewPresenter CreateViewPresenter()

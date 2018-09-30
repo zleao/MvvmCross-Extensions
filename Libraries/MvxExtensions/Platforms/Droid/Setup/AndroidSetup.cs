@@ -7,11 +7,18 @@ using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvxExtensions.Platforms.Droid.Presenters;
 using MvxExtensions.Platforms.Droid.Components.Binding;
+using MvxExtensions.Platforms.Droid.Components.Controls;
 
 namespace MvxExtensions.Platforms.Droid.Setup
 {
     public abstract class AndroidSetup : MvxAndroidSetup
     {
+        protected override IEnumerable<Assembly> AndroidViewAssemblies =>
+            new List<Assembly>(base.AndroidViewAssemblies)
+            {
+                typeof(NumericEditText).Assembly
+            };
+
         protected override IMvxAndroidViewPresenter CreateViewPresenter()
         {
             return new AndroidViewPresenter(AndroidViewAssemblies);

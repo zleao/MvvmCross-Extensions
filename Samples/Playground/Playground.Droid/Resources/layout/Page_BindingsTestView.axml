@@ -43,14 +43,11 @@
       android:layout_margin = "10dp"
       local:MvxLang="Text Text_MaxLength_Description"/>
 
-    <EditText
+    <NumericEditText
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:layout_margin = "10dp"
-      android:editable="false"
-      android:clickable="false"
-      android:enabled="false"
-      local:MvxBind="Text TextMaxLength" />
+      android:layout_margin="10dp"
+      local:MvxBind="IntValue TextMaxLength" />
 
     <EditText
       android:layout_width="fill_parent"

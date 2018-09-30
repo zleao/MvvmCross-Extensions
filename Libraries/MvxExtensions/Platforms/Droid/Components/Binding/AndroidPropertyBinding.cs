@@ -7,6 +7,7 @@ namespace MvxExtensions.Platforms.Droid.Components.Binding
     internal static class AndroidPropertyBinding
     {
         public const string EditTextSingleLine = "SingleLine";
+        public const string NumericEditTextIntValue = "IntValue";
         public const string TextViewIsValid = "IsValid";
         public const string TextViewMaxLength = "MaxLength";
         public const string ToggleButtonTextLabelOn = "TextLabelOn";
