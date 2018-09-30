@@ -4,58 +4,83 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  
+
   <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:layout_weight="1">
 
-    <LinearLayout 
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical">
 
-    <TextView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin = "10dp"
-      local:MvxLang="Text Label_ToggleButton_Description"/>
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        local:MvxLang="Text Label_ToggleButton_Description"/>
 
-	  <ToggleButton
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_margin = "10dp"
-	    local:MvxLang="TextLabelOn Label_ToggleButton_On;
-				             TextLabelOff Label_ToggleButton_Off;"
-	    local:MvxBind="Checked IsValid"/>
+      <ToggleButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        local:MvxLang="TextLabelOn Label_ToggleButton_On;
+				               TextLabelOff Label_ToggleButton_Off;"
+        local:MvxBind="Checked IsValid"/>
 
-    <TextView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin = "10dp"
-      local:MvxBind="Text ValidityText;
-                     IsValid IsValid"/>
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        local:MvxBind="Text ValidityText;
+                       IsValid IsValid"/>
 
-    <TextView
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin = "10dp"
-      local:MvxLang="Text Text_MaxLength_Description"/>
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        local:MvxLang="Text Text_MaxLength_Description"/>
 
-    <NumericEditText
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="10dp"
-      local:MvxBind="IntValue TextMaxLength" />
+      <NumericEditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        local:MvxBind="IntValue TextMaxLength" />
 
-    <EditText
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin = "10dp"
-      android:inputType="textFilter"
-      local:MvxBind="MaxLength TextMaxLength" />
-      
+      <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        android:inputType="textFilter"
+        local:MvxBind="MaxLength TextMaxLength" />
+
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        android:layout_marginTop = "30dp"
+        local:MvxLang="Text Text_Decimal_Description"/>
+
+      <NumericEditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        local:MvxBind="IntValue DecimalPlaces" />
+
+      <DecimalEditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        local:MvxBind="DecimalValue DecimalValue" />
+
+      <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin = "10dp"
+        local:MvxBind="Text DecimalValueAsString"/>
+
     </LinearLayout>
   </ScrollView>
 </LinearLayout>

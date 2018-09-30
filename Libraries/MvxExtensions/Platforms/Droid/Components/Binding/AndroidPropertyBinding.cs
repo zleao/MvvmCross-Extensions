@@ -6,6 +6,7 @@ namespace MvxExtensions.Platforms.Droid.Components.Binding
 {
     internal static class AndroidPropertyBinding
     {
+        public const string DecimalEditTextDecimalValue = "DecimalValue";
         public const string EditTextSingleLine = "SingleLine";
         public const string NumericEditTextIntValue = "IntValue";
         public const string TextViewIsValid = "IsValid";

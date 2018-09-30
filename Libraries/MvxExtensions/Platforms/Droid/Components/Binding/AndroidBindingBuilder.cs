@@ -13,6 +13,9 @@ namespace MvxExtensions.Platforms.Droid.Components.Binding
         {
             base.FillTargetFactories(registry);
 
+            registry.RegisterFactory(new MvxCustomBindingFactory<DecimalEditText>(AndroidPropertyBinding.DecimalEditTextDecimalValue, 
+                decimalEditText => new DecimalEditTextDecimalValueTargetBinding(decimalEditText)));
+
             registry.RegisterFactory(new MvxCustomBindingFactory<EditText>(AndroidPropertyBinding.EditTextSingleLine,
                 editText => new EditTextSingleLineTargetBinding(editText)));
 

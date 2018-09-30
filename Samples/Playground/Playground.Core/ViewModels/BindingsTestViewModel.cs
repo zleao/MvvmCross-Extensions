@@ -1,4 +1,5 @@
-﻿using MvvmCross.Base;
+﻿using System.Globalization;
+using MvvmCross.Base;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
 using MvxExtensions.Attributes;
@@ -30,6 +31,39 @@ namespace Playground.Core.ViewModels
         {
             get => _textMaxLength;
             set => SetProperty(ref _textMaxLength, value);
+        }
+
+        private int _decimalPlaces = 2;
+        public int DecimalPlaces
+        {
+            get => _decimalPlaces;
+            set => SetProperty(ref _decimalPlaces, value);
+        }
+
+        private decimal _decimalValue;
+        public decimal DecimalValue
+        {
+            get => _decimalValue;
+            set => SetProperty(ref _decimalValue, value);
+        }
+
+        [DependsOn("DecimalPlaces")]
+        [DependsOn("DecimalValue")]
+        public string DecimalValueAsString
+        {
+            get
+            {
+                var format = "#0";
+                if (DecimalPlaces > 0)
+                {
+                    format += CultureInfo.CurrentUICulture.NumberFormat.NumberDecimalSeparator;
+                    for (var i = 0; i < DecimalPlaces; i++)
+                    {
+                        format += "0";
+                    }
+                }
+                return DecimalValue.ToString(format);
+            }
         }
 
         #endregion

@@ -1,7 +1,4 @@
-﻿using System.Net.Mime;
-using System.Runtime.Remoting.Contexts;
-using Android.Content;
-using Android.Runtime;
+﻿using Android.Runtime;
 using Android.Text;
 using Android.Text.Method;
 using Android.Util;
@@ -15,7 +12,7 @@ using Context = Android.Content.Context;
 namespace MvxExtensions.Platforms.Droid.Components.Controls
 {
     [Register("mvxextensions.platforms.droid.components.controls.NumericEditText")]
-    public sealed class NumericEditText : EditText
+    public class NumericEditText : EditText
     {
         public delegate void IntValueChangedDelegate(int value);
         public IntValueChangedDelegate OnIntValueChanged;
