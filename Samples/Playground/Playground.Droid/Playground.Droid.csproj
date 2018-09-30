@@ -158,6 +158,7 @@
     <Compile Include="SplashScreen.cs" />
     <Compile Include="Views\BaseAppCompatView.cs" />
     <Compile Include="Views\NavigationSecondView.cs" />
+    <Compile Include="Views\BindingsTestView.cs" />
     <Compile Include="Views\NavigationView.cs" />
     <Compile Include="Views\NotificationsView.cs" />
     <Compile Include="Views\MainView.cs" />
@@ -216,6 +217,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Page_NavigationSecondView.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Page_BindingsTestView.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

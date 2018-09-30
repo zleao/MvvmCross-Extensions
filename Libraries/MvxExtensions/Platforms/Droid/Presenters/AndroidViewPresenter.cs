@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Android.Content;
-using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvxExtensions.Statics;
 
-namespace MvxExtensions.Platforms.Android.Support.V7.Presenters
+namespace MvxExtensions.Platforms.Droid.Presenters
 {
-    public class AndroidAppCompatViewPresenter : MvxAppCompatViewPresenter
+    public class AndroidViewPresenter : MvxAndroidViewPresenter
     {
-        public AndroidAppCompatViewPresenter(IEnumerable<Assembly> androidViewAssemblies) : base(androidViewAssemblies)
+        public AndroidViewPresenter(IEnumerable<Assembly> androidViewAssemblies) : base(androidViewAssemblies)
         {
         }
 

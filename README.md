@@ -1,4 +1,5 @@
 [![Build status](https://zleaopereira.visualstudio.com/CrossDevelopment/_apis/build/status/MvxExtensions)](https://zleaopereira.visualstudio.com/CrossDevelopment/_build/latest?definitionId=1)
+[![NuGet](https://img.shields.io/nuget/v/MvxExtensions.svg)](https://www.nuget.org/packages/MvxExtensions/)
 
 # MvvmCross Extensions
 

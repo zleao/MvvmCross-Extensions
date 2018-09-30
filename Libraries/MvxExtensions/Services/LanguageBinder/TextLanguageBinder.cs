@@ -1,6 +1,6 @@
 ﻿using MvvmCross.Localization;
 
-namespace MvxExtensions.Libraries.Portable.Core.Services.LanguageBinder
+namespace MvxExtensions.Services.LanguageBinder
 {
     /// <summary>
     /// TextLanguageBinder

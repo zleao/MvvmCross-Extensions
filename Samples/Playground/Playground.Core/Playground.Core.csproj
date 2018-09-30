@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\EN\BindingsTestViewModel.json" />
     <None Remove="Resources\EN\NavigationSecondViewModel.json" />
     <None Remove="Resources\EN\NavigationViewModel.json" />
   </ItemGroup>
   
   <ItemGroup>
     <EmbeddedResource Include="Resources\EN\NavigationSecondViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\BindingsTestViewModel.json" />
     <EmbeddedResource Include="Resources\EN\NavigationViewModel.json" />
     <EmbeddedResource Include="Resources\EN\NotificationsViewModel.json" />
     <EmbeddedResource Include="Resources\EN\MainViewModel.json" />
