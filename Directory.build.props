@@ -23,6 +23,7 @@
     <DebugType>full</DebugType>
     <IsTestProject>$(MSBuildProjectName.Contains('UnitTest'))</IsTestProject>
     <IsLibraryProject>$(MSBuildProjectName.Contains('MvxExtensions'))</IsLibraryProject>
+    <IsPluginProject>$(MSBuildProjectName.Contains('Plugins'))</IsPluginProject>
   </PropertyGroup>
   
   <ItemGroup Condition="'$(IsLibraryProject)' == 'true'">
