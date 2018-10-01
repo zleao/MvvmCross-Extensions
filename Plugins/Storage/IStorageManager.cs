@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvxExtensions.Plugins.Storage.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace MvxExtensions.Plugins.Storage
     /// <summary>
     /// Stoarge manager interface
     /// </summary>
-    public interface IStorageManager : IStorageEncryptionManager
+    public interface IStorageManager
     {
         #region Generic Methods
 
@@ -27,14 +28,6 @@ namespace MvxExtensions.Plugins.Storage
         void SetDebugEnabled(bool value);
 
         /// <summary>
-        /// Gets the directory separator character.
-        /// </summary>
-        /// <value>
-        /// The directory separator character.
-        /// </value>
-        char DirectorySeparatorChar { get; }
-
-        /// <summary>
         /// Combines the paths into a single path.
         /// </summary>
         /// <param name="paths">The paths.</param>
@@ -48,34 +41,6 @@ namespace MvxExtensions.Plugins.Storage
         /// <param name="path">The path.</param>
         /// <returns></returns>
         string NativePath(StorageLocation location, string path);
-
-        /// <summary>
-        /// Gets the file name without extension.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        string GetFileNameWithoutExtension(string path);
-
-        /// <summary>
-        /// Gets the file name with extension.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        string GetFileName(string path);
-
-        /// <summary>
-        /// Gets the file extension.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        string GetFileExtension(string path);
-
-        /// <summary>
-        /// Gets the name of the directory.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        string GetDirectoryName(string path);
 
         /// <summary>
         /// Returns the available free space in bytes for a given path
@@ -413,6 +378,14 @@ namespace MvxExtensions.Plugins.Storage
         /// <param name="toFullPath">To full path.</param>
         /// <param name="overwriteExistingTo">if set to <c>true</c> [overwrite existing to].</param>
         Task CloneFileAsync(string fromFullPath, string toFullPath, bool overwriteExistingTo);
+
+        /// <summary>
+        /// Clones a file that exists in the app resources folder
+        /// </summary>
+        /// <param name="fromPath">From path.</param>
+        /// <param name="toLocation">To location.</param>
+        /// <param name="toPath">To path.</param>
+        Task CloneFileFromAppResourcesAsync(string fromPath, StorageLocation toLocation, string toPath);
 
         /// <summary>
         /// Gets a stream that points to the specified file.

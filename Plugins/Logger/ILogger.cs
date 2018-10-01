@@ -1,4 +1,4 @@
-﻿using MvxExtensions.Plugins.Storage;
+﻿using MvxExtensions.Plugins.Storage.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

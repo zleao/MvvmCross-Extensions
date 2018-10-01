@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+  <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:textSize="18dp"
+      local:MvxBind="Text Name"/>
+  <TextView
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:textSize="12dp"
+      local:MvxBind="Text Description"/>
+  <View
+     android:layout_width="fill_parent"
+     android:layout_height="1dp"
+     android:background="#FF808080" />
+</LinearLayout>

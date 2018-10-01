@@ -3,17 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\EN\BindingsTestViewModel.json" />
-    <None Remove="Resources\EN\NavigationSecondViewModel.json" />
-    <None Remove="Resources\EN\NavigationViewModel.json" />
-  </ItemGroup>
   
   <ItemGroup>
+    <EmbeddedResource Include="Resources\EncryptedFiles\encryptedNew.password.txt" />
+    <EmbeddedResource Include="Resources\EncryptedFiles\encryptedOld.356194055156252.txt" />
     <EmbeddedResource Include="Resources\EN\NavigationSecondViewModel.json" />
     <EmbeddedResource Include="Resources\EN\BindingsTestViewModel.json" />
     <EmbeddedResource Include="Resources\EN\NavigationViewModel.json" />
+    <EmbeddedResource Include="Resources\EN\StorageViewModel.json" />
     <EmbeddedResource Include="Resources\EN\NotificationsViewModel.json" />
     <EmbeddedResource Include="Resources\EN\MainViewModel.json" />
     <EmbeddedResource Include="Resources\EN\Common.json" />

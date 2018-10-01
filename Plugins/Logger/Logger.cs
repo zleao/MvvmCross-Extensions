@@ -1,6 +1,7 @@
 using MvvmCross.Base;
 using MvvmCross.Logging;
 using MvxExtensions.Plugins.Storage;
+using MvxExtensions.Plugins.Storage.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace MvxExtensions.Plugins.Logger
         #region Fields
 
         private readonly IStorageManager _storageManager;
+        private readonly IStorageEncryptionManager _storageEncryptionManager;
         private readonly IMvxJsonConverter _jsonConverter;
 
         #endregion
@@ -107,9 +109,10 @@ namespace MvxExtensions.Plugins.Logger
         /// </summary>
         /// <param name="storageManager">The storage manager.</param>
         /// <param name="jsonConverter">The json converter.</param>
-        public Logger(IStorageManager storageManager, IMvxJsonConverter jsonConverter)
+        public Logger(IStorageManager storageManager, IStorageEncryptionManager storageEncryptionManager, IMvxJsonConverter jsonConverter)
         {
             _storageManager = storageManager;
+            _storageEncryptionManager = storageEncryptionManager;
             _jsonConverter = jsonConverter;
         }
 
@@ -635,7 +638,7 @@ namespace MvxExtensions.Plugins.Logger
 
             if (EncryptionActivated)
             {
-                await _storageManager.WriteEncryptedFileAsync(StorageMode.CreateOrAppend, logFullPath, contents, Password);
+                await _storageEncryptionManager.WriteEncryptedFileAsync(StorageMode.CreateOrAppend, logFullPath, contents, Password);
             }
             else
             {
@@ -658,7 +661,7 @@ namespace MvxExtensions.Plugins.Logger
 
             if (EncryptionActivated)
             {
-                await _storageManager.WriteEncryptedFileAsync(StorageMode.Create, logInfoFullPath, contents, Password);
+                await _storageEncryptionManager.WriteEncryptedFileAsync(StorageMode.Create, logInfoFullPath, contents, Password);
             }
             else
             {
@@ -676,7 +679,7 @@ namespace MvxExtensions.Plugins.Logger
             {
                 string existingLogDetailsString = null;
                 if (EncryptionActivated)
-                    existingLogDetailsString = await _storageManager.TryReadTextEncryptedFileAsync(logInfoFullPath, Password);
+                    existingLogDetailsString = await _storageEncryptionManager.TryReadTextEncryptedFileAsync(logInfoFullPath, Password);
                 if (string.IsNullOrEmpty(existingLogDetailsString))
                     existingLogDetailsString = await _storageManager.TryReadTextFileAsync(logInfoFullPath);
 
