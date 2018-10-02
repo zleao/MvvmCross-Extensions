@@ -27,6 +27,7 @@
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="Platforms\iOS\**\*.cs" />
     <Compile Include="Platforms\Common\**\*.cs" />
+    <PackageReference Include="Toast.iOS" Version="1.2.0" />
   </ItemGroup>
   
   <ItemGroup>
