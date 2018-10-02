@@ -70,10 +70,10 @@ namespace Playground.Core.ViewModels
         {
             if (!_isInitialized)
             {
-                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Notifications), typeof(NotificationsViewModel)));
-                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Navigation), typeof(NavigationViewModel)));
-                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_BindingsTest), typeof(BindingsTestViewModel)));
-                AddMenuOption(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Storage), typeof(StorageViewModel)));
+                AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Notifications), typeof(NotificationsViewModel)));
+                AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Navigation), typeof(NavigationViewModel)));
+                AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_BindingsTest), typeof(BindingsTestViewModel)));
+                AddOptionIfImplemented(new MenuOption(TextSource.GetText(TextResourcesKeys.Label_Button_Storage), typeof(StorageViewModel)));
                 
                 //Need to have an initialized flag, because despite the fact that this viewmodel is singleton
                 //the lifecycle will still be executed every time the view is (re)loaded
@@ -101,6 +101,12 @@ namespace Playground.Core.ViewModels
         private Task OnNotificationGenericMessageAsync(NotificationGenericMessage msg)
         {
             return NotificationManager.PublishSuccessNotificationAsync(msg.Message, NotificationModeEnum.MessageBox);
+        }
+
+        private void AddOptionIfImplemented(MenuOption option)
+        {
+            if (HasRegisteredViewFor(option.ViewModelType))
+                MenuOptions.Add(option);
         }
 
         #endregion

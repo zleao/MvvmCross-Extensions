@@ -67,6 +67,21 @@
     <Reference Include="MvvmCross, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\MvvmCross.6.2.0\lib\xamarinios10\MvvmCross.dll</HintPath>
     </Reference>
+    <Reference Include="MvvmCross.Plugin.File, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.File.6.2.0\lib\xamarinios10\MvvmCross.Plugin.File.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugin.Json, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.Json.6.2.0\lib\netstandard2.0\MvvmCross.Plugin.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugin.JsonLocalization, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.JsonLocalization.6.2.0\lib\netstandard2.0\MvvmCross.Plugin.JsonLocalization.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugin.ResourceLoader, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.ResourceLoader.6.2.0\lib\xamarinios10\MvvmCross.Plugin.ResourceLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -129,12 +144,40 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="ViewController.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
+    <Compile Include="Setup.cs" />
+    <Compile Include="Views\NotificationsViewController.cs" />
+    <Compile Include="Views\NotificationsViewController.designer.cs">
+      <DependentUpon>NotificationsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\MainViewController.cs" />
+    <Compile Include="Views\MainViewController.designer.cs">
+      <DependentUpon>MainViewController.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\MvxExtensions\MvxExtensions.csproj">
+      <Project>{bed5f20a-cacf-437c-8a32-2a76d66a91c0}</Project>
+      <Name>MvxExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj">
+      <Project>{684d8862-9f1a-40db-abfa-4b4513f74cb4}</Project>
+      <Name>MvxExtensions.Plugins.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj">
+      <Project>{8829789f-08f2-4e88-ae5a-58f3952f778e}</Project>
+      <Name>MvxExtensions.Plugins.Notification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Plugins\Storage\MvxExtensions.Plugins.Storage.csproj">
+      <Project>{25b95456-71c8-43ab-91ca-ffe4702a5c24}</Project>
+      <Name>MvxExtensions.Plugins.Storage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Playground.Core\Playground.Core.csproj">
+      <Project>{45af8427-db12-4724-b883-00821db40f48}</Project>
+      <Name>Playground.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

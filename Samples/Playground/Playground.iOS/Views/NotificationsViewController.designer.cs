@@ -11,8 +11,8 @@ using UIKit;
 
 namespace Playground.iOS
 {
-    [Register ("ViewController")]
-    partial class ViewController
+    [Register ("NotificationsViewController")]
+    partial class NotificationsViewController
     {
         void ReleaseDesignerOutlets ()
         {
