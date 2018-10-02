@@ -77,21 +77,21 @@ namespace MvxExtensions.Platforms.iOS.Views
             base.ViewDidLoad();
         }
 
-        public override void ViewWillAppear(bool animated)
+        public override void ViewDidAppear(bool animated)
         {
             if (!_eventsSubscribed)
             {
                 SubscribeMessageEvents();
             }
 
-            base.ViewWillAppear(animated);
+            base.ViewDidAppear(animated);
         }
 
-        public override void ViewWillDisappear(bool animated)
+        public override void ViewDidDisappear(bool animated)
         {
             UnsubscribeMessageEvents();
-
-            base.ViewWillDisappear(animated);
+            
+            base.ViewDidDisappear(animated);
         }
 
         public override void ViewWillUnload()
@@ -448,27 +448,28 @@ namespace MvxExtensions.Platforms.iOS.Views
                 return await Task.Run(() => ShowGenericQuestionDialogAsync(title, message, positiveButtonName, negativeButtonName));
             }
 
-            AutoResetEvent resetEvent = new AutoResetEvent(false);
+            var resetEvent = new AutoResetEvent(false);
+            UIAlertController qd = null;
 
-            var qd = CreateGenericQuestionDialog(title, message);
-            if (qd != null)
+            InvokeOnMainThread(() => 
             {
+                qd = CreateGenericQuestionDialog(title, message);
+
                 //Add Actions
-	            qd.AddAction(UIAlertAction.Create(positiveButtonName, UIAlertActionStyle.Default, alert => 
+	            qd?.AddAction(UIAlertAction.Create(positiveButtonName, UIAlertActionStyle.Default, alert => 
                 { 
                     result = true;
                     resetEvent.Set();
                 }));
-	            
-                qd.AddAction(UIAlertAction.Create(negativeButtonName, UIAlertActionStyle.Cancel, alert => resetEvent.Set()));
+                qd?.AddAction(UIAlertAction.Create(negativeButtonName, UIAlertActionStyle.Cancel, alert => resetEvent.Set()));
 
-                InvokeOnMainThread(() => PresentViewController(qd, true, null));
+                PresentViewController(qd, true, null);
+            });
 
-                resetEvent.WaitOne();
+            resetEvent.WaitOne();
 
-                qd.Dispose();
-                qd=null;
-            }
+            qd?.Dispose();
+            qd=null;
 
             return result;
         }
@@ -504,10 +505,13 @@ namespace MvxExtensions.Platforms.iOS.Views
             {
                 var resetEvent = new AutoResetEvent(false);
                 var selectedIndex = indexIfCancel;
+                UIAlertController ssd = null;
 
-                var ssd = CreateSimpleSelectionDialog(title);
-                if (ssd != null)
+                InvokeOnMainThread(() => 
                 {
+                    ssd = CreateSimpleSelectionDialog(title);
+                
+                    //Add actions
                     options.ToArray().SafeForEach(option => 
                     {
                         ssd.AddAction(UIAlertAction.Create(option, UIAlertActionStyle.Default, alert => 
@@ -517,13 +521,13 @@ namespace MvxExtensions.Platforms.iOS.Views
                         }));
                     });
 
-                    InvokeOnMainThread(() => PresentViewController(ssd, true, null));
+                    PresentViewController(ssd, true, null);
+                });
 
-                    resetEvent.WaitOne();
+                resetEvent.WaitOne();
 
-                    ssd.Dispose();
-                    ssd = null;
-                }
+                ssd.Dispose();
+                ssd = null;
 
                 return selectedIndex;
             }
@@ -555,19 +559,20 @@ namespace MvxExtensions.Platforms.iOS.Views
             else
             {
                 var resetEvent = new AutoResetEvent(false);
+                UIAlertController mb = null;
+                
+                InvokeOnMainThread(() =>
+                    {
+                        mb = CreateMessageBox(message, severity);
+                        mb?.AddAction(UIAlertAction.Create(ViewModel.TextSourceCommon.GetText("Label_Ok"), UIAlertActionStyle.Default, alert => resetEvent.Set()));
 
-                var mb = CreateMessageBox(message, severity);
-                if (mb != null)
-                {
-                    mb.AddAction(UIAlertAction.Create(ViewModel.TextSourceCommon.GetText("Label_Ok"), UIAlertActionStyle.Default, alert => resetEvent.Set()));
-                    
-                    InvokeOnMainThread(() => PresentViewController(mb, true, null));
+                        PresentViewController(mb, true, null);
+                    });
 
-                    resetEvent.WaitOne();
+                resetEvent.WaitOne();
 
-                    mb.Dispose();
-                    mb = null;
-                }
+                mb?.Dispose();
+                mb = null;
             }
         }
 
