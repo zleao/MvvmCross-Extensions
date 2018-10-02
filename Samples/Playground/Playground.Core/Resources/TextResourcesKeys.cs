@@ -17,5 +17,8 @@
         public const string Label_CaseTest_Description_Template = "Label_CaseTest{0}_Description";
         public const string MessageTemplate_ProcessingCaseTest = nameof(MessageTemplate_ProcessingCaseTest);
         public const string MessageTemplate_CaseTestCompleted = nameof(MessageTemplate_CaseTestCompleted);
+        public const string Label_Button_ErrorNotification = nameof(Label_Button_ErrorNotification);
+        public const string Label_Button_QuestionNotification = nameof(Label_Button_QuestionNotification);
+        public const string Label_Button_DelayedNotification = nameof(Label_Button_DelayedNotification);
     }
 }
