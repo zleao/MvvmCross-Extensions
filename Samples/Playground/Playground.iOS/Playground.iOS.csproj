@@ -147,6 +147,10 @@
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Views\NavigationSecondViewController.cs" />
+    <Compile Include="Views\NavigationSecondViewController.designer.cs">
+      <DependentUpon>NavigationSecondViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\NavigationViewController.cs" />
     <Compile Include="Views\NavigationViewController.designer.cs">
       <DependentUpon>NavigationViewController.cs</DependentUpon>

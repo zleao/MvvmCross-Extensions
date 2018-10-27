@@ -92,42 +92,103 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1670" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="0.0" y="84" width="414" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1670" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" numberOfLines="3">
+                                <rect key="frame" x="20" y="84" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1671" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="0.0" y="113" width="414" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1672" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" numberOfLines="3">
+                                <rect key="frame" x="20" y="180" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1673" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                                <rect key="frame" x="20" y="209" width="374" height="30"/>
                                 <state key="normal" title="Button"/>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1672" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="0.0" y="180" width="414" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1673" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="0.0" y="209" width="414" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2550" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                                <rect key="frame" x="20" y="113" width="374" height="30"/>
                                 <state key="normal" title="Button"/>
                             </button>
                         </subviews>
+                        <constraints>
+                            <constraint id="3064" firstItem="2550" firstAttribute="top" secondItem="1670" secondAttribute="bottom" constant="8"/>
+                            <constraint id="3065" firstItem="1672" firstAttribute="top" secondItem="2550" secondAttribute="bottom" constant="37"/>
+                            <constraint id="3066" firstItem="1673" firstAttribute="top" secondItem="1672" secondAttribute="bottom" constant="8"/>
+                            <constraint id="3328" firstItem="1670" firstAttribute="top" secondItem="1663" secondAttribute="bottom" constant="64"/>
+                            <constraint id="3329" firstItem="1670" firstAttribute="leading" secondItem="2550" secondAttribute="leading"/>
+                            <constraint id="3330" firstItem="1670" firstAttribute="trailing" secondItem="2550" secondAttribute="trailing"/>
+                            <constraint id="3331" firstItem="2550" firstAttribute="leading" secondItem="1667" secondAttribute="leadingMargin"/>
+                            <constraint id="3332" firstItem="2550" firstAttribute="trailing" secondItem="1667" secondAttribute="trailingMargin"/>
+                            <constraint id="3333" firstItem="1672" firstAttribute="leading" secondItem="1673" secondAttribute="leading"/>
+                            <constraint id="3334" firstItem="1672" firstAttribute="trailing" secondItem="1673" secondAttribute="trailing"/>
+                            <constraint id="3335" firstItem="1673" firstAttribute="leading" secondItem="1667" secondAttribute="leadingMargin"/>
+                            <constraint id="3336" firstItem="1673" firstAttribute="trailing" secondItem="1667" secondAttribute="trailingMargin"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="LabelNavigateAndRemoveSelf" destination="1670" id="name-outlet-1670"/>
-                        <outlet property="ButtonNavigateAndRemoveSelf" destination="1671" id="name-outlet-1671"/>
                         <outlet property="LabelNavigate" destination="1672" id="name-outlet-1672"/>
                         <outlet property="ButtonNavigate" destination="1673" id="name-outlet-1673"/>
+                        <outlet property="ButtonNavigateAndRemoveSelf" destination="2550" id="name-outlet-2550"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1668" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="589" y="5"/>
+        </scene>
+        <scene sceneID="3621">
+            <objects>
+                <viewController id="3622" sceneMemberID="viewController" customClass="NavigationSecondViewController" storyboardIdentifier="NavigationSecondViewController" useStoryboardIdentifierAsRestorationIdentifier="YES">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3619"/>
+                        <viewControllerLayoutGuide type="bottom" id="3620"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3623">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3656" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" numberOfLines="3">
+                                <rect key="frame" x="20" y="84" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3657" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES" numberOfLines="3">
+                                <rect key="frame" x="20" y="169" width="374" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3658" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                                <rect key="frame" x="20" y="198" width="374" height="30"/>
+                                <state key="normal" title="Button"/>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint id="3659" firstItem="3656" firstAttribute="top" secondItem="3619" secondAttribute="bottom" constant="64"/>
+                            <constraint id="3660" firstItem="3656" firstAttribute="leading" secondItem="3623" secondAttribute="leadingMargin"/>
+                            <constraint id="3661" firstItem="3656" firstAttribute="trailing" secondItem="3623" secondAttribute="trailingMargin"/>
+                            <constraint id="3662" firstItem="3657" firstAttribute="top" secondItem="3656" secondAttribute="bottom" constant="64"/>
+                            <constraint id="3663" firstItem="3657" firstAttribute="trailing" secondItem="3623" secondAttribute="trailingMargin"/>
+                            <constraint id="3664" firstItem="3657" firstAttribute="leading" secondItem="3623" secondAttribute="leadingMargin"/>
+                            <constraint id="3665" firstItem="3658" firstAttribute="top" secondItem="3657" secondAttribute="bottom" constant="8"/>
+                            <constraint id="3666" firstItem="3658" firstAttribute="leading" secondItem="3623" secondAttribute="leadingMargin"/>
+                            <constraint id="3667" firstItem="3658" firstAttribute="trailing" secondItem="3623" secondAttribute="trailingMargin"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="ButtonNavigateAndClearBackstack" destination="3658" id="name-outlet-3658"/>
+                        <outlet property="LabelNavigateAndClearBackstack" destination="3657" id="name-outlet-3657"/>
+                        <outlet property="LabelNavigationModeDescription" destination="3656" id="name-outlet-3656"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3624" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="588" y="817"/>
         </scene>
     </scenes>
 </document>

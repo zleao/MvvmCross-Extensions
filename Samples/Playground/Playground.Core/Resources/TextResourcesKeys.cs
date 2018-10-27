@@ -24,5 +24,8 @@
         public const string Label_Button_NavigateAndRemoveSelf = nameof(Label_Button_NavigateAndRemoveSelf);
         public const string Text_Description_Navigate = nameof(Text_Description_Navigate);
         public const string Label_Button_Navigate = nameof(Label_Button_Navigate);
+        public const string NavigationModeDescription = nameof(NavigationModeDescription);
+        public const string Text_Description_NavigateAndClearStack = nameof(Text_Description_NavigateAndClearStack);
+        public const string Label_Button_NavigateAndClearStack = nameof(Label_Button_NavigateAndClearStack);
     }
 }

@@ -35,7 +35,9 @@ namespace MvxExtensions.Platforms.iOS.Presenters
                     }
                     else if (navigationMode == NavigationModes.NavigationModeRemoveSelf)
                     {
-                        MasterNavigationController.ViewControllers = MasterNavigationController.ViewControllers.Take(MasterNavigationController.ViewControllers.Count() - 1).ToArray();
+                        var vcList = MasterNavigationController.ViewControllers.Take(MasterNavigationController.ViewControllers.Count() - 2).ToList();
+                        vcList.Add(MasterNavigationController.ViewControllers.Last());
+                        MasterNavigationController.ViewControllers = vcList.ToArray();
                     }
                 }
             }
