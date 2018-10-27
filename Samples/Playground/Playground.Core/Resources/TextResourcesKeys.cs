@@ -20,5 +20,9 @@
         public const string Label_Button_ErrorNotification = nameof(Label_Button_ErrorNotification);
         public const string Label_Button_QuestionNotification = nameof(Label_Button_QuestionNotification);
         public const string Label_Button_DelayedNotification = nameof(Label_Button_DelayedNotification);
+        public const string Text_Description_NavigateAndRemoveSelf = nameof(Text_Description_NavigateAndRemoveSelf);
+        public const string Label_Button_NavigateAndRemoveSelf = nameof(Label_Button_NavigateAndRemoveSelf);
+        public const string Text_Description_Navigate = nameof(Text_Description_Navigate);
+        public const string Label_Button_Navigate = nameof(Label_Button_Navigate);
     }
 }
