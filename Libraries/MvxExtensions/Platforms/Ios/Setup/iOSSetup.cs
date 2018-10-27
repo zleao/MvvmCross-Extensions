@@ -1,8 +1,10 @@
 ﻿using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Platforms.Ios.Core;
+using MvvmCross.Platforms.Ios.Presenters;
 using MvvmCross.Plugin.Json;
 using MvvmCross.ViewModels;
+using MvxExtensions.Platforms.iOS.Presenters;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -17,9 +19,14 @@ namespace MvxExtensions.Platforms.iOS.Setup
 
             base.InitializeFirstChance();
         }
+
+        protected override IMvxIosViewPresenter CreateViewPresenter()
+        {
+            return new iOSViewPresenter(ApplicationDelegate, Window);
+        }
     }
 
-    public class AndroidSetup<TApplication> : iOSSetup
+    public class iOSSetup<TApplication> : iOSSetup
         where TApplication : class, IMvxApplication, new()
     {
         protected override IMvxApplication CreateApp() => Mvx.IoCProvider.IoCConstruct<TApplication>();
