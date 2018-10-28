@@ -159,3 +159,7 @@ Binaries/
 Resources.designer.cs
 
 nugets/
+
+Libraries/MvxExtensions/Resources/Resource\.designer\.cs
+
+Samples/Playground/Playground\.Droid/Resources/Resource\.Designer\.cs

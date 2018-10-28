@@ -48,7 +48,7 @@ namespace MvxExtensions.Platforms.Droid.Views
         /// <value>
         /// The notification manager.
         /// </value>
-        protected INotificationService NotificationManager => _notificationManager ?? (_notificationManager = Mvx.Resolve<INotificationService>());
+        protected INotificationService NotificationManager => _notificationManager ?? (_notificationManager = Mvx.IoCProvider.Resolve<INotificationService>());
         private INotificationService _notificationManager;
 
         /// <summary>
@@ -394,7 +394,7 @@ namespace MvxExtensions.Platforms.Droid.Views
         /// <returns></returns>
         protected Intent CreateIntentFor(IMvxViewModel subViewModel)
         {
-            var intentWithKey = Mvx.Resolve<IMvxAndroidViewModelRequestTranslator>().GetIntentWithKeyFor(subViewModel);
+            var intentWithKey = Mvx.IoCProvider.Resolve<IMvxAndroidViewModelRequestTranslator>().GetIntentWithKeyFor(subViewModel);
             return intentWithKey.Item1;
         }
 

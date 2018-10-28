@@ -1,8 +1,8 @@
 ﻿using Android.App;
-using System;
 using Android.Runtime;
 using MvxExtensions.Platforms.Droid.Support.V7;
 using Playground.Core;
+using System;
 
 namespace Playground.Droid
 {
