@@ -1,4 +1,5 @@
-﻿using MvxExtensions.Plugins.Storage.Models;
+﻿using Foundation;
+using MvxExtensions.Plugins.Storage.Models;
 using System;
 using System.Reflection;
 
@@ -21,18 +22,20 @@ namespace MvxExtensions.Plugins.Storage.Platforms.iOS
         {
             var basePath = string.Empty;
 
+            NSError nsError;
+
             switch (location)
             {
                 case StorageLocation.Internal:
-                    basePath = AppDomain.CurrentDomain.BaseDirectory;
+                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
                     break;
 
                 case StorageLocation.ExternalPrivate:
-                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
+                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
                     break;
 
                 case StorageLocation.ExternalPublic:
-                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName);
+                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
                     break;
 
                 default:
