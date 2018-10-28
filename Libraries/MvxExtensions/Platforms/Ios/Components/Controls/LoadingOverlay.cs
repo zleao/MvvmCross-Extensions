@@ -36,19 +36,19 @@ namespace MvxExtensions.Platforms.iOS.Components.Controls
             AddSubview(_activitySpinner);
         }
 
-        public void Show(bool endEditing = true)
+        public void Show(UIView targetView, bool endEditing = true)
         {
-            UIWindow window = UIApplication.SharedApplication.KeyWindow;
+            //UIWindow window = UIApplication.SharedApplication.KeyWindow;
             if (endEditing)
             {
-                window.EndEditing(true);
+                targetView.EndEditing(true);
             }
 
-            UIView.Animate(
+            Animate(
                 0.1, // duration
                 () =>
                 {
-                    window.AddSubview(this);
+                    targetView.AddSubview(this);
                     _activitySpinner?.StartAnimating();
                     Alpha = _alpha;
                 },
@@ -58,7 +58,7 @@ namespace MvxExtensions.Platforms.iOS.Components.Controls
 
         public void Hide()
         {
-            UIView.Animate(
+            Animate(
                 0.1, // duration
                 () => { Alpha = 0; },
                 () =>
