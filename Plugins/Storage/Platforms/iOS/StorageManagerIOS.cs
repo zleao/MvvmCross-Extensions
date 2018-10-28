@@ -1,5 +1,6 @@
 ﻿using MvxExtensions.Plugins.Storage.Models;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -25,15 +26,15 @@ namespace MvxExtensions.Plugins.Storage.Platforms.iOS
             switch (location)
             {
                 case StorageLocation.Internal:
-                    basePath = AppDomain.CurrentDomain.BaseDirectory;
+                    basePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "..", "Library");
                     break;
 
                 case StorageLocation.ExternalPrivate:
-                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
+                    basePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     break;
 
                 case StorageLocation.ExternalPublic:
-                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName);
+                    basePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     break;
 
                 default:
