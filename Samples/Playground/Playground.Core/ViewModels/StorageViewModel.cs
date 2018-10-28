@@ -119,12 +119,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
                 throw;
             }
@@ -151,12 +151,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -178,12 +178,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -204,12 +204,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -232,12 +232,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -258,12 +258,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -283,12 +283,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -332,12 +332,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -362,12 +362,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -392,12 +392,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -425,12 +425,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -455,12 +455,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -489,12 +489,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -538,12 +538,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -575,12 +575,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
 
@@ -606,12 +606,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -693,12 +693,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
@@ -731,12 +731,12 @@ namespace Playground.Core.ViewModels
             }
             catch (AggregateException ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.InnerException.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
             catch (Exception ex)
             {
-                await NotificationManager.PublishErrorNotificationAsync(ex.Message);
+                await NotificationManager.PublishErrorNotificationAsync(ex.ToLongString(), NotificationModeEnum.MessageBox);
                 Debugger.Break();
             }
         }
