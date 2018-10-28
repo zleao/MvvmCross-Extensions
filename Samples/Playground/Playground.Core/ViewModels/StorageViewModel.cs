@@ -126,6 +126,7 @@ namespace Playground.Core.ViewModels
             {
                 await NotificationManager.PublishErrorNotificationAsync(ex.Message);
                 Debugger.Break();
+                throw;
             }
         }
 
