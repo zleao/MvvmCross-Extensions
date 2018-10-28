@@ -1,8 +1,8 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   
   <PropertyGroup>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;MonoAndroid81</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;net461;Xamarin.iOS10;MonoAndroid81</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;Xamarin.iOS10;MonoAndroid81</TargetFrameworks>
     <AssemblyName>MvxExtensions</AssemblyName>
     <RootNamespace>MvxExtensions</RootNamespace>
     <PackageId>MvxExtensions</PackageId>
@@ -24,6 +24,12 @@
     <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView" Version="6.2.0" />
   </ItemGroup>
 
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="Platforms\iOS\**\*.cs" />
+    <Compile Include="Platforms\Common\**\*.cs" />
+    <PackageReference Include="Toast.iOS" Version="1.2.0" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="MvvmCross" Version="6.2.0" />
     <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.2.0" />

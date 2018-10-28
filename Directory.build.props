@@ -5,14 +5,14 @@
     <Authors>zleao</Authors>
     <Owners>zleao</Owners>
     <Description>Set of libraries that extend the awesome MvvmCross framework</Description>
-    <PackageTags>mvx.extensions;mvvm;mvvmcross;xamarin;android;monodroid;xamarin.android;wpf;net;net45</PackageTags>
+    <PackageTags>mvx.extensions;mvvm;mvvmcross;xamarin;android;ios;monodroid;monotouch;xamarin.android;xamarin.ios;wpf;net;net45</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/zleao/MvvmCross-Extensions/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zleao/MvvmCross-Extensions</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>6.0.2</Version>
+    <Version>6.1.0</Version>
 
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
@@ -23,6 +23,7 @@
     <DebugType>full</DebugType>
     <IsTestProject>$(MSBuildProjectName.Contains('UnitTest'))</IsTestProject>
     <IsLibraryProject>$(MSBuildProjectName.Contains('MvxExtensions'))</IsLibraryProject>
+    <IsPluginProject>$(MSBuildProjectName.Contains('Plugins'))</IsPluginProject>
   </PropertyGroup>
   
   <ItemGroup Condition="'$(IsLibraryProject)' == 'true'">

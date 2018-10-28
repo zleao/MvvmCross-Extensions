@@ -160,6 +160,7 @@
     <Compile Include="Views\NavigationSecondView.cs" />
     <Compile Include="Views\BindingsTestView.cs" />
     <Compile Include="Views\NavigationView.cs" />
+    <Compile Include="Views\StorageView.cs" />
     <Compile Include="Views\NotificationsView.cs" />
     <Compile Include="Views\MainView.cs" />
   </ItemGroup>
@@ -197,9 +198,17 @@
       <Project>{bed5f20a-cacf-437c-8a32-2a76d66a91c0}</Project>
       <Name>MvxExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj">
+      <Project>{684d8862-9f1a-40db-abfa-4b4513f74cb4}</Project>
+      <Name>MvxExtensions.Plugins.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj">
       <Project>{8829789f-08f2-4e88-ae5a-58f3952f778e}</Project>
       <Name>MvxExtensions.Plugins.Notification</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Plugins\Storage\MvxExtensions.Plugins.Storage.csproj">
+      <Project>{25b95456-71c8-43ab-91ca-ffe4702a5c24}</Project>
+      <Name>MvxExtensions.Plugins.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Playground.Core\Playground.Core.csproj">
       <Project>{45af8427-db12-4724-b883-00821db40f48}</Project>
@@ -226,6 +235,24 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Page_StorageView.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\ListItem_CaseTest.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\EncryptedFiles\encryptedNew.password.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\EncryptedFiles\encryptedOld.356194055156252.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\..\packages\Xamarin.Android.Support.Annotations.27.0.2.1\build\MonoAndroid81\Xamarin.Android.Support.Annotations.targets" Condition="Exists('..\..\..\packages\Xamarin.Android.Support.Annotations.27.0.2.1\build\MonoAndroid81\Xamarin.Android.Support.Annotations.targets')" />
