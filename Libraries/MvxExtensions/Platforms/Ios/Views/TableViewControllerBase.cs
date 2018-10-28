@@ -317,7 +317,7 @@ namespace MvxExtensions.Platforms.iOS.Views
             {
                 if (showBusyNotification)
                 {
-                    BusyIndicator.Show();
+                    BusyIndicator.Show(TableView);
                 }
                 else
                 {
