@@ -28,19 +28,14 @@ namespace MvxExtensions.Plugins.Storage.Wpf
 
             switch (location)
             {
-                case StorageLocation.Internal:
-                    basePath = AppDomain.CurrentDomain.BaseDirectory;
-                    break;
-
-                case StorageLocation.ExternalPrivate:
+                case StorageLocation.AppCacheDirectory:
                     basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
                     break;
-
-                case StorageLocation.ExternalPublic:
-                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName);
+                case StorageLocation.AppDataDirectory:
+                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppName);
                     break;
-
-                default:
+                case StorageLocation.SharedDataDirectory:
+                    basePath = PathCombine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), AppName);
                     break;
             }
 
