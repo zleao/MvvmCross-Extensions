@@ -251,6 +251,10 @@
     <Folder Include="Resources\mipmap-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\MvxExtensions.Droid.Support\MvxExtensions.Droid.Support.csproj">
+      <Project>{a973df64-1677-4072-ac28-e63a7ae7617e}</Project>
+      <Name>MvxExtensions.Droid.Support</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Libraries\MvxExtensions\MvxExtensions.csproj">
       <Project>{bed5f20a-cacf-437c-8a32-2a76d66a91c0}</Project>
       <Name>MvxExtensions</Name>

@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using MvxExtensions.Platforms.Droid.Support.V7.Views;
+﻿using MvxExtensions.Droid.Support.V7.Views;
 using MvxExtensions.ViewModels;
+using System.Reflection;
 
 namespace Playground.Droid.Views
 {
