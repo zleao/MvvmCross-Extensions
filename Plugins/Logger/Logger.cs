@@ -81,7 +81,7 @@ namespace MvxExtensions.Plugins.Logger
         /// </value>
         public string LogBaseNativePath
         {
-            get { return _storageManager.NativePath(StorageLocation.ExternalPublic, DEFAULT_LOGFOLDER); }
+            get { return _storageManager.NativePath(StorageLocation.SharedDataDirectory, DEFAULT_LOGFOLDER); }
         }
 
         /// <summary>
@@ -570,9 +570,9 @@ namespace MvxExtensions.Plugins.Logger
                 folderPath = _storageManager.PathCombine(DEFAULT_LOGFOLDER, relativeLogFolderPath);
             }
 
-            if (await _storageManager.FolderExistsAsync(StorageLocation.ExternalPublic, folderPath))
+            if (await _storageManager.FolderExistsAsync(StorageLocation.SharedDataDirectory, folderPath))
             {
-                logsList = (await _storageManager.GetFilesInAsync(StorageLocation.ExternalPublic, false, folderPath)).ToList();
+                logsList = (await _storageManager.GetFilesInAsync(StorageLocation.SharedDataDirectory, false, folderPath)).ToList();
             }
 
             return logsList;
@@ -592,7 +592,7 @@ namespace MvxExtensions.Plugins.Logger
             var currentDate = DateTimeOffset.Now;
             var deletedLogFilesCounter = 0;
 
-            var logFiles = await _storageManager.GetFilesInAsync(StorageLocation.ExternalPublic, true, DEFAULT_LOGFOLDER, DEFAULT_LOG_FILE_EXTENSION, SearchMode.EndsWith);
+            var logFiles = await _storageManager.GetFilesInAsync(StorageLocation.SharedDataDirectory, true, DEFAULT_LOGFOLDER, DEFAULT_LOG_FILE_EXTENSION, SearchMode.EndsWith);
             foreach (var log in logFiles)
             {
                 var deleteFile = false;
@@ -634,7 +634,7 @@ namespace MvxExtensions.Plugins.Logger
         private async Task LogCommonAsync(LogTypeEnum logType, string logFileName, string contents, Exception ex = null)
         {
             var logRelativePath = _storageManager.PathCombine(DEFAULT_LOGFOLDER, logFileName + DEFAULT_LOG_FILE_EXTENSION);
-            var logFullPath = _storageManager.NativePath(StorageLocation.ExternalPublic, logRelativePath);
+            var logFullPath = _storageManager.NativePath(StorageLocation.SharedDataDirectory, logRelativePath);
 
             if (EncryptionActivated)
             {
