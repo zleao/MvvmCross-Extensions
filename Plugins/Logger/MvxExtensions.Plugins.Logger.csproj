@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>MvxExtensions.Plugins.Logger</AssemblyName>
     <RootNamespace>MvxExtensions.Plugins.Logger</RootNamespace>
-    <Description>Plugin part of the MvxExtensions library, that is an extension of MvvmCross.
-Provides logging abilities. See documentation for more info</Description>
+    <Description>MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework. 
+This package contains the Logger plugin of MvxExtensions that provides logging.
+For more info check the documentation</Description>
     <PackageId>MvxExtensions.Plugins.Logger</PackageId>
   </PropertyGroup>
 

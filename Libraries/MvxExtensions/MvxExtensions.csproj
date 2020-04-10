@@ -5,7 +5,9 @@
     <AssemblyName>MvxExtensions</AssemblyName>
     <RootNamespace>MvxExtensions</RootNamespace>
     <PackageId>MvxExtensions</PackageId>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework. 
+This package contains the 'Core' libraries of MvxExtensions
+For more info check the documentation</Description>
   </PropertyGroup>
 
   <ItemGroup>

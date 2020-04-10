@@ -391,10 +391,11 @@ namespace MvxExtensions.Platforms.Droid.Views
         /// Creates the intent for a existing view model.
         /// </summary>
         /// <param name="subViewModel">The view model.</param>
+        /// <param name="viewModelRequest">The request info</param>
         /// <returns></returns>
-        protected Intent CreateIntentFor(IMvxViewModel subViewModel)
+        protected Intent CreateIntentFor(IMvxViewModel subViewModel, MvxViewModelRequest viewModelRequest)
         {
-            var intentWithKey = Mvx.IoCProvider.Resolve<IMvxAndroidViewModelRequestTranslator>().GetIntentWithKeyFor(subViewModel);
+            var intentWithKey = Mvx.IoCProvider.Resolve<IMvxAndroidViewModelRequestTranslator>().GetIntentWithKeyFor(subViewModel, viewModelRequest);
             return intentWithKey.Item1;
         }
 
@@ -573,8 +574,8 @@ namespace MvxExtensions.Platforms.Droid.Views
             var builder = new AlertDialog.Builder(this);
 
             //Set Custom title to allow multiline text
-            var titleView = LayoutInflater.Inflate(Resource.Layout.Dialog_Common_TitleMultiline, null);
-            var textView = titleView.FindViewById<TextView>(Resource.Id.dialogTitle);
+            var titleView = LayoutInflater.Inflate(MvxExtensions.Resource.Layout.Dialog_Common_TitleMultiline, null);
+            var textView = titleView.FindViewById<TextView>(MvxExtensions.Resource.Id.dialogTitle);
             textView.Text = title;
             builder.SetCustomTitle(titleView);
 

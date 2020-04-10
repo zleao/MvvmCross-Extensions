@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>MvxExtensions.Plugins.Notification</AssemblyName>
     <RootNamespace>MvxExtensions.Plugins.Notification</RootNamespace>
-    <Description>Plugin part of the MvxExtensions library, that is an extension of MvvmCross.
-Provides notification abilities. See documentation for more info</Description>
+    <Description>MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework. 
+This package contains the Notification plugin of MvxExtensions that provides notification capabilities
+For more info check the documentation</Description>
     <PackageId>MvxExtensions.Plugins.Notification</PackageId>
   </PropertyGroup>
 
@@ -13,8 +14,4 @@ Provides notification abilities. See documentation for more info</Description>
     <PackageReference Include="MvvmCross" Version="6.4.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="Microsoft.CSharp" Version="4.7.0" />
-  </ItemGroup>
-  
 </Project>
