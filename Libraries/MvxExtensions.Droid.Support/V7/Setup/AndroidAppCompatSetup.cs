@@ -8,9 +8,9 @@ using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvxExtensions.Platforms.Droid.Components.Binding;
 using MvxExtensions.Platforms.Droid.Components.Controls;
-using MvxExtensions.Platforms.Droid.Support.V7.Presenters;
+using MvxExtensions.Droid.Support.V7.Presenters;
 
-namespace MvxExtensions.Platforms.Droid.Support.V7.Setup
+namespace MvxExtensions.Droid.Support.V7.Setup
 {
     public abstract class AndroidAppCompatSetup : MvxAppCompatSetup
     {

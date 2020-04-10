@@ -6,7 +6,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.ViewModels;
 using MvxExtensions.Statics;
 
-namespace MvxExtensions.Platforms.Droid.Support.V7.Presenters
+namespace MvxExtensions.Droid.Support.V7.Presenters
 {
     public class AndroidAppCompatViewPresenter : MvxAppCompatViewPresenter
     {
@@ -20,7 +20,7 @@ namespace MvxExtensions.Platforms.Droid.Support.V7.Presenters
             try
             {
                 var navigationMode = request.PresentationValues?[NavigationModes.NavigationMode];
-            
+
                 if (navigationMode == NavigationModes.NavigationModeClearStack)
                 {
                     intent.AddFlags(ActivityFlags.ClearTask | ActivityFlags.NewTask);
