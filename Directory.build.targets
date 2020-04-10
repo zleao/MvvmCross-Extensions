@@ -22,10 +22,10 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('Xamarin.WatchOS'))">
     <DefineConstants>$(DefineConstants);MONO;COCOA;WATCHOS</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('MonoAndroid'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('monoandroid'))">
     <DefineConstants>$(DefineConstants);MONO;ANDROID</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('MonoAndroid')) and '$(IsPluginProject)' == 'false' ">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('monoandroid')) and '$(IsPluginProject)' == 'false' ">
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
