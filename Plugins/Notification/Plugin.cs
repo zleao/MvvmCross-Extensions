@@ -3,6 +3,9 @@ using MvvmCross.Plugin;
 
 namespace MvxExtensions.Plugins.Notification
 {
+    /// <summary>
+    /// Plugin registration class
+    /// </summary>
     [MvxPlugin]
     [Preserve(AllMembers = true)]
     public class Plugin : IMvxPlugin

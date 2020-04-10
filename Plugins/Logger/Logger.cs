@@ -108,6 +108,7 @@ namespace MvxExtensions.Plugins.Logger
         /// Initializes a new instance of the <see cref="Logger" /> class.
         /// </summary>
         /// <param name="storageManager">The storage manager.</param>
+        /// <param name="storageEncryptionManager"></param>
         /// <param name="jsonConverter">The json converter.</param>
         public Logger(IStorageManager storageManager, IStorageEncryptionManager storageEncryptionManager, IMvxJsonConverter jsonConverter)
         {
