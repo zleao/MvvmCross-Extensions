@@ -1,10 +1,13 @@
-using Foundation;
+﻿using Foundation;
 using MvxExtensions.Plugins.Storage.Models;
 using System;
 using System.Reflection;
 
 namespace MvxExtensions.Plugins.Storage.Platforms.iOS
 {
+    /// <summary>
+    /// StorageEncryptionManagerIOS
+    /// </summary>
     public class StorageEncryptionManagerIOS : StorageEncryptionManager
     {
         private string AppName

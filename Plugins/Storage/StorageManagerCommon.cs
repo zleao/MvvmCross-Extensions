@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace MvxExtensions.Plugins.Storage
 {
+    /// <summary>
+    /// Base implementation of the Storage Manager
+    /// </summary>
     public abstract class StorageManagerCommon
     {
          /// <summary>

@@ -8,14 +8,14 @@ namespace MvxExtensions.Plugins.Storage
     /// <summary>
     /// storage encryption plugin implementation
     /// </summary>
-    /// <seealso cref="MvxExtensions.Plugins.Storage.IStorageEncryptionManager" />
+    /// <seealso cref="IStorageEncryptionManager" />
     public abstract class StorageEncryptionManager : StorageManagerCommon, IStorageEncryptionManager
     {
         #region Constructor
 
         //TODO: use a disposable pattern instead of finalizer. 
         /// <summary>
-        /// Finalizes an instance of the <see cref="StorageManagerCommon_Droid_WPF"/> class.
+        /// Finalizes an instance of the <see cref="StorageEncryptionManager"/> class.
         /// </summary>
         ~StorageEncryptionManager()
         {

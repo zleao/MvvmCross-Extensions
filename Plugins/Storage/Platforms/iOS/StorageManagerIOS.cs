@@ -1,4 +1,4 @@
-using Foundation;
+﻿using Foundation;
 using MvxExtensions.Plugins.Storage.Models;
 using System;
 using System.Reflection;
@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace MvxExtensions.Plugins.Storage.Platforms.iOS
 {
+    /// <summary>
+    /// StorageManagerIOS
+    /// </summary>
     public class StorageManagerIOS : StorageManager
     {
         private string AppName

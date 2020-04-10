@@ -11,7 +11,7 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
     /// <summary>
     /// Android implementation of the Storage plugin
     /// </summary>
-    /// <seealso cref="MvxExtensions.Plugins.Storage.Droid.StorageManagerCommon_Droid_WPF" />
+    /// <seealso cref="StorageManager" />
     public class StorageManagerDroid : StorageManager
     {
         private const string BASE_PRIVATE_ANDROID_DATA_PATH = "Android/data";
@@ -82,6 +82,13 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
             return (ulong)(bytesToConvert / MEGA_BYTE);
         }
 
+        /// <summary>
+        /// Clones a file coming from the assets folder
+        /// </summary>
+        /// <param name="fromPath"></param>
+        /// <param name="toLocation"></param>
+        /// <param name="toPath"></param>
+        /// <returns></returns>
         public override async Task CloneFileFromAppResourcesAsync(string fromPath, StorageLocation toLocation, string toPath)
         {
             using (var inputStream = Assets.Open(fromPath))

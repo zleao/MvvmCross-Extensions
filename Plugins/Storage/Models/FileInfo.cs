@@ -6,7 +6,7 @@ namespace MvxExtensions.Plugins.Storage.Models
     /// <summary>
     /// Information of a file
     /// </summary>
-    /// <seealso cref="MvxExtensions.Plugins.Storage.BaseFileInfo" />
+    /// <seealso cref="BaseFileInfo" />
     public class FileInfo : BaseFileInfo
     {
         #region Constructor
