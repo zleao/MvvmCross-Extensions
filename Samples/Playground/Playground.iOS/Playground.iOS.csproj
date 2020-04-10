@@ -64,24 +64,26 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MvvmCross, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.6.2.0\lib\xamarinios10\MvvmCross.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.File, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.File.6.2.0\lib\xamarinios10\MvvmCross.Plugin.File.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.Json, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.Json.6.2.0\lib\netstandard2.0\MvvmCross.Plugin.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.JsonLocalization, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.JsonLocalization.6.2.0\lib\netstandard2.0\MvvmCross.Plugin.JsonLocalization.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.ResourceLoader, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.ResourceLoader.6.2.0\lib\xamarinios10\MvvmCross.Plugin.ResourceLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <PackageReference Include="MvvmCross">
+      <Version>6.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmCross.Plugin.File">
+      <Version>6.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmCross.Plugin.Json">
+      <Version>6.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmCross.Plugin.JsonLocalization">
+      <Version>6.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmCross.Plugin.ResourceLoader">
+      <Version>6.4.2</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
