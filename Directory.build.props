@@ -1,10 +1,9 @@
-﻿<Project>
+<Project>
   <PropertyGroup>
     <Copyright>Copyright (c) zleao</Copyright>
-    <PackageLicenseUrl>http://opensource.org/licenses/ms-pl</PackageLicenseUrl>
+    <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
     <Authors>zleao</Authors>
     <Owners>zleao</Owners>
-    <Description>Set of libraries that extend the awesome MvvmCross framework</Description>
     <PackageTags>mvx.extensions;mvvm;mvvmcross;xamarin;android;ios;monodroid;monotouch;xamarin.android;xamarin.ios;wpf;net;net45</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/zleao/MvvmCross-Extensions/wiki</PackageProjectUrl>
@@ -16,23 +15,20 @@
 
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' and '$(IsTestProject)' != 'true'">true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
     <PackageOutputPath>$(SolutionDir)nugets</PackageOutputPath>
     
     <Platform>AnyCPU</Platform>
     <DebugType>full</DebugType>
-    <IsTestProject>$(MSBuildProjectName.Contains('UnitTest'))</IsTestProject>
     <IsLibraryProject>$(MSBuildProjectName.Contains('MvxExtensions'))</IsLibraryProject>
-    <IsPluginProject>$(MSBuildProjectName.Contains('Plugins'))</IsPluginProject>
   </PropertyGroup>
-  
+
   <ItemGroup Condition="'$(IsLibraryProject)' == 'true'">
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" PrivateAssets="All" />
-    <Compile Include="**\*.shared.cs" />
-    <Compile Include="**\*.shared.*.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" PrivateAssets="All" />
+    <None Include="$(MSBuildThisFileDirectory)\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(IsTestProject)' != 'true' and '$(SourceLinkEnabled)' != 'false' and '$(IsLibraryProject)' == 'true'">
+  <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false' and '$(IsLibraryProject)' == 'true'">
     <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" /> 
   </ItemGroup>
 

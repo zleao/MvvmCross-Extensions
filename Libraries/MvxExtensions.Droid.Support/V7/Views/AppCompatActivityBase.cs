@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
@@ -27,9 +20,16 @@ using MvxExtensions.Plugins.Notification.Messages.OneWay;
 using MvxExtensions.Plugins.Notification.Messages.TwoWay.Question;
 using MvxExtensions.Plugins.Notification.Messages.TwoWay.Result;
 using MvxExtensions.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using AndroidResource = Android.Resource;
 
-namespace MvxExtensions.Platforms.Droid.Support.V7.Views
+namespace MvxExtensions.Droid.Support.V7.Views
 {
     public abstract class AppCompatActivityBase<TViewModel> : MvxAppCompatActivity<TViewModel>
         where TViewModel : ViewModel
@@ -394,10 +394,10 @@ namespace MvxExtensions.Platforms.Droid.Support.V7.Views
         /// </summary>
         /// <param name="subViewModel">The view model.</param>
         /// <returns></returns>
-        protected Intent CreateIntentFor(IMvxViewModel subViewModel)
+        protected Intent CreateIntentFor(IMvxViewModel subViewModel, MvxViewModelRequest viewModelRequest)
         {
-            var intentWithKey = Mvx.IoCProvider.Resolve<IMvxAndroidViewModelRequestTranslator>().GetIntentWithKeyFor(subViewModel);
-            return intentWithKey.Item1;
+            var intentWithKey = Mvx.IoCProvider.Resolve<IMvxAndroidViewModelRequestTranslator>().GetIntentWithKeyFor(subViewModel, viewModelRequest);
+            return intentWithKey.intent;
         }
 
         protected NotificationTwoWayAnswersEnum ConvertBool2NotificationTwoWayAnswersEnum(bool value, NotificationTwoWayAnswersGroupEnum possibleAnswers)
@@ -473,7 +473,7 @@ namespace MvxExtensions.Platforms.Droid.Support.V7.Views
                 case NotificationSeverityEnum.Success:
                     return AndroidResource.Drawable.IcDialogInfo;
                 default:
-                   return AndroidResource.Drawable.IcDialogAlert;
+                    return AndroidResource.Drawable.IcDialogAlert;
             }
         }
 
@@ -611,7 +611,7 @@ namespace MvxExtensions.Platforms.Droid.Support.V7.Views
                 var bss = CreateSimpleSelectionDialog(title);
                 if (bss != null)
                 {
-                    //Set avilable options list for the user
+                    //Set available options list for the user
                     bss.SetItems(options.ToArray(), (sender, args) =>
                     {
                         selectedIndex = args.Which;

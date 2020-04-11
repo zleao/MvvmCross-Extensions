@@ -3,7 +3,7 @@ using Android.Content;
 
 namespace MvxExtensions.Platforms.Droid.Views
 {
-    internal class DialogCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
+    public class DialogCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
     {
         private readonly AutoResetEvent _resetEvent;
 

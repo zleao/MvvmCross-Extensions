@@ -1,13 +1,13 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
-
   <PropertyGroup>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;net461;Xamarin.iOS10;MonoAndroid81</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;Xamarin.iOS10;MonoAndroid81</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;Xamarin.iOS10;monoandroid10.0</TargetFrameworks>
     <AssemblyName>MvxExtensions.Plugins.Storage</AssemblyName>
     <RootNamespace>MvxExtensions.Plugins.Storage</RootNamespace>
-    <Description>Plugin part of the MvxExtensions library, that is an extension of MvvmCross.
-Provides storage management abilities. See documentation for more info</Description>
+    <Description>MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework. 
+This package contains the Storage plugin of MvxExtensions that provides storage management capabilities
+For more info check the documentation</Description>
     <PackageId>MvxExtensions.Plugins.Storage</PackageId>
+    <UserSecretsId>09e4280e-01ff-4424-8d8f-9c0f40a32c15</UserSecretsId>
   </PropertyGroup>
   
   <ItemGroup>
@@ -15,7 +15,7 @@ Provides storage management abilities. See documentation for more info</Descript
     <None Include="Platforms\**\*.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('monoandroid')) ">
     <Compile Include="Platforms\Droid\**\*.cs" />
   </ItemGroup>
 
@@ -29,7 +29,7 @@ Provides storage management abilities. See documentation for more info</Descript
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.2.0" />
+    <PackageReference Include="MvvmCross" Version="6.4.2" />
   </ItemGroup>
   
 </Project>

@@ -32,7 +32,6 @@ namespace MvxExtensions.Platforms.iOS.Views
 
         private volatile IList<SubscriptionToken> _messageTokens = new List<SubscriptionToken>();
         private volatile MvxNotifyPropertyChangedEventSubscription _propertyChangedSubscription;
-        private bool _eventsSubscribed;
 
         #endregion
         
@@ -79,10 +78,7 @@ namespace MvxExtensions.Platforms.iOS.Views
 
         public override void ViewDidAppear(bool animated)
         {
-            if (!_eventsSubscribed)
-            {
-                SubscribeMessageEvents();
-            }
+            SubscribeMessageEvents();
 
             base.ViewDidAppear(animated);
         }

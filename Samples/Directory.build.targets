@@ -22,7 +22,7 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'Xamarin.WatchOS10'">
     <DefineConstants>$(DefineConstants);MONO;COCOA</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'MonoAndroid80'">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('monoandroid'))">
     <DefineConstants>$(DefineConstants);MONO;ANDROID</DefineConstants>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <AndroidResgenClass>Resource</AndroidResgenClass>

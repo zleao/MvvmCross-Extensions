@@ -1,17 +1,13 @@
 ﻿using Foundation;
 using MvxExtensions.Plugins.Storage.Models;
-using System;
-using System.Reflection;
 
 namespace MvxExtensions.Plugins.Storage.Platforms.iOS
 {
+    /// <summary>
+    /// StorageEncryptionManagerIOS
+    /// </summary>
     public class StorageEncryptionManagerIOS : StorageEncryptionManager
     {
-        private string AppName
-        {
-            get { return Assembly.GetEntryAssembly().GetName().Name; }
-        }
-
         /// <summary>
         /// Returns the full physical path based on a location and a relative path
         /// </summary>
@@ -21,28 +17,33 @@ namespace MvxExtensions.Plugins.Storage.Platforms.iOS
         protected override string FullPath(StorageLocation location, string path)
         {
             var basePath = string.Empty;
-
-            NSError nsError;
-
             switch (location)
             {
-                case StorageLocation.Internal:
-                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.LibraryDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
+                case StorageLocation.AppCacheDirectory:
+                    basePath = GetDirectory(NSSearchPathDirectory.CachesDirectory);
                     break;
 
-                case StorageLocation.ExternalPrivate:
-                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
+                case StorageLocation.AppDataDirectory:
+                    basePath = GetDirectory(NSSearchPathDirectory.LibraryDirectory);
                     break;
 
-                case StorageLocation.ExternalPublic:
-                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
-                    break;
-
-                default:
+                case StorageLocation.SharedDataDirectory:
+                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out _).Path;
                     break;
             }
 
             return PathCombine(basePath, path);
+        }
+
+        private string GetDirectory(NSSearchPathDirectory directory)
+        {
+            var dirs = NSSearchPath.GetDirectories(directory, NSSearchPathDomain.User);
+            if (dirs == null || dirs.Length == 0)
+            {
+                // this should never happen...
+                return null;
+            }
+            return dirs[0];
         }
     }
 }

@@ -25,6 +25,10 @@ using UIKit;
 
 namespace MvxExtensions.Platforms.iOS.Views
 {
+    /// <summary>
+    /// ViewControllerBase
+    /// </summary>
+    /// <typeparam name="TViewModel"></typeparam>
     public abstract class ViewControllerBase<TViewModel> : MvxViewController<TViewModel>
         where TViewModel : ViewModel
     {
@@ -32,10 +36,9 @@ namespace MvxExtensions.Platforms.iOS.Views
 
         private volatile IList<SubscriptionToken> _messageTokens = new List<SubscriptionToken>();
         private volatile MvxNotifyPropertyChangedEventSubscription _propertyChangedSubscription;
-        private bool _eventsSubscribed;
 
         #endregion
-        
+
         #region Properties
 
         /// <summary>
@@ -51,15 +54,18 @@ namespace MvxExtensions.Platforms.iOS.Views
 
         #region Constructor
 
-        public ViewControllerBase()
+        /// <inheritdoc/>
+        protected ViewControllerBase()
         {
         }
 
-        public ViewControllerBase(IntPtr handle)
+        /// <inheritdoc/>
+        protected ViewControllerBase(IntPtr handle)
             : base(handle)
         {
         }
 
+        /// <inheritdoc/>
         protected ViewControllerBase(string nibName, NSBundle bundle)
             : base(nibName, bundle)
         {
@@ -69,6 +75,7 @@ namespace MvxExtensions.Platforms.iOS.Views
 
         #region Lifecycle Methods
 
+        /// <inheritdoc/>
         public override void ViewDidLoad()
         {
             if (BusyIndicator == null)
@@ -77,23 +84,23 @@ namespace MvxExtensions.Platforms.iOS.Views
             base.ViewDidLoad();
         }
 
+        /// <inheritdoc/>
         public override void ViewDidAppear(bool animated)
         {
-            if (!_eventsSubscribed)
-            {
-                SubscribeMessageEvents();
-            }
+            SubscribeMessageEvents();
 
             base.ViewDidAppear(animated);
         }
 
+        /// <inheritdoc/>
         public override void ViewDidDisappear(bool animated)
         {
             UnsubscribeMessageEvents();
-            
+
             base.ViewDidDisappear(animated);
         }
 
+        /// <inheritdoc/>
         public override void ViewWillUnload()
         {
             if (BusyIndicator != null)
@@ -103,7 +110,7 @@ namespace MvxExtensions.Platforms.iOS.Views
 
             base.ViewWillUnload();
         }
-        
+
         #endregion
 
         #region Notification Management
@@ -140,7 +147,6 @@ namespace MvxExtensions.Platforms.iOS.Views
         /// </value>
         public virtual bool SubscribeTerminateApplicationMessage => true;
 
-
         /// <summary>
         /// Subscribes the event
         /// </summary>
@@ -168,7 +174,6 @@ namespace MvxExtensions.Platforms.iOS.Views
             var token = NotificationManager.Subscribe(asyncDeliveryAction, context);
             _messageTokens.Add(token);
         }
-
 
         /// <summary>
         /// Subscribes the message events.
@@ -211,7 +216,6 @@ namespace MvxExtensions.Platforms.iOS.Views
             SetBusyIndicatorVisibility(false);
             SetBusyIndicatorMessage(string.Empty);
         }
-
 
         /// <summary>
         /// Called when notification error message.
@@ -339,24 +343,18 @@ namespace MvxExtensions.Platforms.iOS.Views
         }
 
         #endregion
-    
+
         #region Generic Methods
 
         protected NotificationTwoWayAnswersEnum ConvertBool2NotificationTwoWayAnswersEnum(bool value, NotificationTwoWayAnswersGroupEnum possibleAnswers)
         {
-            switch (possibleAnswers)
+            return possibleAnswers switch
             {
-                case NotificationTwoWayAnswersGroupEnum.Ok:
-                    return value ? NotificationTwoWayAnswersEnum.Ok : NotificationTwoWayAnswersEnum.Unknown;
-
-                case NotificationTwoWayAnswersGroupEnum.YesNo:
-                    return value ? NotificationTwoWayAnswersEnum.Yes : NotificationTwoWayAnswersEnum.No;
-
-                case NotificationTwoWayAnswersGroupEnum.OkCancel:
-                    return value ? NotificationTwoWayAnswersEnum.Ok : NotificationTwoWayAnswersEnum.Cancel;
-            }
-
-            return NotificationTwoWayAnswersEnum.Unknown;
+                NotificationTwoWayAnswersGroupEnum.Ok => value ? NotificationTwoWayAnswersEnum.Ok : NotificationTwoWayAnswersEnum.Unknown,
+                NotificationTwoWayAnswersGroupEnum.YesNo => value ? NotificationTwoWayAnswersEnum.Yes : NotificationTwoWayAnswersEnum.No,
+                NotificationTwoWayAnswersGroupEnum.OkCancel => value ? NotificationTwoWayAnswersEnum.Ok : NotificationTwoWayAnswersEnum.Cancel,
+                _ => NotificationTwoWayAnswersEnum.Unknown,
+            };
         }
 
         /// <summary>
@@ -384,22 +382,14 @@ namespace MvxExtensions.Platforms.iOS.Views
         /// <returns></returns>
         protected virtual string GetTitleFromSeverity(NotificationSeverityEnum severity)
         {
-            switch (severity)
+            return severity switch
             {
-                case NotificationSeverityEnum.Error:
-                    return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Error");
-
-                case NotificationSeverityEnum.Success:
-                    return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Success");
-
-                case NotificationSeverityEnum.Info:
-                    return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Information");
-
-                case NotificationSeverityEnum.Warning:
-                    return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Warning");
-            }
-
-            return ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Message");
+                NotificationSeverityEnum.Error => ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Error"),
+                NotificationSeverityEnum.Success => ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Success"),
+                NotificationSeverityEnum.Info => ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Information"),
+                NotificationSeverityEnum.Warning => ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Warning"),
+                _ => ViewModel.TextSourceCommon.GetText("Label_Dialog_Title_Message"),
+            };
         }
 
         /// <summary>
@@ -407,7 +397,6 @@ namespace MvxExtensions.Platforms.iOS.Views
         /// It garantees that the code executes in UI thread
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="toastLength">Length of time the toast will be shown.</param>
         protected virtual void ShowToast(string message)
         {
             if (Thread.CurrentThread.IsBackground)
@@ -451,17 +440,17 @@ namespace MvxExtensions.Platforms.iOS.Views
             var resetEvent = new AutoResetEvent(false);
             UIAlertController qd = null;
 
-            InvokeOnMainThread(() => 
+            InvokeOnMainThread(() =>
             {
                 qd = CreateGenericQuestionDialog(title, message);
 
                 //Add Actions
-	            qd?.AddAction(UIAlertAction.Create(positiveButtonName, UIAlertActionStyle.Default, alert => 
-                { 
+                qd?.AddAction(UIAlertAction.Create(positiveButtonName, UIAlertActionStyle.Default, _ =>
+                {
                     result = true;
                     resetEvent.Set();
                 }));
-                qd?.AddAction(UIAlertAction.Create(negativeButtonName, UIAlertActionStyle.Cancel, alert => resetEvent.Set()));
+                qd?.AddAction(UIAlertAction.Create(negativeButtonName, UIAlertActionStyle.Cancel, _ => resetEvent.Set()));
 
                 PresentViewController(qd, true, null);
             });
@@ -469,7 +458,7 @@ namespace MvxExtensions.Platforms.iOS.Views
             resetEvent.WaitOne();
 
             qd?.Dispose();
-            qd=null;
+            qd = null;
 
             return result;
         }
@@ -507,15 +496,15 @@ namespace MvxExtensions.Platforms.iOS.Views
                 var selectedIndex = indexIfCancel;
                 UIAlertController ssd = null;
 
-                InvokeOnMainThread(() => 
+                InvokeOnMainThread(() =>
                 {
                     ssd = CreateSimpleSelectionDialog(title);
-                
+
                     //Add actions
-                    options.ToArray().SafeForEach(option => 
+                    options.ToArray().SafeForEach(option =>
                     {
-                        ssd.AddAction(UIAlertAction.Create(option, UIAlertActionStyle.Default, alert => 
-                        { 
+                        ssd.AddAction(UIAlertAction.Create(option, UIAlertActionStyle.Default, alert =>
+                        {
                             selectedIndex = options.SafeIndexOf(alert.Title);
                             resetEvent.Set();
                         }));
@@ -560,11 +549,11 @@ namespace MvxExtensions.Platforms.iOS.Views
             {
                 var resetEvent = new AutoResetEvent(false);
                 UIAlertController mb = null;
-                
+
                 InvokeOnMainThread(() =>
                     {
                         mb = CreateMessageBox(message, severity);
-                        mb?.AddAction(UIAlertAction.Create(ViewModel.TextSourceCommon.GetText("Label_Ok"), UIAlertActionStyle.Default, alert => resetEvent.Set()));
+                        mb?.AddAction(UIAlertAction.Create(ViewModel.TextSourceCommon.GetText("Label_Ok"), UIAlertActionStyle.Default, _ => resetEvent.Set()));
 
                         PresentViewController(mb, true, null);
                     });

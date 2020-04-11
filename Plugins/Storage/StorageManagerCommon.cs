@@ -1,10 +1,12 @@
 ﻿using MvxExtensions.Plugins.Storage.Models;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MvxExtensions.Plugins.Storage
 {
+    /// <summary>
+    /// Base implementation of the Storage Manager
+    /// </summary>
     public abstract class StorageManagerCommon
     {
          /// <summary>
@@ -30,12 +32,11 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public string PathCombine(params string[] paths)
         {
-            if (paths == null || paths.Count() <= 0)
+            if (paths == null || paths.Length == 0)
                 return string.Empty;
 
-            var count = paths.Count();
+            var count = paths.Length;
             var trimmedPaths = new string[count];
-
 
             for (int i = 0; i < count; i++)
             {

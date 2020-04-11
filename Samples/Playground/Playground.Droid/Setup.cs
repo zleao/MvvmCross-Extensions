@@ -1,5 +1,5 @@
 ﻿using MvvmCross.Logging;
-using MvxExtensions.Platforms.Droid.Support.V7.Setup;
+using MvxExtensions.Droid.Support.V7.Setup;
 using Playground.Core;
 using Serilog;
 

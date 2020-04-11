@@ -6,7 +6,7 @@ namespace MvxExtensions.Plugins.Storage.Models
     /// <summary>
     /// Information of a file
     /// </summary>
-    /// <seealso cref="MvxExtensions.Plugins.Storage.BaseFileInfo" />
+    /// <seealso cref="BaseFileInfo" />
     public class FileInfo : BaseFileInfo
     {
         #region Constructor
@@ -42,8 +42,8 @@ namespace MvxExtensions.Plugins.Storage.Models
         /// <param name="creationTime">The creation time.</param>
         /// <param name="lastAccessTime">The last access time.</param>
         /// <param name="lastWriteTime">The last write time.</param>
-        public FileInfo(string fileName, 
-                        string fileFullPath, 
+        public FileInfo(string fileName,
+                        string fileFullPath,
                         long fileLength,
                         DateTimeOffset creationTime,
                         DateTimeOffset lastAccessTime,
@@ -56,10 +56,10 @@ namespace MvxExtensions.Plugins.Storage.Models
             Length = fileLength;
             CreationTime = creationTime;
             CreationTimeUtc = creationTime.ToUniversalTime();
-            LastAccessTime = LastAccessTime;
-            LastAccessTimeUtc = LastAccessTime.ToUniversalTime();
-            LastWriteTime = LastWriteTime;
-            LastWriteTimeUtc = LastWriteTime.ToUniversalTime();
+            LastAccessTime = lastAccessTime;
+            LastAccessTimeUtc = lastAccessTime.ToUniversalTime();
+            LastWriteTime = lastWriteTime;
+            LastWriteTimeUtc = lastWriteTime.ToUniversalTime();
         }
 
         #endregion
