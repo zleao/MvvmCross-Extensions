@@ -1,4 +1,4 @@
-using Android.Views;
+﻿using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Platforms.Android.Binding;
@@ -7,8 +7,10 @@ using MvxExtensions.Platforms.Droid.Components.Targets;
 
 namespace MvxExtensions.Platforms.Droid.Components.Binding
 {
+    /// <inheritdoc/>
     public class AndroidBindingBuilder : MvxAndroidBindingBuilder
     {
+        /// <inheritdoc/>
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             base.FillTargetFactories(registry);
