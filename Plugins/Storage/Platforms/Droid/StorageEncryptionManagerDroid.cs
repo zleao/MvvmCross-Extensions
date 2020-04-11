@@ -12,7 +12,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
     /// </summary>
     public class StorageEncryptionManagerDroid : StorageEncryptionManager
     {
-        private const string BASE_PRIVATE_ANDROID_DATA_PATH = "Android/data";
         private const string BASE_PUBLIC_ANDROID_DATA_PATH = "Data";
 
         private Context Context
@@ -23,9 +22,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
             }
         }
         private Context _context;
-
-        private AssetManager Assets => _assets ?? (_assets = Mvx.IoCProvider.Resolve<IMvxAndroidGlobals>().ApplicationContext.Assets);
-        private AssetManager _assets;
 
         /// <summary>
         /// Returns the full physical path based on a location and a relative path

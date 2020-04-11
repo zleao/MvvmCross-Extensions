@@ -1,7 +1,5 @@
 ﻿using Foundation;
 using MvxExtensions.Plugins.Storage.Models;
-using System;
-using System.Reflection;
 
 namespace MvxExtensions.Plugins.Storage.Platforms.iOS
 {
@@ -10,11 +8,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.iOS
     /// </summary>
     public class StorageEncryptionManagerIOS : StorageEncryptionManager
     {
-        private string AppName
-        {
-            get { return Assembly.GetEntryAssembly().GetName().Name; }
-        }
-
         /// <summary>
         /// Returns the full physical path based on a location and a relative path
         /// </summary>
@@ -24,9 +17,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.iOS
         protected override string FullPath(StorageLocation location, string path)
         {
             var basePath = string.Empty;
-
-            NSError nsError;
-
             switch (location)
             {
                 case StorageLocation.AppCacheDirectory:
@@ -38,7 +28,7 @@ namespace MvxExtensions.Plugins.Storage.Platforms.iOS
                     break;
 
                 case StorageLocation.SharedDataDirectory:
-                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out nsError).Path;
+                    basePath = NSFileManager.DefaultManager.GetUrl(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.All, null, true, out _).Path;
                     break;
             }
 

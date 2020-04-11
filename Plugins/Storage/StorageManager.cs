@@ -34,7 +34,7 @@ namespace MvxExtensions.Plugins.Storage
         public virtual void SetDebugEnabled(bool value)
         {
             IsDebugEnabled = value;
-        
+
             CryptologyAsync.SetDebugEnabled(value);
         }
 
@@ -56,7 +56,6 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
         public abstract Task<ulong> GetAvailableFreeSpaceAsync(string fullPath);
-
 
         /// <summary>
         /// Clears the stream.
@@ -134,7 +133,7 @@ namespace MvxExtensions.Plugins.Storage
 
             return pattern;
         }
-        
+
         #endregion
 
         #region Read Methods
@@ -165,7 +164,7 @@ namespace MvxExtensions.Plugins.Storage
                     result = streamReader.ReadToEnd();
                 }
                 return true;
-            });
+            }).ConfigureAwait(false);
 
             return result;
         }
@@ -187,12 +186,14 @@ namespace MvxExtensions.Plugins.Storage
                     if (binaryReader.Read(memoryBuffer, 0,
                                           memoryBuffer.Length) !=
                         memoryBuffer.Length)
+                    {
                         return false; // TODO - do more here?
+                    }
 
                     result = memoryBuffer;
                     return true;
                 }
-            });
+            }).ConfigureAwait(false);
 
             return result;
         }
@@ -208,7 +209,6 @@ namespace MvxExtensions.Plugins.Storage
         {
             return TryReadFileCommonAsync(FullPath(location, path), readMethod);
         }
-
 
         /// <summary>
         /// Common implementation to try to read a file.
@@ -331,7 +331,7 @@ namespace MvxExtensions.Plugins.Storage
                         {
                             if (stream != null)
                             {
-                                if(sourceStream.CanSeek)
+                                if (sourceStream.CanSeek)
                                     sourceStream.Seek(0, SeekOrigin.Begin);
                                 sourceStream.CopyTo(stream);
                             }
@@ -373,7 +373,6 @@ namespace MvxExtensions.Plugins.Storage
             });
         }
 
-
         /// <summary>
         /// Common implementation to write contents to a file.
         /// </summary>
@@ -398,7 +397,7 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         protected virtual async Task WriteFileCommonAsync(StorageMode mode, string fullPath, Action<Stream> streamAction)
         {
-            await EnsureFolderExistsAsync(Path.GetDirectoryName(fullPath));
+            await EnsureFolderExistsAsync(Path.GetDirectoryName(fullPath)).ConfigureAwait(false);
 
             await Task.Run(() =>
             {
@@ -409,7 +408,7 @@ namespace MvxExtensions.Plugins.Storage
                         streamAction(fileStream);
                     }
                 }
-            });
+            }).ConfigureAwait(false);
         }
 
         #endregion
@@ -463,7 +462,7 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public virtual async Task<bool> IsFolderAsync(string fullPath)
         {
-            if (await FolderExistsAsync(fullPath))
+            if (await FolderExistsAsync(fullPath).ConfigureAwait(false))
             {
                 var attr = File.GetAttributes(fullPath);
                 return attr.HasFlag(FileAttributes.Directory);
@@ -569,7 +568,7 @@ namespace MvxExtensions.Plugins.Storage
             }
 
             // If the destination directory doesn't exist, create it. 
-            await EnsureFolderExistsAsync(toFullPath);
+            await EnsureFolderExistsAsync(toFullPath).ConfigureAwait(false);
 
             // Get the files in the directory and copy them to the new location.
             var files = dir.GetFiles();
@@ -585,10 +584,9 @@ namespace MvxExtensions.Plugins.Storage
                 foreach (DirectoryInfo subdir in dirs)
                 {
                     string tempPath = Path.Combine(toFullPath, subdir.Name);
-                    await CloneFolderAsync(subdir.FullName, tempPath, overwriteExistingTo, recursive);
+                    await CloneFolderAsync(subdir.FullName, tempPath, overwriteExistingTo, recursive).ConfigureAwait(false);
                 }
             }
-
         }
 
         #endregion
@@ -613,7 +611,7 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public virtual async Task<bool> IsFileAsync(string fullPath)
         {
-            if (await FileExistsAsync(fullPath))
+            if (await FileExistsAsync(fullPath).ConfigureAwait(false))
             {
                 var attr = File.GetAttributes(fullPath);
                 return !attr.HasFlag(FileAttributes.Directory);
@@ -729,7 +727,7 @@ namespace MvxExtensions.Plugins.Storage
                 if (!System.IO.File.Exists(fromFullPath))
                     return false;
 
-                await EnsureFolderExistsAsync(toFullPath.Replace(Path.GetFileName(toFullPath), string.Empty));
+                await EnsureFolderExistsAsync(toFullPath.Replace(Path.GetFileName(toFullPath), string.Empty)).ConfigureAwait(false);
 
                 return await Task.Run<bool>(() =>
                 {
@@ -743,17 +741,12 @@ namespace MvxExtensions.Plugins.Storage
 
                     File.Move(fromFullPath, toFullPath);
                     return true;
-                });
+                }).ConfigureAwait(false);
             }
-            catch (AggregateException ag)
+            catch (AggregateException ag) when (ag.InnerException.GetType() != typeof(ThreadAbortException))
             {
-                if (ag.InnerException.GetType() == typeof(ThreadAbortException))
-                    throw;
-                else
-                {
-                     MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
-                    return false;
-                }
+                MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
+                return false;
             }
             catch (ThreadAbortException)
             {
@@ -761,7 +754,7 @@ namespace MvxExtensions.Plugins.Storage
             }
             catch (Exception exception)
             {
-                 MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, exception.Message);
+                MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, exception.Message);
                 return false;
             }
         }
@@ -796,20 +789,15 @@ namespace MvxExtensions.Plugins.Storage
             {
                 if (File.Exists(fromFullPath))
                 {
-                    await EnsureFolderExistsAsync(toFullPath.Replace(Path.GetFileName(toFullPath), string.Empty));
+                    await EnsureFolderExistsAsync(toFullPath.Replace(Path.GetFileName(toFullPath), string.Empty)).ConfigureAwait(false);
 
-                    await Task.Run(() => File.Copy(fromFullPath, toFullPath, overwriteExistingTo));
+                    await Task.Run(() => File.Copy(fromFullPath, toFullPath, overwriteExistingTo)).ConfigureAwait(false);
                 }
             }
-            catch (AggregateException ag)
+            catch (AggregateException ag) when (ag.InnerException.GetType() != typeof(ThreadAbortException))
             {
-                if (ag.InnerException.GetType() == typeof(ThreadAbortException))
-                    throw;
-                else
-                {
-                     MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
-                    throw;
-                }
+                MvxPluginLog.Instance.Error("Error during file move {0} : {1} : {2}", fromFullPath, toFullPath, ag.Message);
+                throw;
             }
             catch (ThreadAbortException)
             {
@@ -851,7 +839,7 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public virtual async Task<Stream> GetStreamFromFileAsync(string fullPath, StreamMode streamMode)
         {
-            if (streamMode == StreamMode.Open && !(await FileExistsAsync(fullPath)))
+            if (streamMode == StreamMode.Open && !(await FileExistsAsync(fullPath).ConfigureAwait(false)))
                 throw new FileNotFoundException(fullPath);
 
             return new FileStream(fullPath, GetFileMode(streamMode));
@@ -868,14 +856,16 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public async Task<Stream> CompressStreamAsync(Stream streamToCompress)
         {
-            if (streamToCompress != null && streamToCompress.CanSeek)
+            if (streamToCompress?.CanSeek == true)
+            {
                 streamToCompress.Seek(0, SeekOrigin.Begin);
+            }
 
             var compressedStream = new MemoryStream();
 
             using (var compressor = new DeflateStream(compressedStream, CompressionMode.Compress, true))
             {
-                await streamToCompress.CopyToAsync(compressor);
+                await streamToCompress.CopyToAsync(compressor).ConfigureAwait(false);
             }
 
             compressedStream.Seek(0, SeekOrigin.Begin);
@@ -889,14 +879,16 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public async Task<Stream> DecompressStreamAsync(Stream streamToDecompress)
         {
-            if (streamToDecompress != null && streamToDecompress.CanSeek)
+            if (streamToDecompress?.CanSeek == true)
+            {
                 streamToDecompress.Seek(0, SeekOrigin.Begin);
+            }
 
             var decompressedStream = new MemoryStream();
 
             using (DeflateStream decompressor = new DeflateStream(streamToDecompress, CompressionMode.Decompress, true))
             {
-                await decompressor.CopyToAsync(decompressedStream);
+                await decompressor.CopyToAsync(decompressedStream).ConfigureAwait(false);
             }
 
             decompressedStream.Seek(0, SeekOrigin.Begin);

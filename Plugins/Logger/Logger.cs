@@ -23,7 +23,6 @@ namespace MvxExtensions.Plugins.Logger
         private const string DEFAULT_LOG_FILENAME = "ApplicationLog";
         private const string DEFAULT_LOG_EXECUTIONTIME_FILENAME = "ExecutionTimeLog";
         private const string DEFAULT_LOGFOLDER = "Logs";
-        private const string DEFAULT_ANALYSER_LOG_FILENAME = "AnalyserLog";
 
         private const string DEFAULT_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss,fff";
 
@@ -33,7 +32,7 @@ namespace MvxExtensions.Plugins.Logger
         private const string DEFAULT_LOGENTRY_EXCEPTION_WITH_TAG = "[{0}] - #{1:00000} - {2} - {3}";
         private const string DEFAULT_LOGENTRY_EXCEPTION_WITHOUT_TAG = "[{0}] - #{1:00000} - {2}";
 
-        private const string DEFAULT_LOG_EXECUTIONTIME_TEMPLATE = @"TIME: {1} {0}";
+        private const string DEFAULT_LOG_EXECUTIONTIME_TEMPLATE = "TIME: {1} {0}";
 
         #endregion
 
@@ -44,7 +43,7 @@ namespace MvxExtensions.Plugins.Logger
         private readonly IMvxJsonConverter _jsonConverter;
 
         #endregion
-        
+
         #region Properties
 
         /// <summary>
@@ -60,7 +59,6 @@ namespace MvxExtensions.Plugins.Logger
                 return Task.CurrentId.GetValueOrDefault();
             }
         }
-
 
         /// <summary>
         /// Gets the log base path.
@@ -147,7 +145,6 @@ namespace MvxExtensions.Plugins.Logger
             Password = null;
         }
 
-
         private void WriteException(Exception e, StringBuilder sb)
         {
             sb.AppendLine(e.GetType().ToString());
@@ -195,8 +192,7 @@ namespace MvxExtensions.Plugins.Logger
         /// <returns></returns>
         public Task LogAsync(LogTypeEnum logType, string tag, string message, string logFileName)
         {
-            var logEntry = string.Empty;
-
+            string logEntry;
             if (!string.IsNullOrEmpty(tag))
             {
                 logEntry = string.Format(DEFAULT_LOGENTRY_NORMAL_WITH_TAG, DateTime.Now.ToString(DEFAULT_DATETIME_FORMAT),
@@ -240,8 +236,7 @@ namespace MvxExtensions.Plugins.Logger
         public Task LogAsync(LogTypeEnum logType, string tag, Exception e, string logFileName)
         {
             var contents = new StringBuilder();
-            var logEntry = string.Empty;
-
+            string logEntry;
             if (!string.IsNullOrEmpty(tag))
             {
                 logEntry = string.Format(DEFAULT_LOGENTRY_EXCEPTION_WITH_TAG, DateTime.Now.ToString(DEFAULT_DATETIME_FORMAT),
@@ -288,8 +283,7 @@ namespace MvxExtensions.Plugins.Logger
         public Task LogAsync(LogTypeEnum logType, string tag, string message, Exception e, string logFileName)
         {
             var contents = new StringBuilder();
-            var logEntry = string.Empty;
-
+            string logEntry;
             if (!string.IsNullOrEmpty(tag))
             {
                 logEntry = string.Format(DEFAULT_LOGENTRY_NORMAL_WITH_TAG, DateTime.Now.ToString(DEFAULT_DATETIME_FORMAT),
@@ -393,7 +387,7 @@ namespace MvxExtensions.Plugins.Logger
         public Task<T> LogMethodExecutionTimeAsync<T>(Func<T> method, string methodName, string logFileName)
         {
             if (methodName != null)
-                return LogMethodExecutionTimeAsync(method, (ignore) => { return methodName; }, logFileName);
+                return LogMethodExecutionTimeAsync(method, (_) => methodName, logFileName);
 
             return Task.FromResult<T>(default);
         }
@@ -420,15 +414,13 @@ namespace MvxExtensions.Plugins.Logger
         {
             if (method != null)
             {
-                T result = default;
-
                 var startDateTime = DateTime.Now;
-                result = method.Invoke();
+                T result = method.Invoke();
                 var endDateTime = DateTime.Now;
 
                 var executionTime = endDateTime - startDateTime;
 
-                await LogAsync(LogTypeEnum.Info, null, string.Format(DEFAULT_LOG_EXECUTIONTIME_TEMPLATE, methodName(result), executionTime), logFileName);
+                await LogAsync(LogTypeEnum.Info, null, string.Format(DEFAULT_LOG_EXECUTIONTIME_TEMPLATE, methodName(result), executionTime), logFileName).ConfigureAwait(false);
 
                 return result;
             }
@@ -482,12 +474,12 @@ namespace MvxExtensions.Plugins.Logger
             if (asyncMethod != null)
             {
                 var startDateTime = DateTime.Now;
-                await asyncMethod.Invoke();
+                await asyncMethod.Invoke().ConfigureAwait(false);
                 var endDateTime = DateTime.Now;
 
                 var executionTime = endDateTime - startDateTime;
 
-                await LogAsync(LogTypeEnum.Info, null, string.Format(DEFAULT_LOG_EXECUTIONTIME_TEMPLATE, methodName, executionTime), logFileName);
+                await LogAsync(LogTypeEnum.Info, null, string.Format(DEFAULT_LOG_EXECUTIONTIME_TEMPLATE, methodName, executionTime), logFileName).ConfigureAwait(false);
             }
         }
 
@@ -513,7 +505,7 @@ namespace MvxExtensions.Plugins.Logger
         public Task<T> LogAsyncMethodExecutionTimeAsync<T>(Func<Task<T>> asyncMethod, string methodName, string logFileName)
         {
             if (methodName != null)
-                return LogAsyncMethodExecutionTimeAsync<T>(asyncMethod, (ignore) => { return methodName; }, logFileName);
+                return LogAsyncMethodExecutionTimeAsync<T>(asyncMethod, (_) => methodName, logFileName);
 
             return Task.FromResult<T>(default);
         }
@@ -540,15 +532,13 @@ namespace MvxExtensions.Plugins.Logger
         {
             if (asyncMethod != null)
             {
-                T result = default;
-
                 var startDateTime = DateTime.Now;
-                result = await asyncMethod.Invoke();
+                T result = await asyncMethod.Invoke().ConfigureAwait(false);
                 var endDateTime = DateTime.Now;
 
                 var executionTime = endDateTime - startDateTime;
 
-                await LogAsync(LogTypeEnum.Info, null, string.Format(DEFAULT_LOG_EXECUTIONTIME_TEMPLATE, methodName(result), executionTime), logFileName);
+                await LogAsync(LogTypeEnum.Info, null, string.Format(DEFAULT_LOG_EXECUTIONTIME_TEMPLATE, methodName(result), executionTime), logFileName).ConfigureAwait(false);
 
                 return result;
             }
@@ -571,14 +561,13 @@ namespace MvxExtensions.Plugins.Logger
                 folderPath = _storageManager.PathCombine(DEFAULT_LOGFOLDER, relativeLogFolderPath);
             }
 
-            if (await _storageManager.FolderExistsAsync(StorageLocation.SharedDataDirectory, folderPath))
+            if (await _storageManager.FolderExistsAsync(StorageLocation.SharedDataDirectory, folderPath).ConfigureAwait(false))
             {
-                logsList = (await _storageManager.GetFilesInAsync(StorageLocation.SharedDataDirectory, false, folderPath)).ToList();
+                logsList = (await _storageManager.GetFilesInAsync(StorageLocation.SharedDataDirectory, false, folderPath).ConfigureAwait(false)).ToList();
             }
 
             return logsList;
         }
-
 
         /// <summary>
         /// Delete the expired logs with the possibility of maintaining the ones that have errors.
@@ -593,14 +582,14 @@ namespace MvxExtensions.Plugins.Logger
             var currentDate = DateTimeOffset.Now;
             var deletedLogFilesCounter = 0;
 
-            var logFiles = await _storageManager.GetFilesInAsync(StorageLocation.SharedDataDirectory, true, DEFAULT_LOGFOLDER, DEFAULT_LOG_FILE_EXTENSION, SearchMode.EndsWith);
+            var logFiles = await _storageManager.GetFilesInAsync(StorageLocation.SharedDataDirectory, true, DEFAULT_LOGFOLDER, DEFAULT_LOG_FILE_EXTENSION, SearchMode.EndsWith).ConfigureAwait(false);
             foreach (var log in logFiles)
             {
                 var deleteFile = false;
 
                 var logFullPath = log.FileFullPath;
 
-                var logDetails = await GetLogDetailsAsync(logFullPath);
+                var logDetails = await GetLogDetailsAsync(logFullPath).ConfigureAwait(false);
                 if (logDetails != null)
                 {
                     //Use the details to check if the log has to be deleted
@@ -620,9 +609,9 @@ namespace MvxExtensions.Plugins.Logger
 
                 if (deleteFile)
                 {
-                    await _storageManager.DeleteFileAsync(logFullPath);
+                    await _storageManager.DeleteFileAsync(logFullPath).ConfigureAwait(false);
                     if (logDetails != null)
-                        await _storageManager.DeleteFileAsync(GetLogDetailsPath(logFullPath));
+                        await _storageManager.DeleteFileAsync(GetLogDetailsPath(logFullPath)).ConfigureAwait(false);
 
                     deletedLogFilesCounter++;
                 }
@@ -631,29 +620,26 @@ namespace MvxExtensions.Plugins.Logger
             return deletedLogFilesCounter;
         }
 
-
-        private async Task LogCommonAsync(LogTypeEnum logType, string logFileName, string contents, Exception ex = null)
+        private async Task LogCommonAsync(LogTypeEnum logType, string logFileName, string contents)
         {
             var logRelativePath = _storageManager.PathCombine(DEFAULT_LOGFOLDER, logFileName + DEFAULT_LOG_FILE_EXTENSION);
             var logFullPath = _storageManager.NativePath(StorageLocation.SharedDataDirectory, logRelativePath);
 
             if (EncryptionActivated)
             {
-                await _storageEncryptionManager.WriteEncryptedFileAsync(StorageMode.CreateOrAppend, logFullPath, contents, Password);
+                await _storageEncryptionManager.WriteEncryptedFileAsync(StorageMode.CreateOrAppend, logFullPath, contents, Password).ConfigureAwait(false);
             }
             else
             {
-                await _storageManager.WriteFileAsync(StorageMode.CreateOrAppend, logFullPath, contents);
+                await _storageManager.WriteFileAsync(StorageMode.CreateOrAppend, logFullPath, contents).ConfigureAwait(false);
             }
 
-            await WriteLogInfoAsync(logType, logFullPath);
+            await WriteLogInfoAsync(logType, logFullPath).ConfigureAwait(false);
         }
 
         private async Task WriteLogInfoAsync(LogTypeEnum logType, string logFullPath)
         {
-            var logDetails = await GetLogDetailsAsync(logFullPath);
-            if (logDetails == null)
-                logDetails = new LogDetails() { CreationDate = DateTimeOffset.Now };
+            var logDetails = await GetLogDetailsAsync(logFullPath).ConfigureAwait(false) ?? new LogDetails() { CreationDate = DateTimeOffset.Now };
 
             logDetails.IncrementLogCounter(logType);
 
@@ -662,11 +648,11 @@ namespace MvxExtensions.Plugins.Logger
 
             if (EncryptionActivated)
             {
-                await _storageEncryptionManager.WriteEncryptedFileAsync(StorageMode.Create, logInfoFullPath, contents, Password);
+                await _storageEncryptionManager.WriteEncryptedFileAsync(StorageMode.Create, logInfoFullPath, contents, Password).ConfigureAwait(false);
             }
             else
             {
-                await _storageManager.WriteFileAsync(StorageMode.Create, logInfoFullPath, contents);
+                await _storageManager.WriteFileAsync(StorageMode.Create, logInfoFullPath, contents).ConfigureAwait(false);
             }
         }
 
@@ -676,13 +662,18 @@ namespace MvxExtensions.Plugins.Logger
 
             var logInfoFullPath = GetLogDetailsPath(logFullPath);
 
-            if (await _storageManager.FileExistsAsync(logInfoFullPath))
+            if (await _storageManager.FileExistsAsync(logInfoFullPath).ConfigureAwait(false))
             {
                 string existingLogDetailsString = null;
                 if (EncryptionActivated)
-                    existingLogDetailsString = await _storageEncryptionManager.TryReadTextEncryptedFileAsync(logInfoFullPath, Password);
+                {
+                    existingLogDetailsString = await _storageEncryptionManager.TryReadTextEncryptedFileAsync(logInfoFullPath, Password).ConfigureAwait(false);
+                }
+
                 if (string.IsNullOrEmpty(existingLogDetailsString))
-                    existingLogDetailsString = await _storageManager.TryReadTextFileAsync(logInfoFullPath);
+                {
+                    existingLogDetailsString = await _storageManager.TryReadTextFileAsync(logInfoFullPath).ConfigureAwait(false);
+                }
 
                 if (!string.IsNullOrEmpty(existingLogDetailsString))
                 {
@@ -706,7 +697,7 @@ namespace MvxExtensions.Plugins.Logger
         {
             return logPath + DEFAULT_LOGINFO_FILE_EXTENSION;
         }
-      
+
         #endregion
     }
 }

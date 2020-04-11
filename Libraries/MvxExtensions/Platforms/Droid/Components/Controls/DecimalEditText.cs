@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Android.Runtime;
 using Android.Text;
 using Android.Text.Method;
@@ -136,7 +136,7 @@ namespace MvxExtensions.Platforms.Droid.Components.Controls
 
         public override ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
         {
-            var decimalSeparator = '.';
+            const char decimalSeparator = '.';
 
             ICharSequence outValue = base.FilterFormatted(source, start, end, dest, dstart, dend);
 

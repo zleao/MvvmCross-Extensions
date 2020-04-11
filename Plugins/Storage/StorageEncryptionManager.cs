@@ -59,7 +59,7 @@ namespace MvxExtensions.Plugins.Storage
                     result = streamReader.ReadToEnd();
                 }
                 return true;
-            });
+            }).ConfigureAwait(false);
 
             return result;
         }
@@ -75,7 +75,7 @@ namespace MvxExtensions.Plugins.Storage
         public virtual async Task<string> DecryptFileAsync(string sourceFullPath, string password)
         {
             var targetFullPath = sourceFullPath.Replace(Path.GetFileNameWithoutExtension(sourceFullPath), Path.GetFileNameWithoutExtension(sourceFullPath) + "_Decrypted");
-            await DecryptFileAsync(sourceFullPath, targetFullPath, password);
+            await DecryptFileAsync(sourceFullPath, targetFullPath, password).ConfigureAwait(false);
             return targetFullPath;
         }
 
@@ -118,8 +118,8 @@ namespace MvxExtensions.Plugins.Storage
             if (sourceFullPath == targetFullPath)
                 throw new NotSupportedException(string.Format("Source and Target paths cannot be equal: {0} | {1}", sourceFullPath, targetFullPath));
 
-            if (await FileExistsAsync(sourceFullPath))
-                await CryptologyAsync.DecryptFileAsync(sourceFullPath, targetFullPath, password);
+            if (await FileExistsAsync(sourceFullPath).ConfigureAwait(false))
+                await CryptologyAsync.DecryptFileAsync(sourceFullPath, targetFullPath, password).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -142,8 +142,8 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public virtual async Task<Stream> DecryptFileToStreamAsync(string sourceFullPath, string password)
         {
-            if (await FileExistsAsync(sourceFullPath))
-                return await CryptologyAsync.DecryptFileToStreamAsync(sourceFullPath, password);
+            if (await FileExistsAsync(sourceFullPath).ConfigureAwait(false))
+                return await CryptologyAsync.DecryptFileToStreamAsync(sourceFullPath, password).ConfigureAwait(false);
 
             return null;
         }
@@ -159,7 +159,6 @@ namespace MvxExtensions.Plugins.Storage
             return CryptologyAsync.DecryptStringFromBytesAsync(Convert.FromBase64String(stringToDecrypt), password);
         }
 
-
         /// <summary>
         /// Tries the read an encrypted file.
         /// </summary>
@@ -174,10 +173,8 @@ namespace MvxExtensions.Plugins.Storage
                 return false;
             }
 
-            using (var fileStream = await CryptologyAsync.DecryptFileToStreamAsync(fullPath, password))
-            {
-                return streamAction(fileStream);
-            }
+            using var fileStream = await CryptologyAsync.DecryptFileToStreamAsync(fullPath, password).ConfigureAwait(false);
+            return streamAction(fileStream);
         }
 
         #endregion
@@ -210,11 +207,7 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public virtual Task WriteEncryptedFileAsync(StorageLocation location, StorageMode mode, string path, byte[] contents, string password)
         {
-            return WriteEncryptedFileCommonAsync(location, mode, path, (stream) =>
-            {
-                stream.Write(contents, 0, contents.Length);
-            },
-            password);
+            return WriteEncryptedFileCommonAsync(location, mode, path, (stream) => stream.Write(contents, 0, contents.Length), password);
         }
 
         /// <summary>
@@ -247,7 +240,7 @@ namespace MvxExtensions.Plugins.Storage
         public virtual async Task<string> EncryptFileAsync(string sourceFullPath, string password)
         {
             var targetFullPath = sourceFullPath.Replace(Path.GetFileNameWithoutExtension(sourceFullPath), Path.GetFileNameWithoutExtension(sourceFullPath) + "_Encrypted");
-            await EncryptFileAsync(sourceFullPath, targetFullPath, password);
+            await EncryptFileAsync(sourceFullPath, targetFullPath, password).ConfigureAwait(false);
             return targetFullPath;
         }
 
@@ -290,8 +283,8 @@ namespace MvxExtensions.Plugins.Storage
             if (sourceFullPath == targetFullPath)
                 throw new NotSupportedException(string.Format("Source and Target paths cannot be equal: {0} | {1}", sourceFullPath, targetFullPath));
 
-            if (await FileExistsAsync(sourceFullPath))
-                await CryptologyAsync.EncryptFileAsync(sourceFullPath, targetFullPath, password);
+            if (await FileExistsAsync(sourceFullPath).ConfigureAwait(false))
+                await CryptologyAsync.EncryptFileAsync(sourceFullPath, targetFullPath, password).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -302,9 +295,8 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         public virtual async Task<string> EncryptStringAsync(string stringToEncrypt, string password)
         {
-            return Convert.ToBase64String(await CryptologyAsync.EncryptStringToBytesAsync(stringToEncrypt, password));
+            return Convert.ToBase64String(await CryptologyAsync.EncryptStringToBytesAsync(stringToEncrypt, password).ConfigureAwait(false));
         }
-
 
         /// <summary>
         /// Common file to write encrypted content to a file.
@@ -332,17 +324,15 @@ namespace MvxExtensions.Plugins.Storage
         /// <returns></returns>
         protected virtual async Task WriteEncryptedFileCommonAsync(StorageMode mode, string fullPath, Action<Stream> streamAction, string password)
         {
-            await EnsureFolderExistsAsync(Path.GetDirectoryName(fullPath));
+            await EnsureFolderExistsAsync(Path.GetDirectoryName(fullPath)).ConfigureAwait(false);
 
-            using (var memoryStream = new MemoryStream())
+            using var memoryStream = new MemoryStream();
+            lock (LockObj)
             {
-                lock (LockObj)
-                {
-                    streamAction(memoryStream);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-                }
-                await CryptologyAsync.EncryptStreamToFileAsync(memoryStream, fullPath, password, mode == StorageMode.Create ? EncryptionModeEnum.CRYPTOFULL : EncryptionModeEnum.CRYPTOLINE);
+                streamAction(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
             }
+            await CryptologyAsync.EncryptStreamToFileAsync(memoryStream, fullPath, password, mode == StorageMode.Create ? EncryptionModeEnum.CRYPTOFULL : EncryptionModeEnum.CRYPTOLINE).ConfigureAwait(false);
         }
 
         #endregion
@@ -387,7 +377,7 @@ namespace MvxExtensions.Plugins.Storage
         public virtual async Task<string> RecoverEncryptedFileAsync(string sourceFullPath, string password)
         {
             var targetFullPath = sourceFullPath.Replace(Path.GetFileNameWithoutExtension(sourceFullPath), Path.GetFileNameWithoutExtension(sourceFullPath) + "_Recovered");
-            await RecoverEncryptedFileAsync(sourceFullPath, targetFullPath, password);
+            await RecoverEncryptedFileAsync(sourceFullPath, targetFullPath, password).ConfigureAwait(false);
             return targetFullPath;
         }
 

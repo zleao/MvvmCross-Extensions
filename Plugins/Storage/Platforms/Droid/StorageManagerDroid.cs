@@ -14,7 +14,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
     /// <seealso cref="StorageManager" />
     public class StorageManagerDroid : StorageManager
     {
-        private const string BASE_PRIVATE_ANDROID_DATA_PATH = "Android/data";
         private const string BASE_PUBLIC_ANDROID_DATA_PATH = "Data";
 
         private Context Context
@@ -71,7 +70,7 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
             return Task.FromResult(ConvertBytesToMegabytes(freeBytes));
         }
 
-        private static readonly long MEGA_BYTE = 1048576;
+        private const long MEGA_BYTE = 1048576;
         /// <summary>
         /// Converts the bytes to megabytes.
         /// </summary>
@@ -91,10 +90,8 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
         /// <returns></returns>
         public override async Task CloneFileFromAppResourcesAsync(string fromPath, StorageLocation toLocation, string toPath)
         {
-            using (var inputStream = Assets.Open(fromPath))
-            {
-                await WriteFileAsync(toLocation, StorageMode.Create, toPath, inputStream);
-            }
+            using var inputStream = Assets.Open(fromPath);
+            await WriteFileAsync(toLocation, StorageMode.Create, toPath, inputStream).ConfigureAwait(false);
         }
     }
 }

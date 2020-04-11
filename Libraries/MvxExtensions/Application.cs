@@ -1,4 +1,4 @@
-﻿using MvvmCross.ViewModels;
+using MvvmCross.ViewModels;
 using MvxExtensions.ViewModels;
 
 namespace MvxExtensions
@@ -8,6 +8,6 @@ namespace MvxExtensions
         protected override IMvxViewModelLocator CreateDefaultViewModelLocator()
         {
             return new SingletonViewModelLocator();
-        } 
+        }
     }
 }
