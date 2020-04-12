@@ -2,6 +2,7 @@
   
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;Xamarin.iOS10;monoandroid10.0</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.16299;</TargetFrameworks>
     <AssemblyName>MvxExtensions</AssemblyName>
     <RootNamespace>MvxExtensions</RootNamespace>
     <PackageId>MvxExtensions</PackageId>
@@ -19,14 +20,20 @@ For more info check the documentation</Description>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('monoandroid')) ">
     <Compile Include="Platforms\Droid\**\*.cs" />
-    <Compile Include="Platforms\Common\**\*.cs" />
     <AndroidResource Include="Resources\**\*.axml" SubType="Designer" Generator="MSBuild:UpdateAndroidResources" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="Platforms\iOS\**\*.cs" />
-    <Compile Include="Platforms\Common\**\*.cs" />
     <PackageReference Include="Toast.iOS" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <Compile Include="Platforms\UWP\**\*.cs" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.10" />
+    <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   
   <ItemGroup>

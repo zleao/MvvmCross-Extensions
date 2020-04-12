@@ -4,7 +4,7 @@
     <PackageLicenseExpression>MS-PL</PackageLicenseExpression>
     <Authors>zleao</Authors>
     <Owners>zleao</Owners>
-    <PackageTags>mvx.extensions;mvvm;mvvmcross;xamarin;android;ios;monodroid;monotouch;xamarin.android;xamarin.ios;wpf;net;net45</PackageTags>
+    <PackageTags>mvx.extensions;mvvm;mvvmcross;xamarin;android;ios;monodroid;monotouch;xamarin.android;xamarin.ios;wpf;uwp;net;net45</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/zleao/MvvmCross-Extensions/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zleao/MvvmCross-Extensions</RepositoryUrl>

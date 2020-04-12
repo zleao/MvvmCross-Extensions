@@ -6,8 +6,7 @@
     <DefineConstants>$(DefineConstants);NET_461;XAML</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.StartsWith('uap'))">
-    <DefineConstants>$(DefineConstants);NETFX_CORE;XAML;WINDOWS;WINDOWS_UWP</DefineConstants>
-    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
+    <DefineConstants>$(DefineConstants);NETFX_CORE;XAML;WINDOWS;WINDOWS_UWP;UWP</DefineConstants>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.StartsWith('Xamarin.iOS'))">
@@ -36,7 +35,4 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('tizen'))">
     <DefineConstants>$(DefineConstants);TIZEN</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('uap')) and '$(IsLibraryProject)' == 'true' ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.8" />
-  </ItemGroup>
 </Project>
