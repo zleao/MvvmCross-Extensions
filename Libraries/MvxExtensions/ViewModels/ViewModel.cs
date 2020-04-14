@@ -81,14 +81,6 @@ namespace MvxExtensions.ViewModels
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether this instance is child.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is child; otherwise, <c>false</c>.
-        /// </value>
-        public virtual bool IsChild => false;
-
-        /// <summary>
         /// Gets the page title.
         /// </summary>
         /// <value>
@@ -131,14 +123,6 @@ namespace MvxExtensions.ViewModels
         public string ViewModelContext => _viewModelContext ?? (_viewModelContext = GetType().Name);
 
         private string _viewModelContext;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is hosted.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is hosted; otherwise, <c>false</c>.
-        /// </value>
-        protected bool IsHosted { get; set; }
 
         #endregion
 
@@ -643,12 +627,14 @@ namespace MvxExtensions.ViewModels
             base.ViewCreated();
         }
 
-        public override void ViewAppeared()
+        public override async void ViewAppeared()
         {
+            SubscribeLongRunningMessageEvents();
+            
             base.ViewAppeared();
 
 #pragma warning disable 4014
-            DoWorkAsync(OnViewShownAsync, isSilent: true);
+            await DoWorkAsync(OnViewShownAsync, isSilent: true).ConfigureAwait(false);
 #pragma warning restore 4014
         }
 
