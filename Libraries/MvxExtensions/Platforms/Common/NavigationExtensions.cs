@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using MvvmCross.Navigation;
+﻿using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using MvxExtensions.Statics;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MvxExtensions.Extensions
 {
@@ -13,6 +13,7 @@ namespace MvxExtensions.Extensions
     public static class NavigationExtensions
     {
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type.
         /// Removes the current viewmodel/view from the stack
         /// </summary>
@@ -20,7 +21,6 @@ namespace MvxExtensions.Extensions
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         public static Task NavigateAndRemoveSelf(this IMvxNavigationService navigationService, Type viewModelType, IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default (CancellationToken))
         {
             if (presentationBundle == null)
@@ -34,6 +34,7 @@ namespace MvxExtensions.Extensions
         }
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type and passes TParameter
         /// Removes the current viewmodel/view from the stack
         /// </summary>
@@ -42,7 +43,6 @@ namespace MvxExtensions.Extensions
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="param">The parameter.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
-        /// <returns></returns>
         public static Task NavigateAndRemoveSelf<TParameter>(this IMvxNavigationService navigationService, Type viewModelType, TParameter param, IMvxBundle presentationBundle = null)
         {
             if (presentationBundle == null)
@@ -56,13 +56,13 @@ namespace MvxExtensions.Extensions
         }
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type.
         /// Removes the current viewmodel/view from the stack
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
-        /// <returns></returns>
         public static Task NavigateAndRemoveSelf<TViewModel>(this IMvxNavigationService navigationService, IMvxBundle presentationBundle = null) where TViewModel : IMvxViewModel
         {
             if (presentationBundle == null)
@@ -76,6 +76,7 @@ namespace MvxExtensions.Extensions
         }
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type and passes TParameter
         /// Removes the current viewmodel/view from the stack
         /// </summary>
@@ -84,7 +85,6 @@ namespace MvxExtensions.Extensions
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="param">The parameter.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
-        /// <returns></returns>
         public static Task NavigateAndRemoveSelf<TViewModel, TParameter>(this IMvxNavigationService navigationService, TParameter param, IMvxBundle presentationBundle = null) where TViewModel : IMvxViewModel<TParameter>
         {
             if (presentationBundle == null)
@@ -99,6 +99,7 @@ namespace MvxExtensions.Extensions
 
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type.
         /// Clears the current view stack
         /// </summary>
@@ -106,7 +107,6 @@ namespace MvxExtensions.Extensions
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         public static Task NavigateAndClearStack(this IMvxNavigationService navigationService, Type viewModelType, IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default (CancellationToken))
         {
             if (presentationBundle == null)
@@ -120,6 +120,7 @@ namespace MvxExtensions.Extensions
         }
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type and passes TParameter
         /// Clears the current view stack
         /// </summary>
@@ -128,7 +129,6 @@ namespace MvxExtensions.Extensions
         /// <param name="viewModelType">Type of the view model.</param>
         /// <param name="param">The parameter.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
-        /// <returns></returns>
         public static Task NavigateAndClearStack<TParameter>(this IMvxNavigationService navigationService, Type viewModelType, TParameter param, IMvxBundle presentationBundle = null)
         {
             if (presentationBundle == null)
@@ -142,13 +142,13 @@ namespace MvxExtensions.Extensions
         }
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type.
         /// Clears the current view stack
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
-        /// <returns></returns>
         public static Task NavigateAndClearStack<TViewModel>(this IMvxNavigationService navigationService, IMvxBundle presentationBundle = null) where TViewModel : IMvxViewModel
         {
             if (presentationBundle == null)
@@ -162,6 +162,7 @@ namespace MvxExtensions.Extensions
         }
 
         /// <summary>
+        /// Not Supported in Xamarin.Forms Projects!
         /// Navigates to a ViewModel Type and passes TParameter
         /// Clears the current view stack
         /// </summary>
@@ -170,7 +171,6 @@ namespace MvxExtensions.Extensions
         /// <param name="navigationService">The navigation service.</param>
         /// <param name="param">The parameter.</param>
         /// <param name="presentationBundle">The presentation bundle.</param>
-        /// <returns></returns>
         public static Task NavigateAndClearStack<TViewModel, TParameter>(this IMvxNavigationService navigationService, TParameter param, IMvxBundle presentationBundle = null) where TViewModel : IMvxViewModel<TParameter>
         {
             if (presentationBundle == null)
