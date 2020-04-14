@@ -34,7 +34,7 @@ namespace MvxExtensions.Plugins.Storage.Platforms.UWP
                     break;
 
                 case StorageLocation.SharedDataDirectory:
-                    basePath = ApplicationData.Current.SharedLocalFolder.Path;
+                    basePath = ApplicationData.Current.RoamingFolder.Path;
                     break;
             }
 
@@ -73,7 +73,10 @@ namespace MvxExtensions.Plugins.Storage.Platforms.UWP
         /// <returns></returns>
         public override async Task CloneFileFromAppResourcesAsync(string fromPath, StorageLocation toLocation, string toPath)
         {
-            var fromFolderPath = Path.Combine(Windows.ApplicationModel.Package.Current.InstalledLocation.Path, Path.GetDirectoryName(fromPath));
+            StorageFolder appInstalledFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            StorageFolder assetsFolder = await appInstalledFolder.GetFolderAsync("Assets");
+
+            var fromFolderPath = Path.Combine(assetsFolder.Path, Path.GetDirectoryName(fromPath));
             var fromStorageFolder = await StorageFolder.GetFolderFromPathAsync(fromFolderPath).AsTask().ConfigureAwait(false);
             StorageFile file = await fromStorageFolder.GetFileAsync(Path.GetFileName(fromPath));
             if (File.Exists(file.Path))

@@ -29,7 +29,7 @@ namespace MvxExtensions.Plugins.Storage.Platforms.UWP
                     break;
 
                 case StorageLocation.SharedDataDirectory:
-                    basePath = ApplicationData.Current.SharedLocalFolder.Path;
+                    basePath = ApplicationData.Current.RoamingFolder.Path;
                     break;
             }
 
