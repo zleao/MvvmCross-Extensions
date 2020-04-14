@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="MSBuild.Sdk.Extras">
   
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;Xamarin.iOS10;monoandroid10.0</TargetFrameworks>
@@ -19,13 +19,11 @@ For more info check the documentation</Description>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('monoandroid')) ">
     <Compile Include="Platforms\Droid\**\*.cs" />
-    <Compile Include="Platforms\Common\**\*.cs" />
     <AndroidResource Include="Resources\**\*.axml" SubType="Designer" Generator="MSBuild:UpdateAndroidResources" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="Platforms\iOS\**\*.cs" />
-    <Compile Include="Platforms\Common\**\*.cs" />
     <PackageReference Include="Toast.iOS" Version="1.2.0" />
   </ItemGroup>
 
