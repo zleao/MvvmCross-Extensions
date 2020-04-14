@@ -1,7 +1,7 @@
 ﻿using Playground.Forms.Core.ViewModels;
 using Playground.Forms.UI.Core.Views;
+using System;
 using System.ComponentModel;
-using System.Linq;
 
 namespace Playground.Forms.Views
 {
@@ -14,10 +14,14 @@ namespace Playground.Forms.Views
         {
             InitializeComponent();
         }
-
-        private void ItemsCollectionView_SelectionChanged(object sender, Xamarin.Forms.SelectionChangedEventArgs e)
+       
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            ((MainViewModel)ViewModel).NavigateCommand.Execute(e.CurrentSelection.FirstOrDefault());
+            if (ItemsCollectionView.SelectedItem != null)
+            {
+                ((MainViewModel)ViewModel).NavigateCommand.Execute(ItemsCollectionView.SelectedItem);
+                ItemsCollectionView.SelectedItem = null;
+            }
         }
     }
 }

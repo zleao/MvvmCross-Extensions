@@ -9,7 +9,6 @@
 
     <CollectionView x:Name="ItemsCollectionView"
                     ItemsSource="{Binding MenuOptions}"
-                    SelectionChanged="ItemsCollectionView_SelectionChanged"
                     SelectionMode="Single">
         <CollectionView.ItemTemplate>
             <DataTemplate>
@@ -18,6 +17,10 @@
                            LineBreakMode="NoWrap" 
                            Style="{DynamicResource ListItemTextStyle}" 
                            FontSize="Medium" />
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
+                                              NumberOfTapsRequired="1" />
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
             </DataTemplate>
         </CollectionView.ItemTemplate>
