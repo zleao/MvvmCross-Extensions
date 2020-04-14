@@ -1,25 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:PlaygroundContentPage
+<views:MvxContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:views="clr-namespace:Playground.Forms.UI.Core.Views"
+    xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    x:Class="Playground.Forms.Views.MainPage"
+    x:Class="Playground.Forms.Views.StoragePage"
     Title="{Binding PageTitle}">
 
     <CollectionView x:Name="ItemsCollectionView"
-                    ItemsSource="{Binding MenuOptions}"
+                    ItemsSource="{Binding CaseTests}"
                     SelectionChanged="ItemsCollectionView_SelectionChanged"
                     SelectionMode="Single">
         <CollectionView.ItemTemplate>
             <DataTemplate>
                 <StackLayout Padding="10">
-                    <Label Text="{Binding Text}" 
+                    <Label Text="{Binding Name}" 
                            LineBreakMode="NoWrap" 
                            Style="{DynamicResource ListItemTextStyle}" 
-                           FontSize="Medium" />
+                           FontSize="Title" />
+                    <Label Text="{Binding Description}" 
+                           LineBreakMode="NoWrap" 
+                           Style="{DynamicResource ListItemTextStyle}" 
+                           FontSize="Subtitle" />
                 </StackLayout>
             </DataTemplate>
         </CollectionView.ItemTemplate>
     </CollectionView>
-</views:PlaygroundContentPage>
+</views:MvxContentPage>

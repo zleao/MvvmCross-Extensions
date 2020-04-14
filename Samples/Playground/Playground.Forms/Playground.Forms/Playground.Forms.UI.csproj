@@ -17,15 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Playground.Core\Playground.Core.csproj" />
+    <ProjectReference Include="..\Playground.Forms.Core\Playground.Forms.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\NavigationSecondPage.xaml.cs">
-      <DependentUpon>NavigationSecondPage.xaml</DependentUpon>
+    <Compile Update="Views\NotificationsPage.xaml.cs">
+      <DependentUpon>NotificationsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\NavigationPage.xaml.cs">
-      <DependentUpon>NavigationPage.xaml</DependentUpon>
+    <Compile Update="Views\StoragePage.xaml.cs">
+      <DependentUpon>StoragePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

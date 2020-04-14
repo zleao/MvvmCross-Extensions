@@ -11,8 +11,8 @@
     <AssemblyName>Playground.Forms.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -167,13 +167,13 @@
       <Project>{25b95456-71c8-43ab-91ca-ffe4702a5c24}</Project>
       <Name>MvxExtensions.Plugins.Storage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Playground.Core\Playground.Core.csproj">
-      <Project>{45af8427-db12-4724-b883-00821db40f48}</Project>
-      <Name>Playground.Core</Name>
+    <ProjectReference Include="..\Playground.Forms.Core\Playground.Forms.Core.csproj">
+      <Project>{696b6ab9-cdda-4d10-b4df-117fbacc633a}</Project>
+      <Name>Playground.Forms.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Playground.Forms\Playground.Forms.csproj">
-      <Project>{C0E1BD08-77E1-43A7-A2D7-D5CC40023979}</Project>
-      <Name>Playground.Forms</Name>
+    <ProjectReference Include="..\Playground.Forms\Playground.Forms.UI.csproj">
+      <Project>{2329E669-0AA7-4056-AEDD-9F1FC1567D72}</Project>
+      <Name>Playground.Forms.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
