@@ -153,6 +153,10 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Libraries\MvxExtensions.Forms\MvxExtensions.Forms.csproj">
+      <Project>{ca8bbf3c-524f-4705-9e77-2cdd8fd84635}</Project>
+      <Name>MvxExtensions.Forms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Libraries\MvxExtensions\MvxExtensions.csproj">
       <Project>{bed5f20a-cacf-437c-8a32-2a76d66a91c0}</Project>
       <Name>MvxExtensions</Name>

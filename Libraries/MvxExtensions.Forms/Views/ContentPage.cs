@@ -17,9 +17,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace Playground.Forms.UI.Core.Views
+namespace MvxExtensions.Forms.Views
 {
-    public abstract class PlaygroundContentPage : MvxContentPage
+    public abstract class ContentPage : MvxContentPage
     {
         #region Fields
 

@@ -32,6 +32,13 @@ namespace Playground.Forms.Core.ViewModels
             set => SetProperty(ref _menuOptions, value);
         }
 
+        private MenuOption _selectedOption;
+        public MenuOption SelectedOption
+        {
+            get => _selectedOption;
+            set => SetProperty(ref _selectedOption, value);
+        }
+
         #endregion
 
         #region Commands
@@ -40,7 +47,7 @@ namespace Playground.Forms.Core.ViewModels
 
         #endregion
 
-        #region Commands
+        #region Constructor
 
         public MainViewModel(IMvxJsonConverter jsonConverter,
                              INotificationService notificationManager,
@@ -83,6 +90,11 @@ namespace Playground.Forms.Core.ViewModels
 
         private Task OnNavigateAsync(MenuOption option)
         {
+            if (option == null)
+            {
+                return Task.CompletedTask;
+            }
+
             if (option.ViewModelType == typeof(NotificationsViewModel))
             {
                 return NavigationService.Navigate(option.ViewModelType, ViewModelContext);
