@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:PlaygroundContentPage
+<views:ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:views="clr-namespace:Playground.Forms.UI.Core.Views"
+    xmlns:views="clr-namespace:MvxExtensions.Forms.Views;assembly=MvxExtensions.Forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     x:Class="Playground.Forms.Views.StoragePage"
     Title="{Binding PageTitle}"
     IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBoolConverter}}">
 
-    <views:PlaygroundContentPage.Content>
+    <views:ContentPage.Content>
         <Grid>
             <CollectionView x:Name="ItemsCollectionView"
                     ItemsSource="{Binding CaseTests}"
@@ -39,6 +39,6 @@
                                HorizontalOptions="Fill" />
         </Grid>
         
-    </views:PlaygroundContentPage.Content>
+    </views:ContentPage.Content>
     
-</views:PlaygroundContentPage>
+</views:ContentPage>

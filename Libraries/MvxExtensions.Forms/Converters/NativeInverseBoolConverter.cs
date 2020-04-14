@@ -1,7 +1,7 @@
 ﻿using MvvmCross.Forms.Converters;
 using MvxExtensions.Converters;
 
-namespace Playground.Forms.UI.Core.Converters
+namespace MvxExtensions.Forms.Converters
 {
     public class NativeInverseBoolConverter : MvxNativeValueConverter<InverseBoolConverter>
     {

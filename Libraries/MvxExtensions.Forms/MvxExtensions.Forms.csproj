@@ -1,0 +1,25 @@
+﻿<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>MvxExtensions.Forms</AssemblyName>
+    <RootNamespace>MvxExtensions.Forms</RootNamespace>
+    <PackageId>MvxExtensions.Forms</PackageId>
+    <Description>
+      MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework.
+      This package contains the 'Core' libraries of MvxExtensions to use with Xamarin.Forms
+      For more info check the documentation
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MvvmCross.Forms" Version="6.4.2" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.617" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MvxExtensions\MvxExtensions.csproj" />
+  </ItemGroup>
+
+</Project>

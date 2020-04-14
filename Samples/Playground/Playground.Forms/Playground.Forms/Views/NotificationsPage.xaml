@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:PlaygroundContentPage
+<views:ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:views="clr-namespace:Playground.Forms.UI.Core.Views"
+    xmlns:views="clr-namespace:MvxExtensions.Forms.Views;assembly=MvxExtensions.Forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     x:Class="Playground.Forms.Views.NotificationsPage"
     Title="{Binding PageTitle}">
 
-    <views:PlaygroundContentPage.Content>
+    <views:ContentPage.Content>
         <StackLayout>
             <Button Text="{Binding TextSource, 
                            Converter={StaticResource LanguageConverter}, 
@@ -22,5 +22,5 @@
                            ConverterParameter='Label_Button_DelayedNotification'}" 
                     Command="{Binding DelayedNotificationCommand}"/>
         </StackLayout>
-    </views:PlaygroundContentPage.Content>
-</views:PlaygroundContentPage>
+    </views:ContentPage.Content>
+</views:ContentPage>

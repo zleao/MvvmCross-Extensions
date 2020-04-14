@@ -1,6 +1,6 @@
-﻿using MvxExtensions.ViewModels;
+﻿using MvxExtensions.Forms.Views;
+using MvxExtensions.ViewModels;
 using Playground.Forms.Core.ViewModels;
-using Playground.Forms.UI.Core.Views;
 using System;
 using System.ComponentModel;
 using Xamarin.Essentials;
@@ -10,7 +10,7 @@ namespace Playground.Forms.Views
     // Learn more about making custom code visible in the Xamarin.Forms previewer
     // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
-    public partial class StoragePage : PlaygroundContentPage
+    public partial class StoragePage : ContentPage
     {
         public StoragePage()
         {
