@@ -5,6 +5,7 @@ namespace MvxExtensions.Attributes
     /// <summary>
     /// Simple attribute class for storing String Values
     /// </summary>
+    [AttributeUsage(AttributeTargets.Enum, AllowMultiple = false)]
     public sealed class StringValueAttribute : Attribute
     {
         /// <summary>

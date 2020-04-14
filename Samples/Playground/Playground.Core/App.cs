@@ -11,6 +11,8 @@ namespace Playground.Core
     {
         public override void Initialize()
         {
+            base.Initialize();
+
             CreatableTypes()
                 .EndingWith("Service")
                 .AsInterfaces()

@@ -5,15 +5,15 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <DefineConstants>$(DefineConstants);NET_461;XAML</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('uap'))">
-    <DefineConstants>$(DefineConstants);NETFX_CORE;XAML;WINDOWS;WINDOWS_UWP</DefineConstants>
-    <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('uap10.0'))">
+    <DefineConstants>$(DefineConstants);NETFX_CORE;XAML;WINDOWS;WINDOWS_UWP;UWP</DefineConstants>
+    <TargetPlatformVersion>10.0.18362.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.StartsWith('Xamarin.iOS'))">
     <DefineConstants>$(DefineConstants);MONO;UIKIT;COCOA;IOS</DefineConstants>
   </PropertyGroup>
-   <PropertyGroup Condition="$(TargetFramework.StartsWith('Xamarin.Mac'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('Xamarin.Mac'))">
     <DefineConstants>$(DefineConstants);MONO;COCOA;MAC</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(TargetFramework.StartsWith('Xamarin.TVOS'))">
@@ -36,7 +36,4 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('tizen'))">
     <DefineConstants>$(DefineConstants);TIZEN</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('uap')) and '$(IsLibraryProject)' == 'true' ">
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.0.8" />
-  </ItemGroup>
 </Project>

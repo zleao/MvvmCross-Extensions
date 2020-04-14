@@ -1,6 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;Xamarin.iOS10;monoandroid10.0</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);uap10.0.18362;</TargetFrameworks>
     <AssemblyName>MvxExtensions.Plugins.Storage</AssemblyName>
     <RootNamespace>MvxExtensions.Plugins.Storage</RootNamespace>
     <Description>MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework. 
@@ -24,8 +25,15 @@ For more info check the documentation</Description>
   </ItemGroup>
   
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
-    <Compile Include="Platforms\Net\**\*.cs" />
     <Compile Include="Platforms\Wpf\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.10" />
+    <Compile Include="Platforms\UWP\**\*.cs" />
+    <SDKReference Include="WindowsMobile, Version=10.0.18362.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   
   <ItemGroup>

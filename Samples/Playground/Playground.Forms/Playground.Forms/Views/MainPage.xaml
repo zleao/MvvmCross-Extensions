@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:PlaygroundContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:views="clr-namespace:Playground.Forms.UI.Core.Views"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    x:Class="Playground.Forms.Views.MainPage"
+    Title="{Binding PageTitle}">
+
+    <CollectionView x:Name="ItemsCollectionView"
+                    ItemsSource="{Binding MenuOptions}"
+                    SelectionMode="Single">
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <StackLayout Padding="10">
+                    <Label Text="{Binding Text}" 
+                           LineBreakMode="NoWrap" 
+                           Style="{DynamicResource ListItemTextStyle}" 
+                           FontSize="Medium" />
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
+                                              NumberOfTapsRequired="1" />
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+</views:PlaygroundContentPage>
