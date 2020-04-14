@@ -1,7 +1,6 @@
 ﻿using MvxExtensions.Forms.Views;
 using MvxExtensions.ViewModels;
 using Playground.Forms.Core.ViewModels;
-using System;
 using System.ComponentModel;
 using Xamarin.Essentials;
 
@@ -34,12 +33,12 @@ namespace Playground.Forms.Views
             }
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        private void ItemsCollectionView_SelectionChanged(object sender, Xamarin.Forms.SelectionChangedEventArgs e)
         {
             if (ItemsCollectionView.SelectedItem != null)
             {
                 ((StorageViewModel)ViewModel).CaseTestCommand.Execute(ItemsCollectionView.SelectedItem);
-                ItemsCollectionView.SelectedItem = null;
+                ((Xamarin.Forms.CollectionView)sender).SelectedItem = null;
             }
         }
     }

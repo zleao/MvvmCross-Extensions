@@ -11,8 +11,9 @@
     <views:ContentPage.Content>
         <Grid>
             <CollectionView x:Name="ItemsCollectionView"
-                    ItemsSource="{Binding CaseTests}"
-                    SelectionMode="Single">
+                            ItemsSource="{Binding CaseTests}"
+                            SelectionMode="Single"
+                            SelectionChanged="ItemsCollectionView_SelectionChanged">
                 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -25,10 +26,6 @@
                            LineBreakMode="NoWrap" 
                            Style="{DynamicResource ListItemTextStyle}" 
                            FontSize="Subtitle" />
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"
-                                              NumberOfTapsRequired="1" />
-                            </StackLayout.GestureRecognizers>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

@@ -1,6 +1,5 @@
 ﻿using MvxExtensions.Forms.Views;
 using Playground.Forms.Core.ViewModels;
-using System;
 using System.ComponentModel;
 
 namespace Playground.Forms.Views
@@ -15,12 +14,12 @@ namespace Playground.Forms.Views
             InitializeComponent();
         }
        
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        private void ItemsCollectionView_SelectionChanged(object sender, Xamarin.Forms.SelectionChangedEventArgs e)
         {
-            if (ItemsCollectionView.SelectedItem != null)
+            if(ItemsCollectionView.SelectedItem != null)
             {
                 ((MainViewModel)ViewModel).NavigateCommand.Execute(ItemsCollectionView.SelectedItem);
-                ItemsCollectionView.SelectedItem = null;
+                ((Xamarin.Forms.CollectionView)sender).SelectedItem = null;
             }
         }
     }
