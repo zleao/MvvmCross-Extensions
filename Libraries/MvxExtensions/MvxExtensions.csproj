@@ -1,12 +1,13 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   
   <PropertyGroup>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">netstandard2.0;net461;Xamarin.iOS10;MonoAndroid81</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">netstandard2.0;net461;Xamarin.iOS10;MonoAndroid81</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;Xamarin.iOS10;monoandroid10.0</TargetFrameworks>
     <AssemblyName>MvxExtensions</AssemblyName>
     <RootNamespace>MvxExtensions</RootNamespace>
     <PackageId>MvxExtensions</PackageId>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>MvxExtensions provide a set of libraries that extend the awesome MvvmCross framework. 
+This package contains the 'Core' libraries of MvxExtensions
+For more info check the documentation</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,12 +17,10 @@
     <None Include="Resources\*.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('monoandroid')) ">
     <Compile Include="Platforms\Droid\**\*.cs" />
     <Compile Include="Platforms\Common\**\*.cs" />
     <AndroidResource Include="Resources\**\*.axml" SubType="Designer" Generator="MSBuild:UpdateAndroidResources" />
-    <PackageReference Include="MvvmCross.Droid.Support.V7.AppCompat" Version="6.2.0" />
-    <PackageReference Include="MvvmCross.Droid.Support.V7.RecyclerView" Version="6.2.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
@@ -29,11 +28,11 @@
     <Compile Include="Platforms\Common\**\*.cs" />
     <PackageReference Include="Toast.iOS" Version="1.2.0" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.2.0" />
-    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.2.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="MvvmCross" Version="6.4.2" />
+    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.4.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>

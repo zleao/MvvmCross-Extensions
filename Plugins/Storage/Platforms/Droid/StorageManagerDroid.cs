@@ -11,10 +11,9 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
     /// <summary>
     /// Android implementation of the Storage plugin
     /// </summary>
-    /// <seealso cref="MvxExtensions.Plugins.Storage.Droid.StorageManagerCommon_Droid_WPF" />
+    /// <seealso cref="StorageManager" />
     public class StorageManagerDroid : StorageManager
     {
-        private const string BASE_PRIVATE_ANDROID_DATA_PATH = "Android/data";
         private const string BASE_PUBLIC_ANDROID_DATA_PATH = "Data";
 
         private Context Context
@@ -41,21 +40,17 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
 
             switch (location)
             {
-                case StorageLocation.Internal:
+                case StorageLocation.AppCacheDirectory:
+                    basePath = Context.CacheDir.Path;
+                    break;
+
+                case StorageLocation.AppDataDirectory:
                     basePath = Context.FilesDir.Path;
                     break;
 
-                case StorageLocation.ExternalPrivate:
-                    var cachePath = PathCombine(BASE_PRIVATE_ANDROID_DATA_PATH, Context.PackageName, "files");
+                case StorageLocation.SharedDataDirectory:
+                    var cachePath = PathCombine(BASE_PUBLIC_ANDROID_DATA_PATH, Context.PackageName, "files");
                     basePath = Context.GetExternalFilesDir(cachePath).Path;
-                    break;
-
-                case StorageLocation.ExternalPublic:
-                    var filesPath = PathCombine(BASE_PUBLIC_ANDROID_DATA_PATH, Context.PackageName, "files");
-                    basePath = Environment.GetExternalStoragePublicDirectory(filesPath).Path;
-                    break;
-
-                default:
                     break;
             }
 
@@ -75,7 +70,7 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
             return Task.FromResult(ConvertBytesToMegabytes(freeBytes));
         }
 
-        private static readonly long MEGA_BYTE = 1048576;
+        private const long MEGA_BYTE = 1048576;
         /// <summary>
         /// Converts the bytes to megabytes.
         /// </summary>
@@ -86,12 +81,17 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
             return (ulong)(bytesToConvert / MEGA_BYTE);
         }
 
+        /// <summary>
+        /// Clones a file coming from the assets folder
+        /// </summary>
+        /// <param name="fromPath"></param>
+        /// <param name="toLocation"></param>
+        /// <param name="toPath"></param>
+        /// <returns></returns>
         public override async Task CloneFileFromAppResourcesAsync(string fromPath, StorageLocation toLocation, string toPath)
         {
-            using (var inputStream = Assets.Open(fromPath))
-            {
-                await WriteFileAsync(toLocation, StorageMode.Create, toPath, inputStream);
-            }
+            using var inputStream = Assets.Open(fromPath);
+            await WriteFileAsync(toLocation, StorageMode.Create, toPath, inputStream).ConfigureAwait(false);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Android.App;
 using Android.Runtime;
-using MvxExtensions.Platforms.Droid.Support.V7;
+using MvxExtensions.Droid.Support.V7;
 using Playground.Core;
 using System;
 

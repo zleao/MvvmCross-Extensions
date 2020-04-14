@@ -4,6 +4,9 @@ using MvvmCross.Plugin;
 
 namespace MvxExtensions.Plugins.Storage.Platforms.iOS
 {
+    /// <summary>
+    /// Plugin registration class
+    /// </summary>
     [MvxPlugin]
     [Preserve(AllMembers = true)]
     public class Plugin : IMvxPlugin

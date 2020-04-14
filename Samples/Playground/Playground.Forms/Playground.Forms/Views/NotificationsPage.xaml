@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:views="clr-namespace:MvxExtensions.Forms.Views;assembly=MvxExtensions.Forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    x:Class="Playground.Forms.Views.NotificationsPage"
+    Title="{Binding PageTitle}">
+
+    <views:ContentPage.Content>
+        <StackLayout>
+            <Button Text="{Binding TextSource, 
+                           Converter={StaticResource LanguageConverter}, 
+                           ConverterParameter='Label_Button_ErrorNotification'}" 
+                    Command="{Binding ErrorNotificationCommand}"/>
+            <Button Text="{Binding TextSource, 
+                           Converter={StaticResource LanguageConverter}, 
+                           ConverterParameter='Label_Button_QuestionNotification'}" 
+                    Command="{Binding QuestionNotificationCommand}"/>
+            <Button Text="{Binding TextSource, 
+                           Converter={StaticResource LanguageConverter}, 
+                           ConverterParameter='Label_Button_DelayedNotification'}" 
+                    Command="{Binding DelayedNotificationCommand}"/>
+        </StackLayout>
+    </views:ContentPage.Content>
+</views:ContentPage>

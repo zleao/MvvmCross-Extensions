@@ -1,4 +1,13 @@
-﻿using MvvmCross.Localization;
+﻿using MvvmCross;
+using MvvmCross.Base;
+using MvvmCross.Commands;
+using MvvmCross.Localization;
+using MvvmCross.Logging;
+using MvvmCross.Navigation;
+using MvvmCross.Plugin.JsonLocalization;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
+using MvvmCross.WeakSubscription;
 using MvxExtensions.Attributes;
 using MvxExtensions.Extensions;
 using MvxExtensions.Models;
@@ -19,15 +28,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MvvmCross;
-using MvvmCross.Base;
-using MvvmCross.Commands;
-using MvvmCross.Logging;
-using MvvmCross.Navigation;
-using MvvmCross.Plugin.JsonLocalization;
-using MvvmCross.ViewModels;
-using MvvmCross.Views;
-using MvvmCross.WeakSubscription;
 
 namespace MvxExtensions.ViewModels
 {
@@ -81,14 +81,6 @@ namespace MvxExtensions.ViewModels
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether this instance is child.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is child; otherwise, <c>false</c>.
-        /// </value>
-        public virtual bool IsChild => false;
-
-        /// <summary>
         /// Gets the page title.
         /// </summary>
         /// <value>
@@ -131,14 +123,6 @@ namespace MvxExtensions.ViewModels
         public string ViewModelContext => _viewModelContext ?? (_viewModelContext = GetType().Name);
 
         private string _viewModelContext;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is hosted.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is hosted; otherwise, <c>false</c>.
-        /// </value>
-        protected bool IsHosted { get; set; }
 
         #endregion
 
@@ -212,7 +196,6 @@ namespace MvxExtensions.ViewModels
             _messageTokens.Clear();
         }
 
-
         /// <summary>
         /// Subscribes the long running message events.
         /// This Method is called in the viewmodel base constructor
@@ -232,7 +215,7 @@ namespace MvxExtensions.ViewModels
             where TMessage : NotificationOneWayMessage
         {
             var messageType = typeof(TMessage);
-            Task CastedAsyncDeliveryAction(INotificationOneWayMessage msg) => asyncDeliveryAction((TMessage) msg);
+            Task CastedAsyncDeliveryAction(INotificationOneWayMessage msg) => asyncDeliveryAction((TMessage)msg);
             SubscribeLongRunningEvent(messageType, CastedAsyncDeliveryAction, asyncDeliveryActionName, unsubscribeOnMessageArrival, context);
         }
 
@@ -267,7 +250,9 @@ namespace MvxExtensions.ViewModels
             if (longSubscription != null)
             {
                 if (longSubscription.AsyncDeliveryAction is Func<INotificationOneWayMessage, Task> asyncDeliveryAction)
-                    await asyncDeliveryAction.Invoke(msg as INotificationOneWayMessage);
+                {
+                    await asyncDeliveryAction.Invoke(msg as INotificationOneWayMessage).ConfigureAwait(false);
+                }
 
                 if (longSubscription.UnsubscribeOnArrival)
                 {
@@ -276,7 +261,6 @@ namespace MvxExtensions.ViewModels
                 }
             }
         }
-
 
         /// <summary>
         /// Unsubscribes the long running message events.
@@ -337,11 +321,10 @@ namespace MvxExtensions.ViewModels
         /// <summary>
         /// Gets a value indicating whether this instance should react to property changed events
         /// </summary>
-        protected bool HasDependencies => _propertyDependencies != null && 
+        protected bool HasDependencies => _propertyDependencies != null &&
                                           (_propertyDependencies.Count > 0 ||
                                            _notifiableCollectionsPropertyDependencies.Count > 0 ||
                                            _methodDependencies.Count > 0);
-
 
         /// <summary>
         /// Maps all the properties that have de DependsOn and/or the PropagateCollectionChange attributes configured
@@ -640,34 +623,36 @@ namespace MvxExtensions.ViewModels
         public override void ViewCreated()
         {
             SubscribeLongRunningMessageEvents();
-         
+
             base.ViewCreated();
         }
 
-        public override void ViewAppeared()
+        public override async void ViewAppeared()
         {
+            SubscribeLongRunningMessageEvents();
+            
             base.ViewAppeared();
 
-            #pragma warning disable 4014
-            DoWorkAsync(OnViewShownAsync, isSilent: true);
-            #pragma warning restore 4014
+#pragma warning disable 4014
+            await DoWorkAsync(OnViewShownAsync, isSilent: true).ConfigureAwait(false);
+#pragma warning restore 4014
         }
-       
+
         protected virtual async Task OnViewShownAsync()
         {
             if (_initialGenericMessages.Count > 0)
             {
                 foreach (var message in _initialGenericMessages)
                 {
-                    await NotificationManager.PublishAsync(message);
+                    await NotificationManager.PublishAsync(message).ConfigureAwait(false);
                 }
                 _initialGenericMessages.Clear();
             }
 
             if (NotificationManager != null)
             {
-                await NotificationManager.PublishPendingNotificationsAsync(this, ViewModelContext);
-                await NotificationManager.PublishPendingNotificationsAsync(this);
+                await NotificationManager.PublishPendingNotificationsAsync(this, ViewModelContext).ConfigureAwait(false);
+                await NotificationManager.PublishPendingNotificationsAsync(this).ConfigureAwait(false);
             }
         }
 
@@ -871,7 +856,7 @@ namespace MvxExtensions.ViewModels
         #endregion
 
         #region Navigation
-        
+
         protected IMvxNavigationService NavigationService { get; }
 
         /// <summary>
@@ -892,7 +877,7 @@ namespace MvxExtensions.ViewModels
         #region Busy Notification Management
 
         /// <summary>
-        /// Indicates if there's work in progress. 
+        /// Indicates if there's work in progress.
         /// Tipically controled by the 'DoWorkAsync' method
         /// </summary>
         public virtual bool IsBusy => _busyCount > 0;
@@ -931,7 +916,7 @@ namespace MvxExtensions.ViewModels
 
             try
             {
-                await action.Invoke();
+                await action.Invoke().ConfigureAwait(false);
             }
             catch
             {
@@ -981,7 +966,6 @@ namespace MvxExtensions.ViewModels
 
                 if (_busyCount <= 0)
                     BusyMessage = null;
-
             }
         }
 
@@ -990,12 +974,12 @@ namespace MvxExtensions.ViewModels
 
     public abstract class ViewModel<TParameter> : ViewModel, IMvxViewModel<TParameter>
     {
-        protected ViewModel(IMvxLanguageBinder textSource, 
-                            IMvxLanguageBinder textSourceCommon, 
-                            IMvxJsonConverter jsonConverter, 
-                            INotificationService notificationManager, 
+        protected ViewModel(IMvxLanguageBinder textSource,
+                            IMvxLanguageBinder textSourceCommon,
+                            IMvxJsonConverter jsonConverter,
+                            INotificationService notificationManager,
                             IMvxLogProvider logProvider,
-                            IMvxNavigationService navigationService) 
+                            IMvxNavigationService navigationService)
             : base(textSource, textSourceCommon, jsonConverter, notificationManager, logProvider, navigationService)
         {
         }

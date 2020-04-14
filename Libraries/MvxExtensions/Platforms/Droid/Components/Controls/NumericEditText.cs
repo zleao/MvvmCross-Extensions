@@ -16,7 +16,7 @@ namespace MvxExtensions.Platforms.Droid.Components.Controls
     {
         public delegate void IntValueChangedDelegate(int value);
         public IntValueChangedDelegate OnIntValueChanged;
-        
+
         #region Properties
 
         private int _intValue;
@@ -27,7 +27,7 @@ namespace MvxExtensions.Platforms.Droid.Components.Controls
         }
 
         #endregion
-        
+
         #region Constructor
 
         public NumericEditText(Context context)

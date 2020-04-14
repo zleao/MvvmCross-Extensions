@@ -1,0 +1,10 @@
+﻿{
+	"Label_Page_Title_BindingsTest" : "Bindings Test",
+  "Label_ToggleButton_Description": "ToggleButton with a binding to text On/Off" ,
+  "Label_ToggleButton_On" :  "Valid (Tap to invalidate)",
+  "Label_ToggleButton_Off" :  "Invalid (Tap to validate)",
+  "Text_Validity_Valid":  "I'm valid!", 
+  "Text_Validity_Invalid":  "I'm NOT valid!",
+	"Text_MaxLength_Description":  "Set a max length value in the first edit text and it will be enforced in the second one",
+	"Text_Decimal_Description":  "Set the number of decimal places and/or edit the decimal value"
+}

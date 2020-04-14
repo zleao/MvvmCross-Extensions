@@ -12,7 +12,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
     /// </summary>
     public class StorageEncryptionManagerDroid : StorageEncryptionManager
     {
-        private const string BASE_PRIVATE_ANDROID_DATA_PATH = "Android/data";
         private const string BASE_PUBLIC_ANDROID_DATA_PATH = "Data";
 
         private Context Context
@@ -23,9 +22,6 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
             }
         }
         private Context _context;
-
-        private AssetManager Assets => _assets ?? (_assets = Mvx.IoCProvider.Resolve<IMvxAndroidGlobals>().ApplicationContext.Assets);
-        private AssetManager _assets;
 
         /// <summary>
         /// Returns the full physical path based on a location and a relative path
@@ -39,21 +35,17 @@ namespace MvxExtensions.Plugins.Storage.Platforms.Droid
 
             switch (location)
             {
-                case StorageLocation.Internal:
+                case StorageLocation.AppCacheDirectory:
+                    basePath = Context.CacheDir.Path;
+                    break;
+
+                case StorageLocation.AppDataDirectory:
                     basePath = Context.FilesDir.Path;
                     break;
 
-                case StorageLocation.ExternalPrivate:
-                    var cachePath = PathCombine(BASE_PRIVATE_ANDROID_DATA_PATH, Context.PackageName, "files");
+                case StorageLocation.SharedDataDirectory:
+                    var cachePath = PathCombine(BASE_PUBLIC_ANDROID_DATA_PATH, Context.PackageName, "files");
                     basePath = Context.GetExternalFilesDir(cachePath).Path;
-                    break;
-
-                case StorageLocation.ExternalPublic:
-                    var filesPath = PathCombine(BASE_PUBLIC_ANDROID_DATA_PATH, Context.PackageName, "files");
-                    basePath = Environment.GetExternalStoragePublicDirectory(filesPath).Path;
-                    break;
-
-                default:
                     break;
             }
 

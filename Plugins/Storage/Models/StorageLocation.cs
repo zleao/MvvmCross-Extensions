@@ -3,30 +3,23 @@ namespace MvxExtensions.Plugins.Storage.Models
 {
     /// <summary>
     /// StorageLocation
+    /// Follows the same naming as the one present in Xamarin.Essentials.FileSystem
     /// </summary>
     public enum StorageLocation
     {
         /// <summary>
         /// Files accessible only by the current app.
-        /// Files removed when app is uninstalled.
-        /// Best when you want to be sure that neither the user nor other apps can access your files.
         /// </summary>
-        Internal,
+        AppCacheDirectory,
 
         /// <summary>
-        /// Files will be world-readable.
-        /// Files removed when app is uninstalled.
-        /// Best for files that are to be available to users and/or apps, but that don't provide value outside the app.
-        /// (i.e.: aditional resources or temporary media files)
+        /// Files accessible only by the current app.
         /// </summary>
-        ExternalPrivate,
+        AppDataDirectory,
 
         /// <summary>
-        /// Files will be world-readable.
-        /// Files will be persisted even after the app is uninstalled.
-        /// Best for files that are to be available to users and/or apps, even after the app is uninstalled or updated.
-        /// (i.e.: Photos captured by the app, log files, configuration files )
+        /// Files will be readable by other apps, if they have the correct permission.
         /// </summary>
-        ExternalPublic
+        SharedDataDirectory
     }
 }

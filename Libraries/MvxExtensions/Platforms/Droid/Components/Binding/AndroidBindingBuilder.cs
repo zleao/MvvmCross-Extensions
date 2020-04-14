@@ -7,19 +7,21 @@ using MvxExtensions.Platforms.Droid.Components.Targets;
 
 namespace MvxExtensions.Platforms.Droid.Components.Binding
 {
+    /// <inheritdoc/>
     public class AndroidBindingBuilder : MvxAndroidBindingBuilder
     {
+        /// <inheritdoc/>
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             base.FillTargetFactories(registry);
 
-            registry.RegisterFactory(new MvxCustomBindingFactory<DecimalEditText>(AndroidPropertyBinding.DecimalEditTextDecimalValue, 
+            registry.RegisterFactory(new MvxCustomBindingFactory<DecimalEditText>(AndroidPropertyBinding.DecimalEditTextDecimalValue,
                 decimalEditText => new DecimalEditTextDecimalValueTargetBinding(decimalEditText)));
 
             registry.RegisterFactory(new MvxCustomBindingFactory<EditText>(AndroidPropertyBinding.EditTextSingleLine,
                 editText => new EditTextSingleLineTargetBinding(editText)));
 
-            registry.RegisterFactory(new MvxCustomBindingFactory<NumericEditText>(AndroidPropertyBinding.NumericEditTextIntValue, 
+            registry.RegisterFactory(new MvxCustomBindingFactory<NumericEditText>(AndroidPropertyBinding.NumericEditTextIntValue,
                 numericEditText => new NumericEditTextIntValueTargetBinding(numericEditText)));
 
             registry.RegisterFactory(new MvxCustomBindingFactory<TextView>(AndroidPropertyBinding.TextViewIsValid,
