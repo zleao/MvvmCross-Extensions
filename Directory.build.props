@@ -9,9 +9,10 @@
     <PackageProjectUrl>https://github.com/zleao/MvvmCross-Extensions/wiki</PackageProjectUrl>
     <RepositoryUrl>https://github.com/zleao/MvvmCross-Extensions</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>6.3.0</Version>
+    <Version>6.3.1</Version>
 
     <LangVersion>latest</LangVersion>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
@@ -20,16 +21,24 @@
     
     <Platform>AnyCPU</Platform>
     <DebugType>full</DebugType>
+
+    
     <IsLibraryProject>$(MSBuildProjectName.Contains('MvxExtensions'))</IsLibraryProject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSymbols>true</IncludeSymbols>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsLibraryProject)' == 'true'">
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" PrivateAssets="All" />
     <None Include="$(MSBuildThisFileDirectory)\LICENSE" Pack="true" PackagePath="\" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false' and '$(IsLibraryProject)' == 'true'">
-    <PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" /> 
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
 
 </Project>
