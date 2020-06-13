@@ -15,7 +15,7 @@ using MvvmCross;
 using MvvmCross.Platforms.Android.Views;
 using MvvmCross.ViewModels;
 using MvvmCross.WeakSubscription;
-using MvxExtensions.Core.Extensions;
+using MvxExtensions.Extensions;
 using MvxExtensions.Plugins.Notification;
 using MvxExtensions.Plugins.Notification.Core;
 using MvxExtensions.Plugins.Notification.Core.Async.Subscriptions;

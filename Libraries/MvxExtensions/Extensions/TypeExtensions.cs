@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace MvxExtensions.Core.Extensions
+namespace MvxExtensions.Extensions
 {
     /// <summary>
     /// Extensions for Type
@@ -18,7 +18,7 @@ namespace MvxExtensions.Core.Extensions
         public static bool IsNullable(this Type source)
         {
             if (source != null)
-                return source.GetTypeInfo().IsGenericType && source.Name == "Nullable`1";
+                return (source.GetTypeInfo().IsGenericType && source.Name == "Nullable`1");
 
             return false;
         }
@@ -42,7 +42,7 @@ namespace MvxExtensions.Core.Extensions
         public static IEnumerable<PropertyInfo> GetProperties(this Type source, bool onlyPublic)
         {
             var ti = source.GetTypeInfo();
-            var props = onlyPublic ? ti.DeclaredProperties.Where(p => (p.GetMethod?.IsPublic == true) || (p.SetMethod?.IsPublic == true)) : ti.DeclaredProperties;
+            var props = onlyPublic ? ti.DeclaredProperties.Where(p => (p.GetMethod != null && p.GetMethod.IsPublic) || (p.SetMethod != null && p.SetMethod.IsPublic)) : ti.DeclaredProperties;
 
             return props;
         }
@@ -61,6 +61,7 @@ namespace MvxExtensions.Core.Extensions
 
             return source.GetProperties(onlyPublic);
         }
+
 
         /// <summary>
         /// Gets all properties of a type (including the inherited ones.

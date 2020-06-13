@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MvxExtensions.Core.Extensions
+namespace MvxExtensions.Extensions
 {
     /// <summary>
     /// Extensions for KeyValuePair type
@@ -16,7 +16,7 @@ namespace MvxExtensions.Core.Extensions
         /// </returns>
         public static bool IsNullOrEmpty(this KeyValuePair<string, string>? source)
         {
-            return source?.Key.IsNullOrEmpty() != false;
+            return source == null || source.Value.Key.IsNullOrEmpty();
         }
     }
 }

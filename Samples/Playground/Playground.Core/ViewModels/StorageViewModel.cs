@@ -4,7 +4,7 @@ using MvvmCross.Commands;
 using MvvmCross.Exceptions;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
-using MvxExtensions.Core.Extensions;
+using MvxExtensions.Extensions;
 using MvxExtensions.Plugins.Logger;
 using MvxExtensions.Plugins.Notification;
 using MvxExtensions.Plugins.Notification.Messages;

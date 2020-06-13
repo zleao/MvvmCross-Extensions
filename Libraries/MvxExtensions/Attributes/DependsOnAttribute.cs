@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvxExtensions.Core.Attributes
+namespace MvxExtensions.Attributes
 {
     /// <summary>
     /// Used to bind the current property/method to the PropertyChanged event of another property

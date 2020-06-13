@@ -3,7 +3,7 @@ using GlobalToast;
 using MvvmCross;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.WeakSubscription;
-using MvxExtensions.Core.Extensions;
+using MvxExtensions.Extensions;
 using MvxExtensions.Platforms.iOS.Components.Controls;
 using MvxExtensions.Platforms.iOS.Components.Interfaces;
 using MvxExtensions.Plugins.Notification;
@@ -34,7 +34,7 @@ namespace MvxExtensions.Platforms.iOS.Views
         private volatile MvxNotifyPropertyChangedEventSubscription _propertyChangedSubscription;
 
         #endregion
-
+        
         #region Properties
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace MvxExtensions.Platforms.iOS.Views
         public override void ViewDidDisappear(bool animated)
         {
             UnsubscribeMessageEvents();
-
+            
             base.ViewDidDisappear(animated);
         }
 
@@ -99,7 +99,7 @@ namespace MvxExtensions.Platforms.iOS.Views
 
             base.ViewWillUnload();
         }
-
+        
         #endregion
 
         #region Notification Management
@@ -335,7 +335,7 @@ namespace MvxExtensions.Platforms.iOS.Views
         }
 
         #endregion
-
+    
         #region Generic Methods
 
         protected NotificationTwoWayAnswersEnum ConvertBool2NotificationTwoWayAnswersEnum(bool value, NotificationTwoWayAnswersGroupEnum possibleAnswers)
@@ -447,13 +447,13 @@ namespace MvxExtensions.Platforms.iOS.Views
             var resetEvent = new AutoResetEvent(false);
             UIAlertController qd = null;
 
-            InvokeOnMainThread(() =>
+            InvokeOnMainThread(() => 
             {
                 qd = CreateGenericQuestionDialog(title, message);
 
                 //Add Actions
-                qd?.AddAction(UIAlertAction.Create(positiveButtonName, UIAlertActionStyle.Default, alert =>
-                {
+	            qd?.AddAction(UIAlertAction.Create(positiveButtonName, UIAlertActionStyle.Default, alert => 
+                { 
                     result = true;
                     resetEvent.Set();
                 }));
@@ -465,7 +465,7 @@ namespace MvxExtensions.Platforms.iOS.Views
             resetEvent.WaitOne();
 
             qd?.Dispose();
-            qd = null;
+            qd=null;
 
             return result;
         }
@@ -503,15 +503,15 @@ namespace MvxExtensions.Platforms.iOS.Views
                 var selectedIndex = indexIfCancel;
                 UIAlertController ssd = null;
 
-                InvokeOnMainThread(() =>
+                InvokeOnMainThread(() => 
                 {
                     ssd = CreateSimpleSelectionDialog(title);
-
+                
                     //Add actions
-                    options.ToArray().SafeForEach(option =>
+                    options.ToArray().SafeForEach(option => 
                     {
-                        ssd.AddAction(UIAlertAction.Create(option, UIAlertActionStyle.Default, alert =>
-                        {
+                        ssd.AddAction(UIAlertAction.Create(option, UIAlertActionStyle.Default, alert => 
+                        { 
                             selectedIndex = options.SafeIndexOf(alert.Title);
                             resetEvent.Set();
                         }));
@@ -556,7 +556,7 @@ namespace MvxExtensions.Platforms.iOS.Views
             {
                 var resetEvent = new AutoResetEvent(false);
                 UIAlertController mb = null;
-
+                
                 InvokeOnMainThread(() =>
                     {
                         mb = CreateMessageBox(message, severity);

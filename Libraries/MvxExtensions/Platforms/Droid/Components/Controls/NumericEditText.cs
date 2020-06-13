@@ -5,7 +5,6 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Java.Util;
-using MvxExtensions.Core.Extensions;
 using MvxExtensions.Extensions;
 using MvxExtensions.Platforms.Droid.Extensions;
 using Context = Android.Content.Context;

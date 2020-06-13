@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MvxExtensions.Core.Extensions
+namespace MvxExtensions.Extensions
 {
     /// <summary>
     /// Extensions for IDictionary type
@@ -65,7 +65,7 @@ namespace MvxExtensions.Core.Extensions
                 if (source.ContainsKey(item.Key))
                     source[item.Key] = item.Value;
                 else
-                    source.Add(item.Key, item.Value);
+                    source.Add(item.Key, item.Value);   
             }
         }
 
@@ -101,7 +101,7 @@ namespace MvxExtensions.Core.Extensions
         /// <returns></returns>
         public static IDictionary<T1, T2> SafeForEach<T1, T2>(this IDictionary<T1, T2> source, Action<T1, T2> action)
         {
-            if (source?.Count > 0)
+            if (source != null && source.Count > 0)
             {
                 foreach (var item in source)
                 {
@@ -120,13 +120,13 @@ namespace MvxExtensions.Core.Extensions
         /// <typeparam name="T2">The type of the 2.</typeparam>
         /// <param name="source">The source.</param>
         /// <returns></returns>
-        public static IList<(T1 Key, T2 Value)> SafeToTupleList<T1, T2>(this IDictionary<T1, T2> source)
+        public static IList<Tuple<T1, T2>> SafeToTupleList<T1, T2>(this IDictionary<T1, T2> source)
         {
-            var result = new List<(T1, T2)>();
+            var result = new List<Tuple<T1, T2>>();
 
-            if (source.SafeCount() > 0)
+            if(EnumerableExtensions.SafeCount(source) > 0)
             {
-                result.AddRange(source.Select(o => (o.Key, o.Value)));
+                result.AddRange(source.Select(o => new Tuple<T1, T2>(o.Key, o.Value)));
             }
 
             return result;

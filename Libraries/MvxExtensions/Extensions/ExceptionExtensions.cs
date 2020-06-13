@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace MvxExtensions.Core.Extensions
+namespace MvxExtensions.Extensions
 {
     /// <summary>
     /// Extensions for Exception type

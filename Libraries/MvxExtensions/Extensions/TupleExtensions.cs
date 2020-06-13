@@ -1,5 +1,4 @@
-﻿using MvxExtensions.Core.Extensions;
-using System;
+﻿using System;
 
 namespace MvxExtensions.Extensions
 {

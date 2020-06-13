@@ -7,7 +7,6 @@ using Android.Views;
 using Android.Widget;
 using Java.Lang;
 using Java.Util;
-using MvxExtensions.Core.Extensions;
 using MvxExtensions.Extensions;
 using MvxExtensions.Platforms.Droid.Extensions;
 using Context = Android.Content.Context;

@@ -1,10 +1,10 @@
-﻿using MvvmCross.Base;
+﻿using System.Globalization;
+using MvvmCross.Base;
 using MvvmCross.Logging;
 using MvvmCross.Navigation;
-using MvxExtensions.Core.Attributes;
+using MvxExtensions.Attributes;
 using MvxExtensions.Plugins.Notification;
 using Playground.Core.Resources;
-using System.Globalization;
 
 namespace Playground.Core.ViewModels
 {

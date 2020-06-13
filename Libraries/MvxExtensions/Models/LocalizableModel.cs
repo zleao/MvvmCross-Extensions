@@ -1,7 +1,7 @@
-﻿using MvvmCross.Localization;
+﻿using System;
+using MvvmCross.Localization;
 using MvvmCross.ViewModels;
-using MvxExtensions.Core.Extensions;
-using System;
+using MvxExtensions.Extensions;
 
 namespace MvxExtensions.Models
 {
