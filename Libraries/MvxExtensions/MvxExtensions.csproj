@@ -36,6 +36,7 @@ For more info check the documentation</Description>
   <ItemGroup>
     <ProjectReference Include="..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj" />
     <ProjectReference Include="..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj" />
+    <ProjectReference Include="..\MvxExtensions.Core\MvxExtensions.Core.csproj" />
   </ItemGroup>
 
 </Project>

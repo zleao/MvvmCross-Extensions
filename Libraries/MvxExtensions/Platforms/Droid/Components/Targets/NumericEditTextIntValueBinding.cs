@@ -2,6 +2,7 @@
 using MvvmCross.Binding;
 using MvvmCross.Exceptions;
 using MvvmCross.Platforms.Android.Binding.Target;
+using MvxExtensions.Core.Extensions;
 using MvxExtensions.Extensions;
 using MvxExtensions.Platforms.Droid.Components.Controls;
 

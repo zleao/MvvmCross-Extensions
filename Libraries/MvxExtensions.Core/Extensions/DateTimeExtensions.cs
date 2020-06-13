@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvxExtensions.Extensions
+namespace MvxExtensions.Core.Extensions
 {
     /// <summary>
     /// Extensions for DateTime type

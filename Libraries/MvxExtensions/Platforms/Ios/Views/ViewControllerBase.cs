@@ -3,7 +3,7 @@ using GlobalToast;
 using MvvmCross;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.WeakSubscription;
-using MvxExtensions.Extensions;
+using MvxExtensions.Core.Extensions;
 using MvxExtensions.Platforms.iOS.Components.Controls;
 using MvxExtensions.Platforms.iOS.Components.Interfaces;
 using MvxExtensions.Plugins.Notification;

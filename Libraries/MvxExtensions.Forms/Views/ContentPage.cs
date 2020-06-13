@@ -1,6 +1,7 @@
 ﻿using MvvmCross;
 using MvvmCross.Forms.Views;
 using MvvmCross.WeakSubscription;
+using MvxExtensions.Core.Extensions;
 using MvxExtensions.Extensions;
 using MvxExtensions.Plugins.Notification;
 using MvxExtensions.Plugins.Notification.Core;

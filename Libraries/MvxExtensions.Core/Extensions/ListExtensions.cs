@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MvxExtensions.Extensions
+namespace MvxExtensions.Core.Extensions
 {
     /// <summary>
     /// Extensions for IList type
@@ -37,7 +37,7 @@ namespace MvxExtensions.Extensions
         /// <param name="action">The action.</param>
         public static IList<T> SafeForEach<T>(this IList<T> source, Action<T> action)
         {
-            if (source != null && source.Count > 0)
+            if (source?.Count > 0)
             {
                 foreach (var item in source)
                 {
@@ -86,7 +86,7 @@ namespace MvxExtensions.Extensions
         {
             try
             {
-                if (source != null && source.Count > 0)
+                if (source?.Count > 0)
                 {
                     source.RemoveAt(source.Count - 1);
                 }

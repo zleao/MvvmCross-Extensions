@@ -1,5 +1,6 @@
 ﻿using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using MvxExtensions.Core.Extensions;
 using MvxExtensions.Statics;
 using System;
 using System.Threading;

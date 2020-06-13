@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvxExtensions.Attributes
+namespace MvxExtensions.Core.Attributes
 {
     /// <summary>
     /// Indicates that the items of the associated collection property, should raise PropertyChanged event
