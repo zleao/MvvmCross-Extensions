@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using MvxExtensions.Attributes;
+﻿using MvxExtensions.Core.Attributes;
+using System.Reflection;
 
-namespace MvxExtensions.Models
+namespace MvxExtensions.Core.Models
 {
     /// <summary>
     /// Represents a dependency injected with the <see cref="DependsOnAttribute"/>

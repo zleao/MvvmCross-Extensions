@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvxExtensions.Extensions
+namespace MvxExtensions.Core.Extensions
 {
     /// <summary>
     /// Extensions ofr decimal type
@@ -12,9 +12,9 @@ namespace MvxExtensions.Extensions
         /// </summary>
         /// <param name="value">The decimal value to round</param>
         /// <returns></returns>
-        public static decimal RoundsCurrency(this decimal value)
+        public static decimal RoundCurrency(this decimal value)
         {
-            return RoundsCurrency(value, 2);
+            return RoundCurrency(value, 2);
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace MvxExtensions.Extensions
         /// <param name="value">The decimal value to round</param>
         /// <param name="precision">Decimal places precision.</param>
         /// <returns></returns>
-        public static decimal RoundsCurrency(this decimal value, int precision)
+        public static decimal RoundCurrency(this decimal value, int precision)
         {
             value = value * (decimal)(Math.Pow(10, precision));
 

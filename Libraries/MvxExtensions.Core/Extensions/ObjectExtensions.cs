@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace MvxExtensions.Extensions
+namespace MvxExtensions.Core.Extensions
 {
     /// <summary>
     /// Extensions for object type

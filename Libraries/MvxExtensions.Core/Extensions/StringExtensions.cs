@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace MvxExtensions.Extensions
+namespace MvxExtensions.Core.Extensions
 {
     /// <summary>
     /// Extensions for string type
@@ -19,6 +19,18 @@ namespace MvxExtensions.Extensions
         public static bool IsNullOrEmpty(this string source)
         {
             return string.IsNullOrEmpty(source);
+        }
+
+        /// <summary>
+        /// Determines whether the specified source string is null or white space.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns>
+        ///   <c>true</c> if he specified source string is null or white space; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNullOrWhiteSpace(this string source)
+        {
+            return string.IsNullOrWhiteSpace(source);
         }
 
         /// <summary>
