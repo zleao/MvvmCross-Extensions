@@ -253,6 +253,13 @@ namespace MvxExtensions.Core.ViewModels
         /// <param name="dependencyName">Name of the dependency.</param>
         public void RaiseDependenciesPropertyChanged(string dependencyName)
         {
+            // Ensure this method runs in the main thread
+            if (!AsyncDispatcher.IsOnMainThread)
+            {
+                InvokeOnMainThread(() => RaiseDependenciesPropertyChanged(dependencyName));
+                return;
+            }
+
             //Prevents the conditional DependsOn from firing, if the execution was made
             //to prevent propagation (ExecuteWithoutConditionalDependsOn)
             if (_dependsOnConditionalCount.ContainsKey(dependencyName) &&
