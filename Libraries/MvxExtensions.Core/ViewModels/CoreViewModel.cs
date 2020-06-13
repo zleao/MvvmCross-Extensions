@@ -404,7 +404,7 @@ namespace MvxExtensions.Core.ViewModels
         /// <returns></returns>
         protected virtual IMvxLog GetLog()
         {
-            return _log ?? (_log = LogProvider.GetLogFor(GetType().Name));
+            return _log ??= LogProvider.GetLogFor(GetType().Name);
         }
 
         #endregion

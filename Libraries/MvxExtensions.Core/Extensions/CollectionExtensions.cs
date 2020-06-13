@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,7 +38,7 @@ namespace MvxExtensions.Core.Extensions
             try
             {
                 var enumeratedItems = items.ToList();
-                if (enumeratedItems.Any())
+                if (enumeratedItems.Count > 0)
                 {
                     foreach (var item in enumeratedItems)
                     {
@@ -87,7 +87,7 @@ namespace MvxExtensions.Core.Extensions
             try
             {
                 var enumeratedItems = items.ToList();
-                if (enumeratedItems.Any())
+                if (enumeratedItems.Count > 0)
                 {
                     foreach (T item in enumeratedItems)
                     {

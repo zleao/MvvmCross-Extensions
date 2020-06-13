@@ -55,7 +55,7 @@ namespace MvxExtensions.Core.Extensions
         /// <param name="source">The System.Collections.Generic.IEnumerable to return the first element of</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>
-        /// default(T) if source is empty; otherwise, The first element in the sequence 
+        /// default(T) if source is empty; otherwise, The first element in the sequence
         /// that passes the test in the specified predicate function.
         /// </returns>
         public static T SafeFirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
@@ -86,7 +86,7 @@ namespace MvxExtensions.Core.Extensions
         /// <param name="source">An System.Collections.Generic.IEnumerable to return the last element of.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
         /// <returns>
-        /// default(T) if source is empty; otherwise, The last element in the sequence 
+        /// default(T) if source is empty; otherwise, The last element in the sequence
         /// that passes the test in the specified predicate function.
         /// </returns>
         public static T SafeLastOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)

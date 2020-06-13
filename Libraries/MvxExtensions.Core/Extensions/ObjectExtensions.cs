@@ -39,8 +39,8 @@ namespace MvxExtensions.Core.Extensions
             if (source != null)
             {
                 var prop = SafeGetPropertyInfoRecursively(source.GetType(), propertyName);
-                if (prop != null)
-                    prop.SetValue(source, value);
+
+                prop?.SetValue(source, value);
             }
         }
 
@@ -50,10 +50,8 @@ namespace MvxExtensions.Core.Extensions
             {
                 var typeInfo = sourceType.GetTypeInfo();
                 var prop = typeInfo.GetDeclaredProperty(propertyName);
-                if (prop != null)
-                    return prop;
 
-                return SafeGetPropertyInfoRecursively(typeInfo.BaseType, propertyName);
+                return prop ?? SafeGetPropertyInfoRecursively(typeInfo.BaseType, propertyName);
             }
 
             return null;
@@ -69,7 +67,7 @@ namespace MvxExtensions.Core.Extensions
         /// <exception cref="System.ArgumentNullException"></exception>
         public static T ThrowIfIoComponentIsNull<T>(this T argument, string propertyName)
         {
-            if(argument == null)
+            if (argument == null)
                 throw new ArgumentNullException($"{propertyName} is null - check if {typeof(T).Name} is registered in the IO container");
 
             return argument;
