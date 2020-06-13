@@ -528,6 +528,36 @@ namespace MvxExtensions.Core.ViewModels
         }
 
         /// <summary>
+        /// Executes work asynchronously and returns the result of the action invocation
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action">The action.</param>
+        /// <param name="workMessage">The work message.</param>
+        /// <param name="isSilent">if set to <c>true</c> [is silent].</param>
+        /// <returns></returns>
+        protected virtual async Task<T> DoWorkAsync<T>(Func<Task<T>> action, string workMessage = null, bool isSilent = false)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            StartWork(workMessage, isSilent);
+
+            try
+            {
+                var result = await action.Invoke().ConfigureAwait(false);
+
+                FinishWork(isSilent);
+
+                return result;
+            }
+            catch
+            {
+                FinishWork(isSilent);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Signals the IsBusy to indicate that a new work has started
         /// </summary>
         /// <param name="isSilent">if set to <c>true</c> the IsBusy will no be signaled.</param>
