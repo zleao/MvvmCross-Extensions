@@ -55,8 +55,9 @@ namespace MvxExtensions.Core.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <param name="filterPredicate">The filter predicate.</param>
+        /// <param name="throwException">if set to <c>true</c> [throw exception].</param>
         /// <returns></returns>
-        public static bool SafeRemoveAll<T>(this IList<T> source, Func<T, bool> filterPredicate)
+        public static bool SafeRemoveAll<T>(this IList<T> source, Func<T, bool> filterPredicate, bool throwException = false)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace MvxExtensions.Core.Extensions
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception) when (!throwException)
             {
                 return false;
             }
@@ -81,8 +82,9 @@ namespace MvxExtensions.Core.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
+        /// <param name="throwException">if set to <c>true</c> [throw exception].</param>
         /// <returns></returns>
-        public static bool SafeRemoveLast<T>(this IList<T> source)
+        public static bool SafeRemoveLast<T>(this IList<T> source, bool throwException = false)
         {
             try
             {
@@ -93,7 +95,7 @@ namespace MvxExtensions.Core.Extensions
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception) when (!throwException)
             {
                 return false;
             }

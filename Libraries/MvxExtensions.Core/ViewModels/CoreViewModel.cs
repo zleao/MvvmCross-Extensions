@@ -253,6 +253,13 @@ namespace MvxExtensions.Core.ViewModels
         /// <param name="dependencyName">Name of the dependency.</param>
         public void RaiseDependenciesPropertyChanged(string dependencyName)
         {
+            // Ensure this method runs in the main thread
+            if (!AsyncDispatcher.IsOnMainThread)
+            {
+                InvokeOnMainThread(() => RaiseDependenciesPropertyChanged(dependencyName));
+                return;
+            }
+
             //Prevents the conditional DependsOn from firing, if the execution was made
             //to prevent propagation (ExecuteWithoutConditionalDependsOn)
             if (_dependsOnConditionalCount.ContainsKey(dependencyName) &&
@@ -397,7 +404,7 @@ namespace MvxExtensions.Core.ViewModels
         /// <returns></returns>
         protected virtual IMvxLog GetLog()
         {
-            return _log ?? (_log = LogProvider.GetLogFor(GetType().Name));
+            return _log ??= LogProvider.GetLogFor(GetType().Name);
         }
 
         #endregion
@@ -512,6 +519,36 @@ namespace MvxExtensions.Core.ViewModels
                 await action.Invoke().ConfigureAwait(false);
          
                 FinishWork(isSilent);
+            }
+            catch
+            {
+                FinishWork(isSilent);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Executes work asynchronously and returns the result of the action invocation
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action">The action.</param>
+        /// <param name="workMessage">The work message.</param>
+        /// <param name="isSilent">if set to <c>true</c> [is silent].</param>
+        /// <returns></returns>
+        protected virtual async Task<T> DoWorkAsync<T>(Func<Task<T>> action, string workMessage = null, bool isSilent = false)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            StartWork(workMessage, isSilent);
+
+            try
+            {
+                var result = await action.Invoke().ConfigureAwait(false);
+
+                FinishWork(isSilent);
+
+                return result;
             }
             catch
             {

@@ -29,7 +29,8 @@ namespace MvxExtensions.Core.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="source">The source.</param>
         /// <param name="items">The items.</param>
-        public static void SafeAddRange<T>(this ICollection<T> source, IEnumerable<T> items)
+        /// <param name="throwException">if set to <c>true</c> [throw exception].</param>
+        public static void SafeAddRange<T>(this ICollection<T> source, IEnumerable<T> items, bool throwException = false)
         {
             if (source == null || items == null)
                 return;
@@ -37,7 +38,7 @@ namespace MvxExtensions.Core.Extensions
             try
             {
                 var enumeratedItems = items.ToList();
-                if (enumeratedItems.Any())
+                if (enumeratedItems.Count > 0)
                 {
                     foreach (var item in enumeratedItems)
                     {
@@ -45,9 +46,8 @@ namespace MvxExtensions.Core.Extensions
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception) when (!throwException)
             {
-                //TODO: Log this error
             }
         }
 
@@ -71,10 +71,15 @@ namespace MvxExtensions.Core.Extensions
         /// <param name="source">The source.</param>
         /// <param name="items">The items.</param>
         /// <param name="validationFunc">The validation function.</param>
+        /// <param name="throwException">if set to <c>true</c> [throw exception].</param>
         /// <remarks>
         /// The missing item is only added if the validation func returns true
         /// </remarks>
-        public static void SafeAddMissing<T>(this ICollection<T> source, IEnumerable<T> items, Func<T, bool> validationFunc)
+        public static void SafeAddMissing<T>(
+            this ICollection<T> source,
+            IEnumerable<T> items,
+            Func<T, bool> validationFunc,
+            bool throwException = false)
         {
             if (source == null || items == null || validationFunc == null)
                 return;
@@ -82,7 +87,7 @@ namespace MvxExtensions.Core.Extensions
             try
             {
                 var enumeratedItems = items.ToList();
-                if (enumeratedItems.Any())
+                if (enumeratedItems.Count > 0)
                 {
                     foreach (T item in enumeratedItems)
                     {
@@ -91,9 +96,8 @@ namespace MvxExtensions.Core.Extensions
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception) when (!throwException)
             {
-                //TODO: Log this error
             }
         }
 

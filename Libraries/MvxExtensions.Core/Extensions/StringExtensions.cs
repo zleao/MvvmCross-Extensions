@@ -94,10 +94,8 @@ namespace MvxExtensions.Core.Extensions
                 {
                     d = decimal.Parse(source.Replace(',', '.').Trim(), NumberStyles.Any, new CultureInfo("en-US"));
                 }
-                catch (Exception)
+                catch (Exception) when (!throwException)
                 {
-                    if (throwException)
-                        throw;
                 }
             }
 
@@ -195,8 +193,8 @@ namespace MvxExtensions.Core.Extensions
 
             source = source.Trim();
 
-            return source.StartsWith("{") && source.EndsWith("}")
-                || source.StartsWith("[") && source.EndsWith("]");
+            return (source.StartsWith("{") && source.EndsWith("}"))
+                || (source.StartsWith("[") && source.EndsWith("]"));
         }
 
         /// <summary>
@@ -214,7 +212,7 @@ namespace MvxExtensions.Core.Extensions
 
             return HexRegex.IsMatch(source.Trim().ToLower());
         }
-        private static readonly Regex HexRegex = new Regex(@"^[0-9a-f]+$");
+        private static readonly Regex HexRegex = new Regex("^[0-9a-f]+$");
 
         /// <summary>
         /// Determines whether the specified source is numeric.
@@ -329,7 +327,7 @@ namespace MvxExtensions.Core.Extensions
             {
                 if (ignoreCase)
                     return (text.ToLower()).Contains(value.ToLower());
-                
+
                 return text.Contains(value);
             }
 
