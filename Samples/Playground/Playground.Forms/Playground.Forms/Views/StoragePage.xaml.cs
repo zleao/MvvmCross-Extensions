@@ -20,13 +20,7 @@ namespace Playground.Forms.Views
         {
             base.OnAppearing();
 
-            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            if(status == PermissionStatus.Granted)
-            {
-                return;
-            }
-
-            status = await Permissions.RequestAsync<Permissions.StorageWrite>();
+            var status = await Permissions.RequestAsync<Permissions.StorageWrite>();
             if (status != PermissionStatus.Granted)
             {
                 ((ViewModel)ViewModel).BackCommand.Execute(null);

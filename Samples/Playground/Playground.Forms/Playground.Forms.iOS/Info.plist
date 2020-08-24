@@ -34,7 +34,5 @@
 	<string>Playground.Forms</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Needs access to storage to write files from PLugin Storage</string>
 </dict>
 </plist>
