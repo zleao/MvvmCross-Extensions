@@ -11,7 +11,7 @@ For more info check the documentation</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.4.2" />
+    <PackageReference Include="MvvmCross" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
