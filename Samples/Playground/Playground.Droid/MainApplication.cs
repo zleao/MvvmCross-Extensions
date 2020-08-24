@@ -1,13 +1,13 @@
 ﻿using Android.App;
 using Android.Runtime;
-using MvxExtensions.Droid.Support.V7;
+using MvxExtensions.Platforms.Droid.Views;
 using Playground.Core;
 using System;
 
 namespace Playground.Droid
 {
     [Application]
-    public class MainApplication : AppCompatApplication<Setup, App>
+    public class MainApplication : AndroidApplication<Setup, App>
     {
         public MainApplication(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {

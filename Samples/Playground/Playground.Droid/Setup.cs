@@ -1,11 +1,12 @@
 ﻿using MvvmCross.Logging;
-using MvxExtensions.Droid.Support.V7.Setup;
+using MvvmCross.Platforms.Android.Core;
+using MvxExtensions.Platforms.Droid.Setup;
 using Playground.Core;
 using Serilog;
 
 namespace Playground.Droid
 {
-    public class Setup : AndroidAppCompatSetup<App>
+    public class Setup : AndroidSetup<App>
     {
         public override MvxLogProviderType GetDefaultLogProviderType()
             => MvxLogProviderType.Serilog;

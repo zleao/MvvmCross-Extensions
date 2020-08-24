@@ -1,10 +1,10 @@
-﻿using MvxExtensions.Droid.Support.V7.Views;
+﻿using MvxExtensions.Platforms.Droid.Views;
 using MvxExtensions.ViewModels;
 using System.Reflection;
 
 namespace Playground.Droid.Views
 {
-    public abstract class BaseAppCompatView<TViewModel> : AppCompatActivityBase<TViewModel>
+    public abstract class BaseAppCompatView<TViewModel> : ActivityBase<TViewModel>
         where TViewModel : ViewModel
     {
         protected override int GetResourceIdFromImageId(string imageId)
