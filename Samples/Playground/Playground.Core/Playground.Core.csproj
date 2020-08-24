@@ -17,11 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MvvmCross" Version="6.4.2" />
-    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="6.4.2" />
+    <PackageReference Include="MvvmCross" Version="7.0.0" />
+    <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\MvxExtensions.Core\MvxExtensions.Core.csproj" />
     <ProjectReference Include="..\..\..\Libraries\MvxExtensions\MvxExtensions.csproj" />
     <ProjectReference Include="..\..\..\Plugins\Logger\MvxExtensions.Plugins.Logger.csproj" />
     <ProjectReference Include="..\..\..\Plugins\Notification\MvxExtensions.Plugins.Notification.csproj" />
