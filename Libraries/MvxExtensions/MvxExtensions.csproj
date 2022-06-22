@@ -30,7 +30,7 @@ For more info check the documentation</Description>
   <ItemGroup>
     <PackageReference Include="MvvmCross" Version="7.0.0" />
     <PackageReference Include="MvvmCross.Plugin.JsonLocalization" Version="7.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
